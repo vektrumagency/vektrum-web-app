@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 
 const ADMIN_HOST = "admin.vecktrum-agency.com";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname, hostname } = request.nextUrl;
 
   if (!pathname.startsWith("/admin")) {

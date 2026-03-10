@@ -11,11 +11,11 @@ export function BrandLogo({ href = "#home", className, compact = false, showTagl
   return (
     <a
       href={href}
-      className={`inline-flex items-center gap-2 rounded-2xl bg-gradient-to-b from-white to-slate-50 px-2.5 py-2 shadow-[0_10px_34px_-24px_rgba(15,23,42,0.45)] transition hover:shadow-[0_14px_38px_-24px_rgba(15,23,42,0.38)] ${className ?? ""}`}
+      className={`inline-flex items-center gap-2 px-1 py-1 ${className ?? ""}`}
       aria-label="Vektrum"
     >
       <img
-        src="/vektrum-logo.png"
+        src="/vektrum-logo-transparent.png"
         alt="Vektrum"
         className={compact ? "h-8 w-auto sm:h-9" : "h-10 w-auto sm:h-11"}
       />
