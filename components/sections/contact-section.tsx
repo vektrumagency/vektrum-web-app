@@ -28,10 +28,10 @@ export function ContactSection({ section, bookCallUrl, locale }: ContactSectionP
           messagePlaceholder: "Tell us your operational goals and bottlenecks."
         };
   return (
-    <section id="contact" className="relative py-20 sm:py-28">
+    <section id="contact" className="relative py-16 sm:py-24">
       <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="reveal">
-          <p className="mb-4 inline-flex rounded-full border border-border bg-white px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-muted">
+          <p className="mb-4 inline-flex rounded-full border border-border bg-surface/90 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-muted">
             {section.eyebrow}
           </p>
           <h2 className="font-heading text-3xl font-semibold tracking-tight text-text sm:text-4xl">
@@ -42,13 +42,13 @@ export function ContactSection({ section, bookCallUrl, locale }: ContactSectionP
           </p>
           <a
             href={bookCallUrl}
-            className="mt-6 inline-flex rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white transition hover:bg-blue-600"
+            className="mt-6 inline-flex w-full justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white transition hover:bg-blue-600 sm:w-auto"
           >
             {section.cta}
           </a>
         </div>
         <form
-          className="reveal rounded-3xl border border-border bg-white p-6 shadow-glow md:p-8 lg:[animation-delay:160ms]"
+          className="reveal rounded-3xl border border-border bg-surface p-6 shadow-glow md:p-8 lg:[animation-delay:160ms]"
           action="#"
           method="post"
           aria-label="Contact form"
@@ -63,7 +63,7 @@ export function ContactSection({ section, bookCallUrl, locale }: ContactSectionP
                 name="name"
                 type="text"
                 required
-                className="w-full rounded-xl border border-border bg-slate-50 px-4 py-3 text-sm text-text outline-none transition placeholder:text-muted focus:border-accent/50"
+                className="w-full rounded-xl border border-border bg-background/60 px-4 py-3 text-sm text-text outline-none transition placeholder:text-muted focus:border-accent/50"
                 placeholder={labels.namePlaceholder}
               />
             </div>
@@ -76,7 +76,7 @@ export function ContactSection({ section, bookCallUrl, locale }: ContactSectionP
                 name="email"
                 type="email"
                 required
-                className="w-full rounded-xl border border-border bg-slate-50 px-4 py-3 text-sm text-text outline-none transition placeholder:text-muted focus:border-accent/50"
+                className="w-full rounded-xl border border-border bg-background/60 px-4 py-3 text-sm text-text outline-none transition placeholder:text-muted focus:border-accent/50"
                 placeholder={labels.emailPlaceholder}
               />
             </div>
@@ -88,7 +88,7 @@ export function ContactSection({ section, bookCallUrl, locale }: ContactSectionP
                 id="company"
                 name="company"
                 type="text"
-                className="w-full rounded-xl border border-border bg-slate-50 px-4 py-3 text-sm text-text outline-none transition placeholder:text-muted focus:border-accent/50"
+                className="w-full rounded-xl border border-border bg-background/60 px-4 py-3 text-sm text-text outline-none transition placeholder:text-muted focus:border-accent/50"
                 placeholder={labels.companyPlaceholder}
               />
             </div>
@@ -101,14 +101,14 @@ export function ContactSection({ section, bookCallUrl, locale }: ContactSectionP
                 name="message"
                 rows={5}
                 required
-                className="w-full rounded-xl border border-border bg-slate-50 px-4 py-3 text-sm text-text outline-none transition placeholder:text-muted focus:border-accent/50"
+                className="w-full rounded-xl border border-border bg-background/60 px-4 py-3 text-sm text-text outline-none transition placeholder:text-muted focus:border-accent/50"
                 placeholder={labels.messagePlaceholder}
               />
             </div>
           </div>
           <button
             type="submit"
-            className="mt-5 inline-flex rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-blue-600"
+            className="mt-5 inline-flex w-full justify-center rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-blue-600 sm:w-auto"
           >
             {section.submit}
           </button>

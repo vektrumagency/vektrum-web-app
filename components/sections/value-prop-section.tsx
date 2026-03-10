@@ -18,13 +18,13 @@ export function ValuePropSection({ valueProp }: ValuePropSectionProps) {
       eyebrow={valueProp.eyebrow}
       title={valueProp.title}
       description={valueProp.description}
-      className="border-y border-border/80 bg-slate-50/60"
+      className="border-y border-border/80 bg-background/40"
     >
       <div className="grid gap-4 sm:grid-cols-3">
         {valueProp.highlights.map((highlight, index) => (
           <article
             key={highlight.metric}
-            className="rounded-2xl border border-border bg-white p-6 reveal"
+            className="rounded-2xl border border-border bg-surface p-6 reveal"
             style={{ animationDelay: `${index * 120}ms` }}
           >
             <p className="font-heading text-3xl font-semibold text-text">{highlight.metric}</p>
@@ -38,7 +38,7 @@ export function ValuePropSection({ valueProp }: ValuePropSectionProps) {
           {logos.map((logo) => (
             <div
               key={logo}
-              className="rounded-xl border border-border bg-white px-4 py-3 text-center text-xs tracking-[0.15em] text-muted"
+              className="rounded-xl border border-border bg-surface px-4 py-3 text-center text-xs tracking-[0.15em] text-muted"
             >
               {logo}
             </div>

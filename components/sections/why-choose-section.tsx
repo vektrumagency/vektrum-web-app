@@ -16,7 +16,7 @@ export function WhyChooseSection({ section, differentiators }: WhyChooseSectionP
         {differentiators.map((item, index) => (
           <div
             key={item}
-            className="flex items-start gap-3 rounded-xl border border-border bg-white p-4 reveal"
+            className="flex items-start gap-3 rounded-xl border border-border bg-surface p-4 reveal"
             style={{ animationDelay: `${index * 90}ms` }}
           >
             <span className="mt-1 inline-block h-2.5 w-2.5 rounded-full bg-accent" />

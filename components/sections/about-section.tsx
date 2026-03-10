@@ -10,9 +10,9 @@ export function AboutSection({ section }: AboutSectionProps) {
       eyebrow={section.eyebrow}
       title={section.title}
       description={section.description}
-      className="bg-slate-50/50"
+      className="bg-background/40"
     >
-      <div className="rounded-2xl border border-border bg-white p-6 reveal">
+      <div className="rounded-2xl border border-border bg-surface p-6 reveal">
         <p className="max-w-3xl text-sm leading-relaxed text-muted">
           {section.body}
         </p>

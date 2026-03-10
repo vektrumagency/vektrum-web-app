@@ -20,7 +20,7 @@ export function BrandLogo({ href = "#home", className, compact = false, showTagl
         className={compact ? "h-8 w-auto sm:h-9" : "h-10 w-auto sm:h-11"}
       />
       {showTagline ? (
-        <span className="hidden border-l border-slate-200 pl-2 text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500 sm:inline-block">
+        <span className="hidden border-l border-border pl-2 text-[10px] font-medium uppercase tracking-[0.16em] text-muted sm:inline-block">
           AI Automation
         </span>
       ) : null}

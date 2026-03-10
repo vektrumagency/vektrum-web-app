@@ -3,9 +3,11 @@ import { SectionShell } from "@/components/section-shell";
 type FAQSectionProps = {
   section: { eyebrow: string; title: string; description: string };
   faqs: { question: string; answer: string }[];
+  ctaLabel: string;
+  ctaHref: string;
 };
 
-export function FAQSection({ section, faqs }: FAQSectionProps) {
+export function FAQSection({ section, faqs, ctaLabel, ctaHref }: FAQSectionProps) {
   return (
     <SectionShell
       id="faq"
@@ -17,7 +19,7 @@ export function FAQSection({ section, faqs }: FAQSectionProps) {
         {faqs.map((faq, index) => (
           <details
             key={faq.question}
-            className="group rounded-2xl border border-border bg-white p-5 reveal"
+            className="group rounded-2xl border border-border bg-surface p-5 reveal"
             style={{ animationDelay: `${index * 70}ms` }}
           >
             <summary className="cursor-pointer list-none pr-8 font-medium text-text">
@@ -27,6 +29,14 @@ export function FAQSection({ section, faqs }: FAQSectionProps) {
             <p className="mt-3 text-sm leading-relaxed text-muted">{faq.answer}</p>
           </details>
         ))}
+      </div>
+      <div className="mt-8 flex justify-center">
+        <a
+          href={ctaHref}
+          className="rounded-full border border-border bg-surface px-6 py-3 text-sm font-semibold text-text transition hover:border-accent/40 hover:bg-surface/80"
+        >
+          {ctaLabel}
+        </a>
       </div>
     </SectionShell>
   );

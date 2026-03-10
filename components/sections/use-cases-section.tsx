@@ -17,7 +17,7 @@ export function UseCasesSection({ section, useCases }: UseCasesSectionProps) {
         {useCases.map((item, index) => (
           <article
             key={item.title}
-            className="rounded-2xl border border-border bg-white p-6 reveal"
+            className="rounded-2xl border border-border bg-surface p-6 reveal"
             style={{ animationDelay: `${100 + index * 90}ms` }}
           >
             <h3 className="font-heading text-xl font-semibold text-text">{item.title}</h3>
