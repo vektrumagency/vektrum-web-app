@@ -30,28 +30,14 @@ export function SiteFooter({ footer, email }: SiteFooterProps) {
         </nav>
         <div>
           <p className="text-sm font-semibold text-text">{footer.contactTitle}</p>
+          <p className="mt-3 text-sm text-muted">Business inquiries and partnerships</p>
           <a
             href={`mailto:${email}`}
-            className="mt-3 inline-block text-sm text-muted transition-colors hover:text-text"
+            className="mt-2 inline-block text-sm font-medium text-text transition-colors hover:text-text/80"
           >
             {email}
           </a>
-          <div className="mt-4 flex gap-4 text-sm text-muted">
-            <a
-              href="https://www.linkedin.com/company/vektrum"
-              target="_blank"
-              rel="noreferrer"
-              className="transition-colors hover:text-text"
-            >
-              LinkedIn
-            </a>
-            <a href="https://x.com/vektrum" target="_blank" rel="noreferrer" className="transition-colors hover:text-text">
-              X
-            </a>
-            <a href={`mailto:${email}`} className="transition-colors hover:text-text">
-              Email
-            </a>
-          </div>
+          <p className="mt-2 text-xs text-muted">Typical response time: within one business day.</p>
         </div>
       </div>
     </footer>
