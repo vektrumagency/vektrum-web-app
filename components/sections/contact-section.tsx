@@ -1,10 +1,16 @@
+"use client";
+
+import { FormEvent, useState } from "react";
+
 type ContactSectionProps = {
   section: { eyebrow: string; title: string; description: string; cta: string; submit: string };
   bookCallUrl: string;
+  email: string;
   locale: "en" | "pt-PT";
 };
 
-export function ContactSection({ section, bookCallUrl, locale }: ContactSectionProps) {
+export function ContactSection({ section, bookCallUrl, email, locale }: ContactSectionProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const labels =
     locale === "pt-PT"
       ? {
@@ -15,7 +21,9 @@ export function ContactSection({ section, bookCallUrl, locale }: ContactSectionP
           namePlaceholder: "O seu nome",
           emailPlaceholder: "voce@empresa.com",
           companyPlaceholder: "Nome da empresa",
-          messagePlaceholder: "Descreva os objetivos e bloqueios operacionais."
+          messagePlaceholder: "Descreva os objetivos e bloqueios operacionais.",
+          emailSubject: "Pedido de chamada de estratégia",
+          submitPending: "A abrir email..."
         }
       : {
           name: "Name",
@@ -25,8 +33,35 @@ export function ContactSection({ section, bookCallUrl, locale }: ContactSectionP
           namePlaceholder: "Your name",
           emailPlaceholder: "you@company.com",
           companyPlaceholder: "Company name",
-          messagePlaceholder: "Tell us your operational goals and bottlenecks."
+          messagePlaceholder: "Tell us your operational goals and bottlenecks.",
+          emailSubject: "Strategy call request",
+          submitPending: "Opening email..."
         };
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsSubmitting(true);
+
+    const formData = new FormData(event.currentTarget);
+    const name = String(formData.get("name") ?? "").trim();
+    const senderEmail = String(formData.get("email") ?? "").trim();
+    const company = String(formData.get("company") ?? "").trim();
+    const message = String(formData.get("message") ?? "").trim();
+
+    const lines = [
+      `${labels.name}: ${name}`,
+      `${labels.email}: ${senderEmail}`,
+      `${labels.company}: ${company || "-"}`,
+      "",
+      `${labels.message}:`,
+      message
+    ];
+
+    const mailtoHref = `mailto:${email}?subject=${encodeURIComponent(labels.emailSubject)}&body=${encodeURIComponent(lines.join("\n"))}`;
+    window.location.href = mailtoHref;
+    setIsSubmitting(false);
+  }
+
   return (
     <section id="contact" className="relative py-16 sm:py-24">
       <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 lg:grid-cols-[0.9fr_1.1fr]">
@@ -49,8 +84,7 @@ export function ContactSection({ section, bookCallUrl, locale }: ContactSectionP
         </div>
         <form
           className="reveal rounded-3xl border border-border bg-surface p-6 shadow-glow md:p-8 lg:[animation-delay:160ms]"
-          action="#"
-          method="post"
+          onSubmit={handleSubmit}
           aria-label="Contact form"
         >
           <div className="grid gap-4 sm:grid-cols-2">
@@ -108,9 +142,10 @@ export function ContactSection({ section, bookCallUrl, locale }: ContactSectionP
           </div>
           <button
             type="submit"
+            disabled={isSubmitting}
             className="mt-5 inline-flex w-full justify-center rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-blue-600 sm:w-auto"
           >
-            {section.submit}
+            {isSubmitting ? labels.submitPending : section.submit}
           </button>
         </form>
       </div>

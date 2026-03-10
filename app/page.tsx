@@ -96,6 +96,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         <ContactSection
           section={content.contactSection}
           bookCallUrl={config.brand.bookCallUrl}
+          email={config.brand.email}
           locale={locale}
         />
       </main>
