@@ -86,7 +86,7 @@ export default function Order2PartyPage() {
             </p>
           </div>
           <span className="rounded-full border border-cyan-300/70 bg-cyan-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-cyan-700">
-            Managed by Order2Party agents
+            Managed by Order2Party Agents
           </span>
         </div>
 
