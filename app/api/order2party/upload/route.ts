@@ -34,6 +34,15 @@ function extractMessage(payload: unknown, fallback: string) {
   return fallback;
 }
 
+function formatTargetForLog(url: string) {
+  try {
+    const parsed = new URL(url);
+    return `${parsed.origin}${parsed.pathname}`;
+  } catch {
+    return "invalid-url";
+  }
+}
+
 export async function POST(request: Request) {
   const orchestratorUrl = process.env.ORDER2PARTY_ORCHESTRATOR_URL;
   const orchestratorSecret = process.env.ORDER2PARTY_ORCHESTRATOR_SECRET;
@@ -42,8 +51,16 @@ export async function POST(request: Request) {
   const timeoutMs = safeNumber(process.env.ORDER2PARTY_ORCHESTRATOR_TIMEOUT_MS, 25000);
   const maxFileBytes = maxFileMb * 1024 * 1024;
   const requestId = crypto.randomUUID();
+  const orchestratorHeaderName = "x-order2party-secret";
 
   if (!orchestratorUrl || !orchestratorSecret || !expectedPin) {
+    console.error("[order2party-upload] missing configuration", {
+      requestId,
+      orchestratorUrlSet: Boolean(orchestratorUrl),
+      orchestratorSecretSet: Boolean(orchestratorSecret),
+      portalPinSet: Boolean(expectedPin)
+    });
+
     return NextResponse.json(
       { ok: false, message: "Upload portal is not configured.", requestId },
       { status: 500 }
@@ -116,15 +133,27 @@ export async function POST(request: Request) {
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
+    console.info("[order2party-upload] forwarding to orchestrator", {
+      requestId,
+      target: formatTargetForLog(orchestratorUrl),
+      headerName: orchestratorHeaderName,
+      headerAttached: Boolean(orchestratorSecret)
+    });
+
     const upstreamResponse = await fetch(orchestratorUrl, {
       method: "POST",
       headers: {
-        "X-Orchestrator-Secret": orchestratorSecret,
-        "X-Request-Id": requestId
+        [orchestratorHeaderName]: orchestratorSecret,
+        "x-request-id": requestId
       },
       body: upstreamBody,
       signal: controller.signal,
       cache: "no-store"
+    });
+
+    console.info("[order2party-upload] orchestrator response", {
+      requestId,
+      status: upstreamResponse.status
     });
 
     const contentType = upstreamResponse.headers.get("content-type") ?? "";
@@ -151,6 +180,11 @@ export async function POST(request: Request) {
     const message = isAbort
       ? "Orchestrator timeout. Please try again."
       : "Could not reach orchestrator. Please try again.";
+
+    console.error("[order2party-upload] orchestrator request failed", {
+      requestId,
+      timedOut: isAbort
+    });
 
     return NextResponse.json(
       { ok: false, message, requestId },
