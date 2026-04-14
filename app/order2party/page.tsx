@@ -10,7 +10,6 @@ type UploadResponse = {
 
 export default function Order2PartyPage() {
   const [pin, setPin] = useState("");
-  const [supplier, setSupplier] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<UploadResponse | null>(null);
@@ -33,10 +32,6 @@ export default function Order2PartyPage() {
     const body = new FormData();
     body.set("pin", pin.trim());
     body.set("file", file, file.name);
-
-    if (supplier.trim()) {
-      body.set("supplier", supplier.trim());
-    }
 
     setLoading(true);
 
@@ -82,7 +77,7 @@ export default function Order2PartyPage() {
               Order2Party Upload Portal
             </h1>
             <p className="mt-2 max-w-lg text-sm text-slate-600">
-              Drop your supplier spreadsheet and forward it directly to the orchestrator pipeline.
+              Drop your spreadsheet and forward it directly to the orchestrator pipeline.
             </p>
           </div>
           <span className="rounded-full border border-cyan-300/70 bg-cyan-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-cyan-700">
@@ -98,17 +93,6 @@ export default function Order2PartyPage() {
               value={pin}
               onChange={(e) => setPin(e.target.value)}
               required
-              className="w-full rounded-2xl border border-slate-200 bg-white/90 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
-            />
-          </label>
-
-          <label className="block">
-            <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-600">Supplier (optional)</span>
-            <input
-              type="text"
-              value={supplier}
-              onChange={(e) => setSupplier(e.target.value)}
-              placeholder="Example: Acme Foods"
               className="w-full rounded-2xl border border-slate-200 bg-white/90 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
             />
           </label>

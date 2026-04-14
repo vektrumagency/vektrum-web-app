@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Order2Party Upload Portal",
-  description: "Temporary upload portal for supplier Excel files.",
+  description: "Temporary upload portal for Excel file uploads.",
   robots: {
     index: false,
     follow: false
