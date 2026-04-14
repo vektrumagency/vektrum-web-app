@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   title: "Vektrum | AI Automation Agency",
   description:
     "Vektrum helps businesses automate operations, deploy custom AI workflows, and scale with practical systems.",
+  icons: {
+    icon: "/vektrum-favicon-20260414.ico",
+    shortcut: "/vektrum-favicon-20260414.ico"
+  },
   openGraph: {
     title: "Vektrum | AI Automation Agency",
     description:
