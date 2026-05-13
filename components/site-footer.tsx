@@ -1,6 +1,13 @@
 import { BrandLogo } from "@/components/brand-logo";
 type SiteFooterProps = {
-  footer: { quickLinksTitle: string; contactTitle: string; quickLinks: { label: string; href: string }[] };
+  footer: {
+    description?: string;
+    quickLinksTitle: string;
+    contactTitle: string;
+    contactNote?: string;
+    responseNote?: string;
+    quickLinks: { label: string; href: string }[];
+  };
   email: string;
 };
 
@@ -11,7 +18,7 @@ export function SiteFooter({ footer, email }: SiteFooterProps) {
         <div>
           <BrandLogo showTagline />
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">
-            AI automation systems for businesses that value speed, reliability, and operational clarity.
+            {footer.description ?? "AI automation systems for businesses that value speed, reliability, and operational clarity."}
           </p>
         </div>
         <nav aria-label="Footer links">
@@ -30,14 +37,18 @@ export function SiteFooter({ footer, email }: SiteFooterProps) {
         </nav>
         <div>
           <p className="text-sm font-semibold text-text">{footer.contactTitle}</p>
-          <p className="mt-3 text-sm text-muted">Business inquiries and partnerships</p>
+          <p className="mt-3 text-sm text-muted">
+            {footer.contactNote ?? "Business inquiries and partnerships"}
+          </p>
           <a
             href={`mailto:${email}`}
             className="mt-2 inline-block text-sm font-medium text-text transition-colors hover:text-text/80"
           >
             {email}
           </a>
-          <p className="mt-2 text-xs text-muted">Typical response time: within one business day.</p>
+          <p className="mt-2 text-xs text-muted">
+            {footer.responseNote ?? "Typical response time: within one business day."}
+          </p>
         </div>
       </div>
     </footer>

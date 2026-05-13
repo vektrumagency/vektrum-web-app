@@ -28,7 +28,7 @@ export function ReviewsSection({ section, reviews, ctaLabel, ctaHref }: ReviewsS
       <div className="mt-8 flex justify-center">
         <a
           href={ctaHref}
-          className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-600"
+          className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition hover:bg-accent/90"
         >
           {ctaLabel}
         </a>

@@ -12,7 +12,7 @@ export function InlineCta({ title, ctaLabel, ctaHref }: InlineCtaProps) {
           <p className="font-heading text-xl font-semibold text-text">{title}</p>
           <a
             href={ctaHref}
-            className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-600"
+            className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/90"
           >
             {ctaLabel}
           </a>

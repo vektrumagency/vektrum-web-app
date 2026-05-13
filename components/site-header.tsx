@@ -39,7 +39,7 @@ export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHead
         </div>
         <a
           href={bookCallUrl}
-          className="rounded-full bg-accent px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-blue-600 sm:px-4 sm:py-2 sm:text-sm"
+          className="rounded-full bg-accent px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-accent/90 sm:px-4 sm:py-2 sm:text-sm"
         >
           {ctaLabel}
         </a>

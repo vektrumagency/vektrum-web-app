@@ -19,10 +19,10 @@ export function ContactSection({ section, bookCallUrl, email, locale }: ContactS
           company: "Empresa",
           message: "Mensagem",
           namePlaceholder: "O seu nome",
-          emailPlaceholder: "voce@empresa.com",
+          emailPlaceholder: "nome@empresa.com",
           companyPlaceholder: "Nome da empresa",
-          messagePlaceholder: "Descreva os objetivos e bloqueios operacionais.",
-          emailSubject: "Pedido de chamada de estratégia",
+          messagePlaceholder: "Descreva os processos repetitivos ou tarefas que consomem tempo.",
+          emailSubject: "Pedido de Auditoria Gratuita de IA",
           submitPending: "A abrir email..."
         }
       : {
@@ -33,8 +33,8 @@ export function ContactSection({ section, bookCallUrl, email, locale }: ContactS
           namePlaceholder: "Your name",
           emailPlaceholder: "you@company.com",
           companyPlaceholder: "Company name",
-          messagePlaceholder: "Tell us your operational goals and bottlenecks.",
-          emailSubject: "Strategy call request",
+          messagePlaceholder: "Tell us which repetitive workflows or tasks are consuming time.",
+          emailSubject: "Free AI Audit request",
           submitPending: "Opening email..."
         };
 
@@ -77,7 +77,7 @@ export function ContactSection({ section, bookCallUrl, email, locale }: ContactS
           </p>
           <a
             href={bookCallUrl}
-            className="mt-6 inline-flex w-full justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white transition hover:bg-blue-600 sm:w-auto"
+            className="mt-6 inline-flex w-full justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white transition hover:bg-accent/90 sm:w-auto"
           >
             {section.cta}
           </a>
@@ -143,7 +143,7 @@ export function ContactSection({ section, bookCallUrl, email, locale }: ContactS
           <button
             type="submit"
             disabled={isSubmitting}
-            className="mt-5 inline-flex w-full justify-center rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-blue-600 sm:w-auto"
+            className="mt-5 inline-flex w-full justify-center rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-accent/90 sm:w-auto"
           >
             {isSubmitting ? labels.submitPending : section.submit}
           </button>

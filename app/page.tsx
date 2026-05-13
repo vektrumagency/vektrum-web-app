@@ -1,17 +1,18 @@
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { InlineCta } from "@/components/inline-cta";
+import type { Metadata } from "next";
 import { MobileStickyCta } from "@/components/mobile-sticky-cta";
-import { AboutSection } from "@/components/sections/about-section";
 import { ContactSection } from "@/components/sections/contact-section";
 import { FAQSection } from "@/components/sections/faq-section";
+import { FinalCtaSection } from "@/components/sections/final-cta-section";
 import { HeroSection } from "@/components/sections/hero-section";
 import { ProcessSection } from "@/components/sections/process-section";
-import { ReviewsSection } from "@/components/sections/reviews-section";
+import { ProblemSection } from "@/components/sections/problem-section";
 import { ResultsSection } from "@/components/sections/results-section";
+import { SavingsCalculatorSection } from "@/components/sections/savings-calculator-section";
 import { ServicesSection } from "@/components/sections/services-section";
+import { SolutionSection } from "@/components/sections/solution-section";
 import { UseCasesSection } from "@/components/sections/use-cases-section";
-import { ValuePropSection } from "@/components/sections/value-prop-section";
 import { WhyChooseSection } from "@/components/sections/why-choose-section";
 import { getRuntimeConfig } from "@/lib/runtime-config";
 import { Locale } from "@/lib/site-config";
@@ -21,6 +22,49 @@ export const dynamic = "force-dynamic";
 type HomePageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
+
+export async function generateMetadata({ searchParams }: HomePageProps): Promise<Metadata> {
+  const params = await searchParams;
+  const langParam = params.lang;
+  const selected = Array.isArray(langParam) ? langParam[0] : langParam;
+  const locale: Locale = selected === "pt-PT" ? "pt-PT" : "en";
+
+  if (locale === "pt-PT") {
+    return {
+      title: "Vektrum | Auditoria Gratuita de Inteligência Artificial",
+      description:
+        "Marque uma auditoria gratuita de IA com a Vektrum e descubra oportunidades práticas de automação com IA, agentes de IA e automatização de processos empresariais.",
+      alternates: {
+        canonical: "/?lang=pt-PT"
+      },
+      openGraph: {
+        title: "Vektrum | Auditoria Gratuita de Inteligência Artificial",
+        description:
+          "Descubra onde a inteligência artificial para empresas pode poupar tempo e reduzir trabalho manual com uma auditoria gratuita da Vektrum.",
+        url: "https://vecktrum-agency.com/?lang=pt-PT",
+        siteName: "Vektrum",
+        type: "website"
+      }
+    };
+  }
+
+  return {
+    title: "Vektrum | Free AI Audit for Business Automation",
+    description:
+      "Book a free AI audit with Vektrum to discover practical AI automation agency opportunities, AI agents for business, and AI workflow automation.",
+    alternates: {
+      canonical: "/"
+    },
+    openGraph: {
+      title: "Vektrum | Free AI Audit for Business Automation",
+      description:
+        "Discover where AI automation can save time, reduce manual work, and improve business process automation with a free AI audit.",
+      url: "https://vecktrum-agency.com",
+      siteName: "Vektrum",
+      type: "website"
+    }
+  };
+}
 
 export default async function HomePage({ searchParams }: HomePageProps) {
   const params = await searchParams;
@@ -32,20 +76,14 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const ctaCopy =
     locale === "pt-PT"
       ? {
-          inlineTitle: "Quer automatizar isto na sua empresa?",
-          inlineLabel: "Quero uma Auditoria de Automação",
-          servicesLabel: "Pedir Auditoria Gratuita",
-          processLabel: "Marcar Chamada de Descoberta",
-          reviewsLabel: "Quero Resultados Semelhantes",
-          faqLabel: "Falar com um Especialista"
+          servicesLabel: "Marcar Auditoria Gratuita",
+          processLabel: "Marcar Auditoria Gratuita",
+          faqLabel: "Falar sobre uma Auditoria Gratuita"
         }
       : {
-          inlineTitle: "Ready to automate this in your business?",
-          inlineLabel: "Get a Free Automation Audit",
-          servicesLabel: "Request Free Audit",
-          processLabel: "Book Discovery Call",
-          reviewsLabel: "I Want Similar Results",
-          faqLabel: "Talk to a Specialist"
+          servicesLabel: "Book a Free AI Audit",
+          processLabel: "Book a Free AI Audit",
+          faqLabel: "Talk About a Free AI Audit"
         };
 
   return (
@@ -58,18 +96,24 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         ctaLabel={content.hero.primaryCta}
       />
       <main className="pb-20 md:pb-0">
-        <HeroSection hero={content.hero} heroStats={content.heroStats} />
-        <ValuePropSection valueProp={content.valueProp} />
+        <HeroSection
+          hero={content.hero}
+          heroStats={content.heroStats}
+          primaryHref={config.brand.bookCallUrl}
+          secondaryHref="#process"
+        />
+        <ProblemSection section={content.problemSection} problems={content.problems} />
+        <SolutionSection section={content.solutionSection} />
+        <SavingsCalculatorSection
+          section={content.calculatorSection}
+          locale={locale}
+          ctaHref={config.brand.bookCallUrl}
+        />
         <ServicesSection
           section={content.servicesSection}
           services={content.services}
           ctaLabel={ctaCopy.servicesLabel}
-          ctaHref="#contact"
-        />
-        <InlineCta
-          title={ctaCopy.inlineTitle}
-          ctaLabel={ctaCopy.inlineLabel}
-          ctaHref="#contact"
+          ctaHref={config.brand.bookCallUrl}
         />
         <ProcessSection
           section={content.processSection}
@@ -77,22 +121,16 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           ctaLabel={ctaCopy.processLabel}
           ctaHref={config.brand.bookCallUrl}
         />
-        <WhyChooseSection section={content.whySection} differentiators={content.differentiators} />
         <ResultsSection section={content.resultsSection} results={content.results} />
         <UseCasesSection section={content.useCasesSection} useCases={content.useCases} />
-        <ReviewsSection
-          section={content.reviewsSection}
-          reviews={content.reviews}
-          ctaLabel={ctaCopy.reviewsLabel}
-          ctaHref="#contact"
-        />
-        <AboutSection section={content.aboutSection} />
+        <WhyChooseSection section={content.whySection} differentiators={content.differentiators} />
         <FAQSection
           section={content.faqSection}
           faqs={content.faqs}
           ctaLabel={ctaCopy.faqLabel}
           ctaHref={config.brand.bookCallUrl}
         />
+        <FinalCtaSection section={content.finalCtaSection} ctaHref={config.brand.bookCallUrl} />
         <ContactSection
           section={content.contactSection}
           bookCallUrl={config.brand.bookCallUrl}

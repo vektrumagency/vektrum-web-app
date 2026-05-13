@@ -3,17 +3,17 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://vecktrum-agency.com"),
-  title: "Vektrum | AI Automation Agency",
+  title: "Vektrum | Free AI Audit for Business Automation",
   description:
-    "Vektrum helps businesses automate operations, deploy custom AI workflows, and scale with practical systems.",
+    "Book a free AI audit with Vektrum to discover where AI automation, AI agents, and business process automation can save time in your company.",
   icons: {
-    icon: "/vektrum-favicon-20260414.ico",
-    shortcut: "/vektrum-favicon-20260414.ico"
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico"
   },
   openGraph: {
-    title: "Vektrum | AI Automation Agency",
+    title: "Vektrum | Free AI Audit for Business Automation",
     description:
-      "Premium AI automation systems for teams that want to save time, reduce manual work, and scale faster.",
+      "Discover practical AI workflow automation opportunities for your business with a free AI audit from Vektrum.",
     url: "https://vecktrum-agency.com",
     siteName: "Vektrum",
     type: "website"
