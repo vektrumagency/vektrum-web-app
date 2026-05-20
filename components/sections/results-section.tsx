@@ -11,13 +11,13 @@ export function ResultsSection({ section, results }: ResultsSectionProps) {
       eyebrow={section.eyebrow}
       title={section.title}
       description={section.description}
-      className="border-y border-border/80 bg-background/40"
+      className="border-y border-border/80 bg-surface/25"
     >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {results.map((item, index) => (
           <article
             key={item}
-            className="rounded-2xl border border-border bg-surface p-5 reveal"
+            className="rounded-2xl border border-border bg-surface/85 p-5 reveal"
             style={{ animationDelay: `${index * 80}ms` }}
           >
             <p className="text-sm leading-relaxed text-muted">{item}</p>

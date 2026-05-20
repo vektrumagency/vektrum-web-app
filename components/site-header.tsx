@@ -11,7 +11,7 @@ type SiteHeaderProps = {
 
 export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHeaderProps) {
   return (
-    <header className="sticky top-0 z-50 border-b border-border/80 bg-surface/85 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/82 backdrop-blur-xl">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
         <BrandLogo compact className="shrink-0" />
         <nav aria-label="Primary" className="hidden items-center gap-7 md:flex">
@@ -39,7 +39,9 @@ export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHead
         </div>
         <a
           href={bookCallUrl}
-          className="rounded-full bg-accent px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-accent/90 sm:px-4 sm:py-2 sm:text-sm"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="max-w-[178px] shrink-0 truncate rounded-full bg-accent px-3 py-1.5 text-center text-xs font-semibold text-background shadow-[0_14px_28px_-18px_rgb(74_181_211)] transition hover:-translate-y-0.5 hover:bg-accent-soft sm:max-w-none sm:px-4 sm:py-2 sm:text-sm"
         >
           {ctaLabel}
         </a>
@@ -51,7 +53,7 @@ export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHead
               <a
                 key={item.href}
                 href={item.href}
-                className="shrink-0 rounded-full border border-border bg-background/60 px-3 py-1.5 text-xs text-muted"
+                className="shrink-0 rounded-full border border-border bg-surface/80 px-3 py-1.5 text-xs text-muted"
               >
                 {item.label}
               </a>

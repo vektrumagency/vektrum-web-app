@@ -1,7 +1,3 @@
-"use client";
-
-import { FormEvent, useState } from "react";
-
 type ContactSectionProps = {
   section: { eyebrow: string; title: string; description: string; cta: string; submit: string };
   bookCallUrl: string;
@@ -10,63 +6,23 @@ type ContactSectionProps = {
 };
 
 export function ContactSection({ section, bookCallUrl, email, locale }: ContactSectionProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const labels =
     locale === "pt-PT"
       ? {
-          name: "Nome",
-          email: "Email",
-          company: "Empresa",
-          message: "Mensagem",
-          namePlaceholder: "O seu nome",
-          emailPlaceholder: "nome@empresa.com",
-          companyPlaceholder: "Nome da empresa",
-          messagePlaceholder: "Descreva os processos repetitivos ou tarefas que consomem tempo.",
-          emailSubject: "Pedido de Auditoria Gratuita de IA",
-          submitPending: "A abrir email..."
+          items: ["Processos repetitivos", "Ferramentas atuais", "Primeiras oportunidades"],
+          emailLabel: "Também pode contactar diretamente"
         }
       : {
-          name: "Name",
-          email: "Email",
-          company: "Company",
-          message: "Message",
-          namePlaceholder: "Your name",
-          emailPlaceholder: "you@company.com",
-          companyPlaceholder: "Company name",
-          messagePlaceholder: "Tell us which repetitive workflows or tasks are consuming time.",
-          emailSubject: "Free AI Audit request",
-          submitPending: "Opening email..."
+          items: ["Repetitive workflows", "Current tools", "First opportunities"],
+          emailLabel: "You can also contact us directly"
         };
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setIsSubmitting(true);
-
-    const formData = new FormData(event.currentTarget);
-    const name = String(formData.get("name") ?? "").trim();
-    const senderEmail = String(formData.get("email") ?? "").trim();
-    const company = String(formData.get("company") ?? "").trim();
-    const message = String(formData.get("message") ?? "").trim();
-
-    const lines = [
-      `${labels.name}: ${name}`,
-      `${labels.email}: ${senderEmail}`,
-      `${labels.company}: ${company || "-"}`,
-      "",
-      `${labels.message}:`,
-      message
-    ];
-
-    const mailtoHref = `mailto:${email}?subject=${encodeURIComponent(labels.emailSubject)}&body=${encodeURIComponent(lines.join("\n"))}`;
-    window.location.href = mailtoHref;
-    setIsSubmitting(false);
-  }
-
   return (
-    <section id="contact" className="relative py-16 sm:py-24">
-      <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 lg:grid-cols-[0.9fr_1.1fr]">
+    <section id="contact" className="relative overflow-hidden py-16 sm:py-24">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+      <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <div className="reveal">
-          <p className="mb-4 inline-flex rounded-full border border-border bg-surface/90 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-muted">
+          <p className="mb-4 inline-flex max-w-full rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.16em] text-accent-soft sm:tracking-[0.2em]">
             {section.eyebrow}
           </p>
           <h2 className="font-heading text-3xl font-semibold tracking-tight text-text sm:text-4xl">
@@ -77,77 +33,34 @@ export function ContactSection({ section, bookCallUrl, email, locale }: ContactS
           </p>
           <a
             href={bookCallUrl}
-            className="mt-6 inline-flex w-full justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white transition hover:bg-accent/90 sm:w-auto"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-7 inline-flex w-full justify-center rounded-full bg-accent px-6 py-3 text-sm font-semibold text-background shadow-[0_18px_40px_-24px_rgb(74_181_211)] transition hover:-translate-y-0.5 hover:bg-accent-soft sm:w-auto"
           >
             {section.cta}
           </a>
         </div>
-        <form
-          className="reveal rounded-3xl border border-border bg-surface p-6 shadow-glow md:p-8 lg:[animation-delay:160ms]"
-          onSubmit={handleSubmit}
-          aria-label="Contact form"
-        >
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="sm:col-span-1">
-              <label className="mb-2 block text-xs uppercase tracking-[0.14em] text-muted" htmlFor="name">
-                {labels.name}
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                className="w-full rounded-xl border border-border bg-background/60 px-4 py-3 text-sm text-text outline-none transition placeholder:text-muted focus:border-accent/50"
-                placeholder={labels.namePlaceholder}
-              />
-            </div>
-            <div className="sm:col-span-1">
-              <label className="mb-2 block text-xs uppercase tracking-[0.14em] text-muted" htmlFor="email">
-                {labels.email}
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                className="w-full rounded-xl border border-border bg-background/60 px-4 py-3 text-sm text-text outline-none transition placeholder:text-muted focus:border-accent/50"
-                placeholder={labels.emailPlaceholder}
-              />
-            </div>
-            <div className="sm:col-span-2">
-              <label className="mb-2 block text-xs uppercase tracking-[0.14em] text-muted" htmlFor="company">
-                {labels.company}
-              </label>
-              <input
-                id="company"
-                name="company"
-                type="text"
-                className="w-full rounded-xl border border-border bg-background/60 px-4 py-3 text-sm text-text outline-none transition placeholder:text-muted focus:border-accent/50"
-                placeholder={labels.companyPlaceholder}
-              />
-            </div>
-            <div className="sm:col-span-2">
-              <label className="mb-2 block text-xs uppercase tracking-[0.14em] text-muted" htmlFor="message">
-                {labels.message}
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows={5}
-                required
-                className="w-full rounded-xl border border-border bg-background/60 px-4 py-3 text-sm text-text outline-none transition placeholder:text-muted focus:border-accent/50"
-                placeholder={labels.messagePlaceholder}
-              />
-            </div>
+        <div className="reveal rounded-3xl border border-border bg-surface/85 p-6 shadow-glow md:p-8 lg:[animation-delay:160ms]">
+          <div className="grid gap-3">
+            {labels.items.map((item, index) => (
+              <div key={item} className="flex items-center gap-4 rounded-2xl border border-border bg-background/55 p-4">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-accent/25 bg-accent/10 font-heading text-sm font-semibold text-accent-soft">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span className="text-sm font-medium text-text">{item}</span>
+              </div>
+            ))}
           </div>
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="mt-5 inline-flex w-full justify-center rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-accent/90 sm:w-auto"
-          >
-            {isSubmitting ? labels.submitPending : section.submit}
-          </button>
-        </form>
+          <div className="mt-6 rounded-2xl border border-accent/20 bg-accent/10 p-5">
+            <p className="text-sm leading-relaxed text-muted">{labels.emailLabel}</p>
+            <a
+              href={`mailto:${email}`}
+              className="mt-2 inline-flex text-sm font-semibold text-text transition hover:text-accent-soft"
+            >
+              {email}
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   );

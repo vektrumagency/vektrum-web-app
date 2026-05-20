@@ -19,7 +19,7 @@ export function FAQSection({ section, faqs, ctaLabel, ctaHref }: FAQSectionProps
         {faqs.map((faq, index) => (
           <details
             key={faq.question}
-            className="group rounded-2xl border border-border bg-surface p-5 reveal"
+            className="group rounded-2xl border border-border bg-surface/85 p-5 reveal"
             style={{ animationDelay: `${index * 70}ms` }}
           >
             <summary className="cursor-pointer list-none pr-8 font-medium text-text">
@@ -33,7 +33,9 @@ export function FAQSection({ section, faqs, ctaLabel, ctaHref }: FAQSectionProps
       <div className="mt-8 flex justify-center">
         <a
           href={ctaHref}
-          className="rounded-full border border-border bg-surface px-6 py-3 text-sm font-semibold text-text transition hover:border-accent/40 hover:bg-surface/80"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-full border border-border bg-surface/85 px-6 py-3 text-sm font-semibold text-text transition hover:border-accent/40 hover:bg-surface"
         >
           {ctaLabel}
         </a>

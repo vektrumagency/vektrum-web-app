@@ -16,7 +16,7 @@ export function SolutionSection({ section }: SolutionSectionProps) {
         {section.outcomes.map((outcome, index) => (
           <article
             key={outcome.title}
-            className="rounded-2xl border border-border bg-surface p-6 reveal"
+            className="rounded-2xl border border-border bg-surface/85 p-6 reveal"
             style={{ animationDelay: `${index * 90}ms` }}
           >
             <div className="mb-4 h-1.5 w-16 rounded-full bg-accent" />

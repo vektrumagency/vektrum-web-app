@@ -22,7 +22,7 @@ export function SectionShell({
       <div className="mx-auto w-full max-w-6xl px-6">
         <header className="mb-12 max-w-2xl">
           {eyebrow ? (
-            <p className="mb-4 inline-flex rounded-full border border-border bg-surface/90 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-muted">
+            <p className="mb-4 inline-flex max-w-full rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-accent-soft">
               {eyebrow}
             </p>
           ) : null}

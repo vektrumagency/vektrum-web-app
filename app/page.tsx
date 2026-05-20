@@ -31,16 +31,16 @@ export async function generateMetadata({ searchParams }: HomePageProps): Promise
 
   if (locale === "pt-PT") {
     return {
-      title: "Vektrum | Auditoria Gratuita de Inteligência Artificial",
+      title: "Vektrum | Automação prática para empresas",
       description:
-        "Marque uma auditoria gratuita de IA com a Vektrum e descubra oportunidades práticas de automação com IA, agentes de IA e automatização de processos empresariais.",
+        "Automatize o trabalho que abranda o seu negócio com sistemas práticos que poupam tempo, reduzem trabalho manual e melhoram operações.",
       alternates: {
         canonical: "/?lang=pt-PT"
       },
       openGraph: {
-        title: "Vektrum | Auditoria Gratuita de Inteligência Artificial",
+        title: "Vektrum | Automação prática para empresas",
         description:
-          "Descubra onde a inteligência artificial para empresas pode poupar tempo e reduzir trabalho manual com uma auditoria gratuita da Vektrum.",
+          "A Vektrum desenha e constrói automações práticas para leads, suporte, reporting, CRM, administração e follow-ups.",
         url: "https://vecktrum-agency.com/?lang=pt-PT",
         siteName: "Vektrum",
         type: "website"
@@ -49,16 +49,16 @@ export async function generateMetadata({ searchParams }: HomePageProps): Promise
   }
 
   return {
-    title: "Vektrum | Free AI Audit for Business Automation",
+    title: "Vektrum | Practical Business Automation Systems",
     description:
-      "Book a free AI audit with Vektrum to discover practical AI automation agency opportunities, AI agents for business, and AI workflow automation.",
+      "Automate the work that slows your business down with practical systems for leads, support, reporting, CRM, admin workflows, and follow-ups.",
     alternates: {
       canonical: "/"
     },
     openGraph: {
-      title: "Vektrum | Free AI Audit for Business Automation",
+      title: "Vektrum | Practical Business Automation Systems",
       description:
-        "Discover where AI automation can save time, reduce manual work, and improve business process automation with a free AI audit.",
+        "Vektrum designs and builds automation systems that save time, reduce manual work, and help teams operate faster.",
       url: "https://vecktrum-agency.com",
       siteName: "Vektrum",
       type: "website"
@@ -76,14 +76,14 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const ctaCopy =
     locale === "pt-PT"
       ? {
-          servicesLabel: "Marcar Auditoria Gratuita",
-          processLabel: "Marcar Auditoria Gratuita",
-          faqLabel: "Falar sobre uma Auditoria Gratuita"
+          servicesLabel: "Auditoria gratuita de IA",
+          processLabel: "Auditoria gratuita de IA",
+          faqLabel: "Auditoria gratuita de IA"
         }
       : {
-          servicesLabel: "Book a Free AI Audit",
-          processLabel: "Book a Free AI Audit",
-          faqLabel: "Talk About a Free AI Audit"
+          servicesLabel: "Free AI audit",
+          processLabel: "Free AI audit",
+          faqLabel: "Free AI audit"
         };
 
   return (

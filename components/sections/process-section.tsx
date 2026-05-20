@@ -14,13 +14,13 @@ export function ProcessSection({ section, processSteps, ctaLabel, ctaHref }: Pro
       eyebrow={section.eyebrow}
       title={section.title}
       description={section.description}
-      className="bg-background/40"
+      className="bg-surface/25"
     >
       <div className="grid gap-4 md:grid-cols-2">
         {processSteps.map((item, index) => (
           <article
             key={item.title}
-            className="rounded-2xl border border-border bg-surface p-6 reveal"
+            className="rounded-2xl border border-border bg-surface/85 p-6 reveal"
             style={{ animationDelay: `${100 + index * 100}ms` }}
           >
             <p className="font-heading text-sm tracking-[0.25em] text-accent">{item.step}</p>
@@ -35,7 +35,9 @@ export function ProcessSection({ section, processSteps, ctaLabel, ctaHref }: Pro
       <div className="mt-8 flex justify-center">
         <a
           href={ctaHref}
-          className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition hover:bg-accent/90"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-background transition hover:bg-accent-soft"
         >
           {ctaLabel}
         </a>

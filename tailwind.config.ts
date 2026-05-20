@@ -14,7 +14,7 @@ const config: Config = {
         "accent-soft": "rgb(var(--color-accent-soft) / <alpha-value>)"
       },
       boxShadow: {
-        glow: "0 0 0 1px rgb(226 232 240 / 0.9), 0 24px 45px -26px rgb(15 23 42 / 0.24)"
+        glow: "0 0 0 1px rgb(74 181 211 / 0.08), 0 28px 60px -32px rgb(0 0 0 / 0.8)"
       },
       animation: {
         "float-slow": "float 8s ease-in-out infinite",

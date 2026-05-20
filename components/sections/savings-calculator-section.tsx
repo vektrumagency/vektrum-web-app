@@ -61,10 +61,10 @@ export function SavingsCalculatorSection({ section, locale, ctaHref }: SavingsCa
   });
 
   return (
-    <section id="calculator" className="relative border-y border-border/80 bg-background/55 py-16 sm:py-24">
+    <section id="calculator" className="relative border-y border-border/80 bg-surface/25 py-16 sm:py-24">
       <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
         <div className="reveal">
-          <p className="mb-4 inline-flex rounded-full border border-border bg-surface/90 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-muted">
+          <p className="mb-4 inline-flex max-w-full rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.16em] text-accent-soft sm:tracking-[0.2em]">
             {section.eyebrow}
           </p>
           <h2 className="font-heading text-3xl font-semibold tracking-tight text-text sm:text-4xl">
@@ -75,14 +75,16 @@ export function SavingsCalculatorSection({ section, locale, ctaHref }: SavingsCa
             <p className="font-heading text-xl font-semibold text-text">{section.ctaTitle}</p>
             <a
               href={ctaHref}
-              className="mt-4 inline-flex w-full justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/90 sm:w-auto"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex w-full justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-background transition hover:bg-accent-soft sm:w-auto"
             >
               {section.ctaLabel}
             </a>
           </div>
         </div>
 
-        <div className="reveal rounded-3xl border border-border bg-surface p-5 shadow-glow sm:p-6 lg:[animation-delay:140ms]">
+        <div className="reveal rounded-3xl border border-border bg-surface/85 p-5 shadow-glow sm:p-6 lg:[animation-delay:140ms]">
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="block rounded-2xl border border-border bg-background/60 p-4">
               <span className="block text-sm font-semibold text-text">{section.employeesLabel}</span>
@@ -93,7 +95,7 @@ export function SavingsCalculatorSection({ section, locale, ctaHref }: SavingsCa
                 max={500}
                 value={employees}
                 onChange={(event) => setEmployees(clamp(Number(event.target.value) || 1, 1, 500))}
-                className="mt-4 w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm text-text outline-none transition focus:border-accent/70"
+                className="mt-4 w-full rounded-xl border border-border bg-background/80 px-3 py-2 text-sm text-text outline-none transition focus:border-accent/70"
               />
             </label>
 
@@ -106,7 +108,7 @@ export function SavingsCalculatorSection({ section, locale, ctaHref }: SavingsCa
                 max={80}
                 value={hours}
                 onChange={(event) => setHours(clamp(Number(event.target.value) || 1, 1, 80))}
-                className="mt-4 w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm text-text outline-none transition focus:border-accent/70"
+                className="mt-4 w-full rounded-xl border border-border bg-background/80 px-3 py-2 text-sm text-text outline-none transition focus:border-accent/70"
               />
             </label>
 
@@ -119,7 +121,7 @@ export function SavingsCalculatorSection({ section, locale, ctaHref }: SavingsCa
                 max={500}
                 value={hourlyCost}
                 onChange={(event) => setHourlyCost(clamp(Number(event.target.value) || 1, 1, 500))}
-                className="mt-4 w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm text-text outline-none transition focus:border-accent/70"
+                className="mt-4 w-full rounded-xl border border-border bg-background/80 px-3 py-2 text-sm text-text outline-none transition focus:border-accent/70"
               />
             </label>
 
@@ -141,26 +143,26 @@ export function SavingsCalculatorSection({ section, locale, ctaHref }: SavingsCa
             </label>
           </div>
 
-          <div className="mt-5 rounded-2xl border border-accent/25 bg-text p-5 text-white">
-            <p className="text-sm font-medium text-white/70">{section.resultsTitle}</p>
+          <div className="mt-5 rounded-2xl border border-accent/25 bg-background/85 p-5 text-text">
+            <p className="text-sm font-medium text-muted">{section.resultsTitle}</p>
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
               <div>
                 <p className="font-heading text-2xl font-semibold">
                   {numberFormatter.format(results.monthlyHoursSaved)}
                 </p>
-                <p className="mt-1 text-xs text-white/65">{section.hoursSavedLabel}</p>
+                <p className="mt-1 text-xs text-muted">{section.hoursSavedLabel}</p>
               </div>
               <div>
                 <p className="font-heading text-2xl font-semibold">
                   {currencyFormatter.format(results.monthlySavings)}
                 </p>
-                <p className="mt-1 text-xs text-white/65">{section.monthlySavingsLabel}</p>
+                <p className="mt-1 text-xs text-muted">{section.monthlySavingsLabel}</p>
               </div>
               <div>
                 <p className="font-heading text-2xl font-semibold">
                   {currencyFormatter.format(results.yearlySavings)}
                 </p>
-                <p className="mt-1 text-xs text-white/65">{section.yearlySavingsLabel}</p>
+                <p className="mt-1 text-xs text-muted">{section.yearlySavingsLabel}</p>
               </div>
             </div>
           </div>

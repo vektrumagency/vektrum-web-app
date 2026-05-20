@@ -19,7 +19,7 @@ export function ServicesSection({ section, services, ctaLabel, ctaHref }: Servic
         {services.map((service, index) => (
           <article
             key={service.title}
-            className="group rounded-2xl border border-border bg-surface p-6 transition hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_20px_35px_-28px_rgba(15,23,42,0.65)]"
+            className="group rounded-2xl border border-border bg-surface/85 p-6 transition hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_20px_45px_-30px_rgb(0_0_0)]"
             style={{ animationDelay: `${120 + index * 90}ms` }}
           >
             <div className="mb-5 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background/60 text-sm font-semibold text-accent">
@@ -33,7 +33,9 @@ export function ServicesSection({ section, services, ctaLabel, ctaHref }: Servic
       <div className="mt-8 flex justify-center">
         <a
           href={ctaHref}
-          className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition hover:bg-accent/90"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-background transition hover:bg-accent-soft"
         >
           {ctaLabel}
         </a>
