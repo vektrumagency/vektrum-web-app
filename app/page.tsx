@@ -9,6 +9,7 @@ import { HeroSection } from "@/components/sections/hero-section";
 import { ProcessSection } from "@/components/sections/process-section";
 import { ProblemSection } from "@/components/sections/problem-section";
 import { ResultsSection } from "@/components/sections/results-section";
+import { SectionDivider } from "@/components/section-divider";
 import { SavingsCalculatorSection } from "@/components/sections/savings-calculator-section";
 import { ServicesSection } from "@/components/sections/services-section";
 import { SolutionSection } from "@/components/sections/solution-section";
@@ -87,8 +88,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         };
 
   return (
-    <div className="relative min-h-screen overflow-x-clip">
-      <div className="page-gradient pointer-events-none fixed inset-0 -z-10" />
+    <div className="relative min-h-screen overflow-x-clip bg-background">
       <SiteHeader
         locale={locale}
         navItems={content.navItems}
@@ -138,6 +138,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           locale={locale}
         />
       </main>
+      <SectionDivider fromClassName="bg-background" toClassName="text-ink" />
       <SiteFooter footer={content.footer} email={config.brand.email} />
       <MobileStickyCta label={content.hero.primaryCta} href={config.brand.bookCallUrl} />
     </div>

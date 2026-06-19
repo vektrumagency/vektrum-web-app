@@ -1,3 +1,5 @@
+import { EyebrowTag } from "@/components/eyebrow-tag";
+
 type ContactSectionProps = {
   section: { eyebrow: string; title: string; description: string; cta: string; submit: string };
   bookCallUrl: string;
@@ -22,10 +24,8 @@ export function ContactSection({ section, bookCallUrl, email, locale }: ContactS
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <div className="reveal">
-          <p className="mb-4 inline-flex max-w-full rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.16em] text-accent-soft sm:tracking-[0.2em]">
-            {section.eyebrow}
-          </p>
-          <h2 className="font-heading text-3xl font-semibold tracking-tight text-text sm:text-4xl">
+          <EyebrowTag label={section.eyebrow} className="mb-5 text-accent" />
+          <h2 className="font-heading text-4xl uppercase leading-[0.95] tracking-tight text-text sm:text-5xl">
             {section.title}
           </h2>
           <p className="mt-4 max-w-md text-base leading-relaxed text-muted">
@@ -35,7 +35,7 @@ export function ContactSection({ section, bookCallUrl, email, locale }: ContactS
             href={bookCallUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-7 inline-flex w-full justify-center rounded-full bg-accent px-6 py-3 text-sm font-semibold text-background shadow-[0_18px_40px_-24px_rgb(74_181_211)] transition hover:-translate-y-0.5 hover:bg-accent-soft sm:w-auto"
+            className="mt-7 inline-flex w-full justify-center rounded-full bg-accent px-6 py-3 text-sm font-semibold text-background shadow-[0_18px_40px_-24px_rgb(var(--color-accent))] transition hover:-translate-y-0.5 hover:bg-accent-soft sm:w-auto"
           >
             {section.cta}
           </a>

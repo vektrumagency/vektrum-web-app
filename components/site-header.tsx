@@ -41,7 +41,7 @@ export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHead
           href={bookCallUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="max-w-[178px] shrink-0 truncate rounded-full bg-accent px-3 py-1.5 text-center text-xs font-semibold text-background shadow-[0_14px_28px_-18px_rgb(74_181_211)] transition hover:-translate-y-0.5 hover:bg-accent-soft sm:max-w-none sm:px-4 sm:py-2 sm:text-sm"
+          className="max-w-[178px] shrink-0 truncate rounded-full bg-accent px-3 py-1.5 text-center text-xs font-bold uppercase tracking-wide text-background shadow-[0_14px_28px_-18px_rgb(var(--color-accent))] transition hover:-translate-y-0.5 hover:bg-accent-soft sm:max-w-none sm:px-4 sm:py-2 sm:text-sm"
         >
           {ctaLabel}
         </a>

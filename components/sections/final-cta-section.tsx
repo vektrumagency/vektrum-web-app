@@ -1,3 +1,6 @@
+import { ScallopBadge } from "@/components/scallop-badge";
+import { SectionDivider } from "@/components/section-divider";
+
 type FinalCtaSectionProps = {
   section: {
     eyebrow: string;
@@ -10,32 +13,33 @@ type FinalCtaSectionProps = {
 
 export function FinalCtaSection({ section, ctaHref }: FinalCtaSectionProps) {
   return (
-    <section className="relative overflow-hidden py-16 sm:py-24">
-      <div className="mx-auto w-full max-w-6xl px-6">
-        <div className="relative overflow-hidden rounded-3xl border border-accent/25 bg-surface/90 px-6 py-10 shadow-glow sm:px-10 sm:py-14">
-          <div className="absolute right-[-120px] top-[-120px] h-72 w-72 rounded-full bg-accent/18 blur-3xl" />
-          <div className="absolute inset-x-10 bottom-0 h-px bg-gradient-to-r from-transparent via-accent/35 to-transparent" />
-          <div className="relative max-w-3xl">
-            <p className="mb-4 inline-flex rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-accent-soft">
-              {section.eyebrow}
-            </p>
-            <h2 className="font-heading text-3xl font-semibold tracking-tight text-text sm:text-5xl">
-              {section.title}
-            </h2>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted">
-              {section.description}
-            </p>
-            <a
-              href={ctaHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-8 inline-flex w-full justify-center rounded-full bg-accent px-6 py-3 text-sm font-semibold text-background transition hover:-translate-y-0.5 hover:bg-accent-soft sm:w-auto"
-            >
-              {section.cta}
-            </a>
+    <>
+      <SectionDivider fromClassName="bg-background" toClassName="text-accent" />
+      <section className="relative overflow-hidden bg-accent py-16 sm:py-24">
+        <div className="relative mx-auto w-full max-w-6xl px-6">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-pop">{section.eyebrow}</p>
+          <div className="flex flex-col items-start gap-8 sm:flex-row sm:items-center sm:justify-between">
+            <div className="max-w-2xl">
+              <h2 className="font-heading text-4xl uppercase leading-[0.95] tracking-tight text-background sm:text-5xl md:text-6xl">
+                {section.title}
+              </h2>
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-background/75">{section.description}</p>
+              <a
+                href={ctaHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-8 inline-flex rounded-full bg-background px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-ink transition hover:-translate-y-0.5 hover:bg-pop"
+              >
+                {section.cta}
+              </a>
+            </div>
+            <ScallopBadge className="text-pop" rotateClassName="hidden h-32 w-32 shrink-0 -rotate-6 lg:flex">
+              <span className="text-xs font-bold uppercase leading-tight text-ink">{section.cta}</span>
+            </ScallopBadge>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+      <SectionDivider fromClassName="bg-accent" toClassName="text-background" flip />
+    </>
   );
 }

@@ -1,4 +1,7 @@
 import { ReactNode } from "react";
+import { EyebrowTag } from "@/components/eyebrow-tag";
+
+type Tone = "cream" | "ink" | "accent";
 
 type SectionShellProps = {
   id?: string;
@@ -7,6 +10,28 @@ type SectionShellProps = {
   description?: string;
   children: ReactNode;
   className?: string;
+  tone?: Tone;
+};
+
+const toneStyles: Record<Tone, { section: string; eyebrow: string; title: string; description: string }> = {
+  cream: {
+    section: "bg-background text-text",
+    eyebrow: "text-accent",
+    title: "text-text",
+    description: "text-muted"
+  },
+  ink: {
+    section: "bg-ink text-background",
+    eyebrow: "text-pop",
+    title: "text-background",
+    description: "text-background/70"
+  },
+  accent: {
+    section: "bg-accent text-background",
+    eyebrow: "text-pop",
+    title: "text-background",
+    description: "text-background/75"
+  }
 };
 
 export function SectionShell({
@@ -15,22 +40,21 @@ export function SectionShell({
   title,
   description,
   children,
-  className
+  className,
+  tone = "cream"
 }: SectionShellProps) {
+  const styles = toneStyles[tone];
+
   return (
-    <section id={id} className={`relative py-16 sm:py-24 ${className ?? ""}`}>
+    <section id={id} className={`relative py-16 sm:py-24 ${styles.section} ${className ?? ""}`}>
       <div className="mx-auto w-full max-w-6xl px-6">
-        <header className="mb-12 max-w-2xl">
-          {eyebrow ? (
-            <p className="mb-4 inline-flex max-w-full rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-accent-soft">
-              {eyebrow}
-            </p>
-          ) : null}
-          <h2 className="font-heading text-3xl font-semibold tracking-tight text-text sm:text-4xl">
+        <header className="mb-12 max-w-3xl">
+          {eyebrow ? <EyebrowTag label={eyebrow} className={`mb-5 ${styles.eyebrow}`} /> : null}
+          <h2 className={`font-heading text-4xl uppercase leading-[0.95] tracking-tight sm:text-5xl md:text-6xl ${styles.title}`}>
             {title}
           </h2>
           {description ? (
-            <p className="mt-4 text-base leading-relaxed text-muted">{description}</p>
+            <p className={`mt-5 max-w-xl text-base leading-relaxed ${styles.description}`}>{description}</p>
           ) : null}
         </header>
         {children}

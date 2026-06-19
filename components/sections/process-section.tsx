@@ -1,4 +1,5 @@
 import { SectionShell } from "@/components/section-shell";
+import { SectionDivider } from "@/components/section-divider";
 
 type ProcessSectionProps = {
   section: { eyebrow: string; title: string; description: string; note?: string };
@@ -9,39 +10,37 @@ type ProcessSectionProps = {
 
 export function ProcessSection({ section, processSteps, ctaLabel, ctaHref }: ProcessSectionProps) {
   return (
-    <SectionShell
-      id="process"
-      eyebrow={section.eyebrow}
-      title={section.title}
-      description={section.description}
-      className="bg-surface/25"
-    >
-      <div className="grid gap-4 md:grid-cols-2">
-        {processSteps.map((item, index) => (
-          <article
-            key={item.title}
-            className="rounded-2xl border border-border bg-surface/85 p-6 reveal"
-            style={{ animationDelay: `${100 + index * 100}ms` }}
+    <>
+      <SectionDivider fromClassName="bg-background" toClassName="text-ink" />
+      <SectionShell id="process" eyebrow={section.eyebrow} title={section.title} description={section.description} tone="ink">
+        <div className="grid gap-4 md:grid-cols-2">
+          {processSteps.map((item, index) => (
+            <article
+              key={item.title}
+              className="rounded-2xl border border-background/15 bg-background/5 p-6 reveal"
+              style={{ animationDelay: `${100 + index * 100}ms` }}
+            >
+              <p className="font-heading text-sm tracking-[0.25em] text-pop">{item.step}</p>
+              <h3 className="mt-3 font-heading text-2xl uppercase text-background">{item.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-background/70">{item.description}</p>
+            </article>
+          ))}
+        </div>
+        {section.note ? (
+          <p className="mt-6 text-center text-sm font-medium text-background/70">{section.note}</p>
+        ) : null}
+        <div className="mt-8 flex justify-center">
+          <a
+            href={ctaHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full bg-pop px-6 py-3 text-sm font-bold uppercase tracking-wide text-ink transition hover:-translate-y-0.5"
           >
-            <p className="font-heading text-sm tracking-[0.25em] text-accent">{item.step}</p>
-            <h3 className="mt-3 font-heading text-2xl font-semibold text-text">{item.title}</h3>
-            <p className="mt-3 text-sm leading-relaxed text-muted">{item.description}</p>
-          </article>
-        ))}
-      </div>
-      {section.note ? (
-        <p className="mt-6 text-center text-sm font-medium text-muted">{section.note}</p>
-      ) : null}
-      <div className="mt-8 flex justify-center">
-        <a
-          href={ctaHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-background transition hover:bg-accent-soft"
-        >
-          {ctaLabel}
-        </a>
-      </div>
-    </SectionShell>
+            {ctaLabel}
+          </a>
+        </div>
+      </SectionShell>
+      <SectionDivider fromClassName="bg-ink" toClassName="text-background" flip />
+    </>
   );
 }

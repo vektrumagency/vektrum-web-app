@@ -6,16 +6,9 @@ type AboutSectionProps = {
 
 export function AboutSection({ section }: AboutSectionProps) {
   return (
-    <SectionShell
-      eyebrow={section.eyebrow}
-      title={section.title}
-      description={section.description}
-      className="bg-background/40"
-    >
-      <div className="rounded-2xl border border-border bg-surface p-6 reveal">
-        <p className="max-w-3xl text-sm leading-relaxed text-muted">
-          {section.body}
-        </p>
+    <SectionShell eyebrow={section.eyebrow} title={section.title} description={section.description}>
+      <div className="max-w-3xl border-l-2 border-accent pl-6 reveal">
+        <p className="text-base leading-relaxed text-muted">{section.body}</p>
       </div>
     </SectionShell>
   );

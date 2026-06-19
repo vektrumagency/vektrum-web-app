@@ -3,16 +3,18 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
-  --font-body: "SF Pro Text", "Avenir Next", "Inter", "Segoe UI", sans-serif;
-  --font-heading: "SF Pro Display", "Sora", "Avenir Next", "Segoe UI", sans-serif;
-  --color-background: 7 13 20;
-  --color-surface: 13 23 33;
-  --color-border: 47 65 80;
-  --color-text: 234 242 247;
-  --color-muted: 139 157 170;
-  --color-accent: 74 181 211;
-  --color-accent-soft: 139 211 231;
+  color-scheme: light;
+  --font-body: var(--font-sans), "Inter", "Segoe UI", sans-serif;
+  --font-heading: var(--font-display), "Arial Narrow", sans-serif;
+  --color-background: 245 241 234;
+  --color-surface: 251 248 242;
+  --color-border: 224 216 201;
+  --color-text: 26 24 22;
+  --color-muted: 111 103 91;
+  --color-accent: 43 31 219;
+  --color-accent-soft: 30 21 165;
+  --color-pop: 214 255 71;
+  --color-ink: 19 18 22;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -30,6 +32,7 @@ body {
 
 .font-heading {
   font-family: var(--font-heading);
+  letter-spacing: -0.01em;
 }
 
 .font-body {
@@ -37,10 +40,7 @@ body {
 }
 
 .page-gradient {
-  background-image:
-    radial-gradient(circle at 16% -10%, rgb(74 181 211 / 0.2), transparent 32%),
-    radial-gradient(circle at 82% 10%, rgb(91 120 143 / 0.18), transparent 28%),
-    linear-gradient(135deg, rgb(7 13 20), rgb(10 19 29) 45%, rgb(5 10 16));
+  background: rgb(var(--color-background));
 }
 
 ::selection {

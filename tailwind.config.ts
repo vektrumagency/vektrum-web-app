@@ -11,10 +11,12 @@ const config: Config = {
         text: "rgb(var(--color-text) / <alpha-value>)",
         muted: "rgb(var(--color-muted) / <alpha-value>)",
         accent: "rgb(var(--color-accent) / <alpha-value>)",
-        "accent-soft": "rgb(var(--color-accent-soft) / <alpha-value>)"
+        "accent-soft": "rgb(var(--color-accent-soft) / <alpha-value>)",
+        pop: "rgb(var(--color-pop) / <alpha-value>)",
+        ink: "rgb(var(--color-ink) / <alpha-value>)"
       },
       boxShadow: {
-        glow: "0 0 0 1px rgb(74 181 211 / 0.08), 0 28px 60px -32px rgb(0 0 0 / 0.8)"
+        glow: "0 0 0 1px rgb(19 18 22 / 0.06), 0 24px 48px -28px rgb(19 18 22 / 0.22), 0 10px 24px -16px rgb(43 31 219 / 0.16)"
       },
       animation: {
         "float-slow": "float 8s ease-in-out infinite",

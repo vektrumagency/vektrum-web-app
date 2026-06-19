@@ -1,5 +1,17 @@
 import type { Metadata } from "next";
+import { Anton, Inter } from "next/font/google";
 import "./globals.css";
+
+const displayFont = Anton({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-display"
+});
+
+const bodyFont = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans"
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://vecktrum-agency.com"),
@@ -29,7 +41,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${displayFont.variable} ${bodyFont.variable}`}>
       <body className="bg-background font-body text-text antialiased">
         {children}
       </body>

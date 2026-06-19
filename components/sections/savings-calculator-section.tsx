@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Locale } from "@/lib/site-config";
+import { EyebrowTag } from "@/components/eyebrow-tag";
 
 type SavingsCalculatorSectionProps = {
   section: {
@@ -61,30 +62,28 @@ export function SavingsCalculatorSection({ section, locale, ctaHref }: SavingsCa
   });
 
   return (
-    <section id="calculator" className="relative border-y border-border/80 bg-surface/25 py-16 sm:py-24">
+    <section id="calculator" className="relative bg-background py-16 sm:py-24">
       <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
         <div className="reveal">
-          <p className="mb-4 inline-flex max-w-full rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.16em] text-accent-soft sm:tracking-[0.2em]">
-            {section.eyebrow}
-          </p>
-          <h2 className="font-heading text-3xl font-semibold tracking-tight text-text sm:text-4xl">
+          <EyebrowTag label={section.eyebrow} className="mb-5 text-accent" />
+          <h2 className="font-heading text-4xl uppercase leading-[0.95] tracking-tight text-text sm:text-5xl">
             {section.title}
           </h2>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-muted">{section.description}</p>
-          <div className="mt-8 rounded-2xl border border-accent/25 bg-accent/10 p-5">
-            <p className="font-heading text-xl font-semibold text-text">{section.ctaTitle}</p>
+          <div className="mt-8 rounded-2xl bg-pop p-5">
+            <p className="font-heading text-xl uppercase text-ink">{section.ctaTitle}</p>
             <a
               href={ctaHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-flex w-full justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-background transition hover:bg-accent-soft sm:w-auto"
+              className="mt-4 inline-flex w-full justify-center rounded-full bg-ink px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-background transition hover:-translate-y-0.5 sm:w-auto"
             >
               {section.ctaLabel}
             </a>
           </div>
         </div>
 
-        <div className="reveal rounded-3xl border border-border bg-surface/85 p-5 shadow-glow sm:p-6 lg:[animation-delay:140ms]">
+        <div className="reveal rounded-3xl border border-border bg-surface p-5 shadow-glow sm:p-6 lg:[animation-delay:140ms]">
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="block rounded-2xl border border-border bg-background/60 p-4">
               <span className="block text-sm font-semibold text-text">{section.employeesLabel}</span>

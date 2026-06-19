@@ -10,7 +10,7 @@ export function MobileStickyCta({ label, href }: MobileStickyCtaProps) {
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="block w-full rounded-full bg-accent px-4 py-3 text-center text-sm font-semibold text-background"
+        className="block w-full rounded-full bg-accent px-4 py-3 text-center text-sm font-bold uppercase tracking-wide text-background"
       >
         {label}
       </a>
