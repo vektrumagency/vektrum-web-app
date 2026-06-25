@@ -11,18 +11,26 @@ type SolutionSectionProps = {
   };
 };
 
-function AnimatedDescription({ text }: { text: string }) {
+function getWordsWithIndices(text: string) {
   const words = text.split(" ");
-  let charIndex = 0;
+  let cumCharIndex = 0;
+  return words.map((word) => {
+    const startIndex = cumCharIndex;
+    cumCharIndex += word.length + 1; // +1 for the space
+    return { word, startIndex };
+  });
+}
+
+function AnimatedDescription({ text }: { text: string }) {
+  const wordsWithIndices = getWordsWithIndices(text);
 
   return (
     <p className="mt-3 text-sm leading-relaxed text-background/80">
-      {words.map((word, wordIndex) => (
+      {wordsWithIndices.map(({ word, startIndex }, wordIndex) => (
         <Fragment key={wordIndex}>
           <span className="inline-block whitespace-nowrap">
-            {word.split("").map((char) => {
-              const delay = charIndex * 6;
-              charIndex += 1;
+            {word.split("").map((char, charIdx) => {
+              const delay = (startIndex + charIdx) * 6;
               return (
                 <span
                   key={delay}
@@ -34,7 +42,7 @@ function AnimatedDescription({ text }: { text: string }) {
               );
             })}
           </span>
-          {wordIndex < words.length - 1 ? " " : null}
+          {wordIndex < wordsWithIndices.length - 1 ? " " : null}
         </Fragment>
       ))}
     </p>

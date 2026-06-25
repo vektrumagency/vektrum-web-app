@@ -252,12 +252,12 @@ export const defaultSiteConfig: SiteConfig = {
           "These are practical starting points for businesses that want faster operations without adding extra headcount or complexity."
       },
       useCases: [
-        { title: "Lead management", description: "Form capture, lead scoring, enrichment, CRM updates, routing, reminders, and follow-up sequences." },
-        { title: "Customer support", description: "Ticket classification, reply drafts, knowledge retrieval, escalation rules, and support reporting." },
-        { title: "Reporting", description: "Automated data collection, KPI summaries, scheduled reports, and internal dashboards for recurring reviews." },
-        { title: "Admin workflows", description: "Document processing, onboarding tasks, approvals, calendar updates, invoice checks, and recurring reminders." },
-        { title: "CRM operations", description: "Record cleanup, pipeline updates, meeting notes, sales handoffs, and customer lifecycle automations." },
-        { title: "Email follow-ups", description: "Context-aware reminders and follow-ups after calls, quotes, form submissions, bookings, and support events." }
+        { title: "Client onboarding", description: "Automate contract creation, project folder setup, and welcome emails when a deal is closed won in your CRM." },
+        { title: "Support triage", description: "Automatically tag incoming tickets by urgency, draft initial responses based on knowledge bases, and alert the team." },
+        { title: "Lead routing", description: "Route new inbound leads instantly based on industry or region, setting reminders for sales reps to follow up." },
+        { title: "Weekly reporting", description: "Pull weekly sales and support KPIs automatically, compile them into a PDF, and email it to management." },
+        { title: "Data synchronization", description: "Keep Stripe purchases, operational Google Sheets, and CRM databases in sync automatically in real-time." },
+        { title: "Meeting follow-ups", description: "Transcribe Zoom calls, extract action items, log them in your CRM under the client profile, and email follow-ups." }
       ],
       aboutSection: {
         eyebrow: "About",
@@ -459,12 +459,12 @@ export const defaultSiteConfig: SiteConfig = {
           "Pontos de partida práticos para empresas que querem operações mais rápidas sem acrescentar equipa ou complexidade."
       },
       useCases: [
-        { title: "Gestão de leads", description: "Captura em formulários, scoring, enriquecimento, atualização de CRM, encaminhamento, lembretes e follow-ups." },
-        { title: "Suporte ao cliente", description: "Classificação de tickets, rascunhos de resposta, pesquisa em base de conhecimento, escalonamento e reporting." },
-        { title: "Reporting", description: "Recolha automática de dados, resumos de KPIs, relatórios programados e dashboards internos." },
-        { title: "Fluxos administrativos", description: "Documentos, onboarding, aprovações, calendários, validação de faturas e lembretes recorrentes." },
-        { title: "Operações de CRM", description: "Limpeza de registos, atualizações de pipeline, notas de reunião, passagens comerciais e ciclo de cliente." },
-        { title: "Follow-ups por email", description: "Lembretes e follow-ups contextuais após chamadas, propostas, formulários, reservas e eventos de suporte." }
+        { title: "Onboarding de clientes", description: "Envio automático de contratos, criação de pastas de projeto e notificações de boas-vindas assim que um negócio é ganho no CRM." },
+        { title: "Triagem de suporte", description: "Classificação automática de tickets recebidos por urgência, sugestão de respostas baseadas em histórico e alertas no Slack." },
+        { title: "Distribuição de leads", description: "Distribuição imediata de leads comerciais com base na indústria ou país da empresa, enviando alertas ao vendedor correto." },
+        { title: "Relatórios operacionais", description: "KPIs semanais de vendas e suporte extraídos do CRM e enviados em formato PDF via email à equipa de gestão." },
+        { title: "Atualização de bases de dados", description: "Sincronização bidirecional em tempo real entre dados de novos pedidos do Stripe, folha de cálculo operacional e o CRM." },
+        { title: "Follow-ups de reuniões", description: "Resumos automáticos de reuniões de Zoom guardados nas notas do cliente, juntamente com o envio de tarefas propostas." }
       ],
       aboutSection: {
         eyebrow: "Sobre",
