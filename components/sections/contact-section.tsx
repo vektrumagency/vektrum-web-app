@@ -22,7 +22,7 @@ export function ContactSection({ section, bookCallUrl, email, locale }: ContactS
   return (
     <section id="contact" className="relative overflow-hidden py-16 sm:py-24">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-      <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+      <div className="mx-auto grid w-[90vw] sm:w-[80vw] gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <div className="reveal">
           <EyebrowTag label={section.eyebrow} className="mb-5 text-accent" />
           <h2 className="font-heading text-4xl uppercase leading-[0.95] tracking-tight text-text sm:text-5xl">

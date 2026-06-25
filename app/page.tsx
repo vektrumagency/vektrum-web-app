@@ -28,7 +28,7 @@ export async function generateMetadata({ searchParams }: HomePageProps): Promise
   const params = await searchParams;
   const langParam = params.lang;
   const selected = Array.isArray(langParam) ? langParam[0] : langParam;
-  const locale: Locale = selected === "pt-PT" ? "pt-PT" : "en";
+  const locale: Locale = selected === "en" ? "en" : "pt-PT";
 
   if (locale === "pt-PT") {
     return {
@@ -71,7 +71,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const params = await searchParams;
   const langParam = params.lang;
   const selected = Array.isArray(langParam) ? langParam[0] : langParam;
-  const locale: Locale = selected === "pt-PT" ? "pt-PT" : "en";
+  const locale: Locale = selected === "en" ? "en" : "pt-PT";
   const config = getRuntimeConfig();
   const content = config.locales[locale];
   const ctaCopy =
@@ -102,8 +102,8 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           primaryHref={config.brand.bookCallUrl}
           secondaryHref="#process"
         />
-        <ProblemSection section={content.problemSection} problems={content.problems} />
         <SolutionSection section={content.solutionSection} />
+        <ProblemSection section={content.problemSection} problems={content.problems} />
         <SavingsCalculatorSection
           section={content.calculatorSection}
           locale={locale}

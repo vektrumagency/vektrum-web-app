@@ -16,7 +16,7 @@ export function FinalCtaSection({ section, ctaHref }: FinalCtaSectionProps) {
     <>
       <SectionDivider fromClassName="bg-background" toClassName="text-accent" />
       <section className="relative overflow-hidden bg-accent py-16 sm:py-24">
-        <div className="relative mx-auto w-full max-w-6xl px-6">
+        <div className="relative mx-auto w-[90vw] sm:w-[80vw]">
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-pop">{section.eyebrow}</p>
           <div className="flex flex-col items-start gap-8 sm:flex-row sm:items-center sm:justify-between">
             <div className="max-w-2xl">

@@ -63,7 +63,7 @@ export function SavingsCalculatorSection({ section, locale, ctaHref }: SavingsCa
 
   return (
     <section id="calculator" className="relative bg-background py-16 sm:py-24">
-      <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+      <div className="mx-auto grid w-[90vw] sm:w-[80vw] gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
         <div className="reveal">
           <EyebrowTag label={section.eyebrow} className="mb-5 text-accent" />
           <h2 className="font-heading text-4xl uppercase leading-[0.95] tracking-tight text-text sm:text-5xl">

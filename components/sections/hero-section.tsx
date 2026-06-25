@@ -27,9 +27,9 @@ type HeroSectionProps = {
 export function HeroSection({ hero, heroStats, primaryHref, secondaryHref }: HeroSectionProps) {
   return (
     <>
-      <section id="home" className="relative overflow-hidden bg-accent pb-20 pt-12 sm:pt-16">
+      <section id="home" className="relative overflow-hidden bg-accent pb-20 pt-36 sm:pt-28">
         <div className="pointer-events-none absolute right-6 top-6 h-3 w-3 rounded-full bg-pop sm:right-10 sm:top-10 sm:h-4 sm:w-4" />
-        <div className="relative mx-auto w-full max-w-6xl px-6">
+        <div className="relative mx-auto w-[90vw] sm:w-[80vw]">
           <p className="mb-8 max-w-xs text-xs font-semibold uppercase tracking-[0.2em] text-background/80 sm:text-sm">
             {hero.eyebrow}
           </p>
@@ -51,7 +51,7 @@ export function HeroSection({ hero, heroStats, primaryHref, secondaryHref }: Her
             >
               {hero.secondaryCta}
             </a>
-            <ScallopBadge className="text-pop" rotateClassName="hidden h-24 w-24 shrink-0 rotate-6 sm:flex">
+            <ScallopBadge className="text-pop" rotateClassName="hidden h-24 w-24 shrink-0 animate-[spin_8s_linear_infinite] sm:flex">
               <span className="text-[11px] font-bold uppercase leading-tight text-ink">{heroStats.liveLabel}</span>
             </ScallopBadge>
           </div>

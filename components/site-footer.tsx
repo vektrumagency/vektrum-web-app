@@ -14,7 +14,7 @@ type SiteFooterProps = {
 export function SiteFooter({ footer, email }: SiteFooterProps) {
   return (
     <footer className="bg-ink py-12">
-      <div className="mx-auto grid w-full max-w-6xl gap-10 px-6 md:grid-cols-3">
+      <div className="mx-auto grid w-[90vw] sm:w-[80vw] gap-10 md:grid-cols-3">
         <div>
           <BrandLogo showTagline light />
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-background/65">
