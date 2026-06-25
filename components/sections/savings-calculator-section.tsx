@@ -83,9 +83,9 @@ export function SavingsCalculatorSection({ section, locale, ctaHref }: SavingsCa
           </div>
         </div>
 
-        <div className="reveal rounded-3xl border border-border bg-surface p-5 shadow-glow sm:p-6 lg:[animation-delay:140ms]">
+        <div className="reveal rounded-3xl bg-surface p-5 sm:p-6 lg:[animation-delay:140ms]">
           <div className="grid gap-4 sm:grid-cols-2">
-            <label className="block rounded-2xl border border-border bg-background/60 p-4">
+            <label className="block rounded-2xl bg-background/60 p-4">
               <span className="block text-sm font-semibold text-text">{section.employeesLabel}</span>
               <span className="mt-1 block text-xs text-muted">{section.employeesHint}</span>
               <input
@@ -94,11 +94,11 @@ export function SavingsCalculatorSection({ section, locale, ctaHref }: SavingsCa
                 max={500}
                 value={employees}
                 onChange={(event) => setEmployees(clamp(Number(event.target.value) || 1, 1, 500))}
-                className="mt-4 w-full rounded-xl border border-border bg-background/80 px-3 py-2 text-sm text-text outline-none transition focus:border-accent/70"
+                className="mt-4 w-full rounded-xl border border-border bg-background/80 px-3 py-2 text-sm text-text outline-none"
               />
             </label>
 
-            <label className="block rounded-2xl border border-border bg-background/60 p-4">
+            <label className="block rounded-2xl bg-background/60 p-4">
               <span className="block text-sm font-semibold text-text">{section.hoursLabel}</span>
               <span className="mt-1 block text-xs text-muted">{section.hoursHint}</span>
               <input
@@ -107,11 +107,11 @@ export function SavingsCalculatorSection({ section, locale, ctaHref }: SavingsCa
                 max={80}
                 value={hours}
                 onChange={(event) => setHours(clamp(Number(event.target.value) || 1, 1, 80))}
-                className="mt-4 w-full rounded-xl border border-border bg-background/80 px-3 py-2 text-sm text-text outline-none transition focus:border-accent/70"
+                className="mt-4 w-full rounded-xl border border-border bg-background/80 px-3 py-2 text-sm text-text outline-none"
               />
             </label>
 
-            <label className="block rounded-2xl border border-border bg-background/60 p-4">
+            <label className="block rounded-2xl bg-background/60 p-4">
               <span className="block text-sm font-semibold text-text">{section.hourlyCostLabel}</span>
               <span className="mt-1 block text-xs text-muted">{section.hourlyCostHint}</span>
               <input
@@ -120,11 +120,11 @@ export function SavingsCalculatorSection({ section, locale, ctaHref }: SavingsCa
                 max={500}
                 value={hourlyCost}
                 onChange={(event) => setHourlyCost(clamp(Number(event.target.value) || 1, 1, 500))}
-                className="mt-4 w-full rounded-xl border border-border bg-background/80 px-3 py-2 text-sm text-text outline-none transition focus:border-accent/70"
+                className="mt-4 w-full rounded-xl border border-border bg-background/80 px-3 py-2 text-sm text-text outline-none"
               />
             </label>
 
-            <label className="block rounded-2xl border border-border bg-background/60 p-4">
+            <label className="block rounded-2xl bg-background/60 p-4">
               <span className="flex items-center justify-between gap-3 text-sm font-semibold text-text">
                 {section.automationLabel}
                 <span className="text-accent">{automationPotential}%</span>
@@ -142,7 +142,7 @@ export function SavingsCalculatorSection({ section, locale, ctaHref }: SavingsCa
             </label>
           </div>
 
-          <div className="mt-5 rounded-2xl border border-accent/25 bg-background/85 p-5 text-text">
+          <div className="mt-5 rounded-2xl bg-background/85 p-5 text-text">
             <p className="text-sm font-medium text-muted">{section.resultsTitle}</p>
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
               <div>

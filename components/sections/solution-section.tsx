@@ -43,7 +43,7 @@ function AnimatedDescription({ text }: { text: string }) {
 
 export function SolutionSection({ section }: SolutionSectionProps) {
   return (
-    <SectionShell eyebrow={section.eyebrow} title={section.title} description={section.description}>
+    <SectionShell eyebrow={section.eyebrow} title={section.title} description={section.description} className="!pt-32 sm:!pt-40">
       <CardGrid
         items={section.outcomes.map((outcome) => ({
           key: outcome.title,

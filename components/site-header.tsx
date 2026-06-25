@@ -125,7 +125,7 @@ export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHead
             href={bookCallUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="max-w-[178px] shrink-0 truncate rounded-full bg-background px-3 py-1.5 text-center text-xs font-bold uppercase tracking-wide text-ink transition hover:-translate-y-0.5 hover:bg-pop sm:max-w-none sm:px-4 sm:py-2 sm:text-sm"
+            className="hidden max-w-[178px] shrink-0 truncate rounded-full bg-background px-3 py-1.5 text-center text-xs font-bold uppercase tracking-wide text-ink transition hover:-translate-y-0.5 hover:bg-pop md:inline-flex sm:max-w-none sm:px-4 sm:py-2 sm:text-sm"
           >
             {ctaLabel}
           </a>

@@ -20,14 +20,14 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  /* clip does not create a scroll container — sticky positioning is unaffected */
+  overflow-x: clip;
 }
 
 body {
   min-height: 100vh;
   background: rgb(var(--color-background));
   color: rgb(var(--color-text));
-  overflow-x: hidden;
 }
 
 .font-heading {
@@ -61,6 +61,11 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes card-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -88,7 +88,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         };
 
   return (
-    <div className="relative min-h-screen overflow-x-clip bg-background">
+    <div className="relative min-h-screen bg-background">
       <SiteHeader
         locale={locale}
         navItems={content.navItems}
