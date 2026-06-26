@@ -4,6 +4,13 @@ const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      fontSize: {
+        "4xl": ["2.25rem", { lineHeight: "1.3" }],
+        "5xl": ["3rem",    { lineHeight: "1.3" }],
+        "6xl": ["3.75rem", { lineHeight: "1.3" }],
+        "7xl": ["4.5rem",  { lineHeight: "1.3" }],
+        "8xl": ["6rem",    { lineHeight: "1.3" }],
+      },
       colors: {
         background: "rgb(var(--color-background) / <alpha-value>)",
         surface: "rgb(var(--color-surface) / <alpha-value>)",

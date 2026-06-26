@@ -11,7 +11,7 @@ type UseCasesSectionProps = {
 function PlusIcon({ isOpen }: { isOpen: boolean }) {
   return (
     <svg
-      className={`h-5 w-5 shrink-0 text-text/60 transition-transform duration-200 ${isOpen ? "rotate-45" : ""}`}
+      className={`h-5 w-5 shrink-0 text-accent transition-transform duration-200 ${isOpen ? "rotate-45" : ""}`}
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"

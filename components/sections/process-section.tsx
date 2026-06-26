@@ -16,7 +16,7 @@ export function ProcessSection({ section, processSteps, ctaLabel, ctaHref }: Pro
         <div className="mx-auto w-[90vw] sm:w-[80vw]">
           <header className="mb-12 max-w-3xl">
             <EyebrowTag label={section.eyebrow} className="mb-5 text-accent" />
-            <h2 className="font-heading text-4xl uppercase leading-[0.95] tracking-tight text-text sm:text-5xl md:text-6xl">
+            <h2 className="font-heading text-4xl uppercase leading-[1.3] tracking-tight text-text sm:text-5xl md:text-6xl">
               {section.title}
             </h2>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-muted">{section.description}</p>

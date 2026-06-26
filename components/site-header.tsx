@@ -13,7 +13,7 @@ type SiteHeaderProps = {
 
 export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHeaderProps) {
   const [scrolled, setScrolled] = useState(false);
-  const [overHero, setOverHero] = useState(true);
+  const [overDark, setOverDark] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -24,14 +24,36 @@ export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHead
   }, []);
 
   useEffect(() => {
-    const hero = document.getElementById("home");
-    if (!hero) return;
-    const observer = new IntersectionObserver(([entry]) => setOverHero(entry.isIntersecting), {
-      rootMargin: "-65px 0px 0px 0px",
-      threshold: 0
-    });
-    observer.observe(hero);
-    return () => observer.disconnect();
+    const darkClasses = ["bg-accent", "bg-ink"];
+
+    const hasDarkBg = (el: Element | null): boolean => {
+      while (el && el !== document.documentElement) {
+        if (darkClasses.some((cls) => el.classList.contains(cls))) return true;
+        el = el.parentElement;
+      }
+      return false;
+    };
+
+    let rafId: number;
+    const update = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        // Sample the element under the nav bar centre (y=80px clears the fixed header)
+        const els = document.elementsFromPoint(window.innerWidth / 2, 80);
+        const pageEl = els.find((el) => {
+          const pos = window.getComputedStyle(el).position;
+          return pos !== "fixed" && pos !== "sticky";
+        }) ?? null;
+        setOverDark(hasDarkBg(pageEl));
+      });
+    };
+
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+    return () => {
+      window.removeEventListener("scroll", update);
+      cancelAnimationFrame(rafId);
+    };
   }, []);
 
   useEffect(() => {
@@ -41,7 +63,7 @@ export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHead
     };
   }, [menuOpen]);
 
-  const burgerColor = overHero ? "bg-background" : "bg-text";
+  const burgerColor = overDark ? "bg-background" : "bg-text";
 
   return (
     <>
@@ -62,7 +84,7 @@ export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHead
                 src="/vektrum-wordmark.png"
                 alt=""
                 aria-hidden="true"
-                className={`h-11 w-auto shrink-0 object-contain ${overHero ? "brightness-0 invert" : ""}`}
+                className={`h-11 w-auto shrink-0 object-contain ${overDark ? "brightness-0 invert" : ""}`}
               />
             </div>
           </a>
@@ -75,7 +97,7 @@ export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHead
                 key={item.href}
                 href={item.href}
                 className={`group flex items-center whitespace-nowrap rounded-full px-3 py-2.5 text-sm transition-colors hover:bg-white hover:text-text ${
-                  overHero ? "text-background/90" : "text-text"
+                  overDark ? "text-background/90" : "text-text"
                 }`}
               >
                 <span className="h-1.5 w-0 shrink-0 rounded-full bg-accent opacity-0 transition-all duration-200 group-hover:mr-2 group-hover:w-1.5 group-hover:opacity-100" />
@@ -105,18 +127,26 @@ export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHead
       </div>
 
       <header className="absolute inset-x-0 top-4 z-40">
-        <div className="relative mx-auto flex h-16 w-[90vw] items-center justify-end gap-2">
-          <div className="hidden items-center gap-2 md:flex">
+        <div className="relative mx-auto flex h-16 w-[90vw] items-center justify-end gap-6">
+          <div className="relative hidden h-8 rounded-full bg-white/10 p-1 backdrop-blur-xl backdrop-saturate-150 md:flex">
+            <div
+              className={`absolute top-1 h-6 w-9 rounded-full bg-background transition-transform duration-200 ease-[var(--ease-out)] ${
+                locale === "pt-PT" ? "translate-x-9" : "translate-x-0"
+              }`}
+            />
             <Link
               href="/?lang=en"
-              className={`text-xs ${locale === "en" ? "text-background" : "text-background/70 hover:text-background"}`}
+              className={`relative z-10 flex h-6 w-9 items-center justify-center rounded-full text-xs font-bold uppercase tracking-wide transition-colors duration-200 ${
+                locale === "en" ? "text-ink" : overDark ? "text-background/70 hover:text-background" : "text-text/60 hover:text-text"
+              }`}
             >
               EN
             </Link>
-            <span className="text-xs text-background/60">/</span>
             <Link
               href="/?lang=pt-PT"
-              className={`text-xs ${locale === "pt-PT" ? "text-background" : "text-background/70 hover:text-background"}`}
+              className={`relative z-10 flex h-6 w-9 items-center justify-center rounded-full text-xs font-bold uppercase tracking-wide transition-colors duration-200 ${
+                locale === "pt-PT" ? "text-ink" : overDark ? "text-background/70 hover:text-background" : "text-text/60 hover:text-text"
+              }`}
             >
               PT
             </Link>

@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(node shot4.mjs)"
+      "Bash(node shot4.mjs)",
+      "Bash(sed -i '' 's/leading-\\\\[1\\\\.1\\\\]/leading-\\\\[1.2\\\\]/g' /Users/pedrovicente/Desktop/Vektrum/Internal/Website/components/sections/contact-section.tsx /Users/pedrovicente/Desktop/Vektrum/Internal/Website/components/sections/final-cta-section.tsx /Users/pedrovicente/Desktop/Vektrum/Internal/Website/components/section-shell.tsx /Users/pedrovicente/Desktop/Vektrum/Internal/Website/components/sections/process-section.tsx /Users/pedrovicente/Desktop/Vektrum/Internal/Website/components/sections/savings-calculator-section.tsx /Users/pedrovicente/Desktop/Vektrum/Internal/Website/components/sections/services-section.tsx)",
+      "Bash(sed -i '' 's/leading-\\\\[1\\\\.05\\\\]/leading-\\\\[1.15\\\\]/g' /Users/pedrovicente/Desktop/Vektrum/Internal/Website/components/sections/services-section.tsx /Users/pedrovicente/Desktop/Vektrum/Internal/Website/components/sections/hero-section.tsx)"
     ]
   }
 }

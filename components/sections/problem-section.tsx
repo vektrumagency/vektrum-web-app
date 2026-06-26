@@ -9,7 +9,7 @@ type ProblemSectionProps = {
 
 export function ProblemSection({ section, problems }: ProblemSectionProps) {
   return (
-    <SectionShell eyebrow={section.eyebrow} title={section.title} description={section.description}>
+    <SectionShell id="problem" eyebrow={section.eyebrow} title={section.title} description={section.description}>
       <ProblemStackMobile problems={problems} />
       <CardGrid
         aspectSquare

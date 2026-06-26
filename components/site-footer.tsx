@@ -1,4 +1,4 @@
-import { BrandLogo } from "@/components/brand-logo";
+/* eslint-disable @next/next/no-img-element */
 type SiteFooterProps = {
   footer: {
     description?: string;
@@ -13,10 +13,13 @@ type SiteFooterProps = {
 
 export function SiteFooter({ footer, email }: SiteFooterProps) {
   return (
-    <footer className="bg-ink py-12">
+    <footer className="bg-accent py-12">
       <div className="mx-auto grid w-[90vw] sm:w-[80vw] gap-10 md:grid-cols-3">
         <div>
-          <BrandLogo showTagline light />
+          <a href="#home" aria-label="Vektrum" className="inline-flex items-center gap-3 px-1 py-1">
+            <img src="/vektrum-icon.png" alt="Vektrum" className="h-10 w-auto object-contain" />
+            <img src="/vektrum-wordmark.png" alt="" aria-hidden="true" className="h-10 w-auto object-contain brightness-0 invert" />
+          </a>
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-background/65">
             {footer.description ?? "AI automation systems for businesses that value speed, reliability, and operational clarity."}
           </p>

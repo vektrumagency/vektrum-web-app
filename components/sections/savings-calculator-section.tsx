@@ -66,7 +66,7 @@ export function SavingsCalculatorSection({ section, locale, ctaHref }: SavingsCa
       <div className="mx-auto grid w-[90vw] sm:w-[80vw] gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
         <div className="reveal">
           <EyebrowTag label={section.eyebrow} className="mb-5 text-accent" />
-          <h2 className="font-heading text-4xl uppercase leading-[0.95] tracking-tight text-text sm:text-5xl">
+          <h2 className="font-heading text-4xl uppercase leading-[1.3] tracking-tight text-text sm:text-5xl">
             {section.title}
           </h2>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-muted">{section.description}</p>

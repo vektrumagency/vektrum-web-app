@@ -23,7 +23,7 @@ type ScallopBadgeProps = {
 export function ScallopBadge({ children, className, rotateClassName }: ScallopBadgeProps) {
   return (
     <div className={`relative inline-flex items-center justify-center ${rotateClassName ?? ""}`}>
-      <svg viewBox="0 0 100 100" className={`absolute inset-0 h-full w-full fill-current ${className ?? "text-accent"}`} aria-hidden="true">
+      <svg viewBox="0 0 100 100" className={`absolute inset-0 h-full w-full fill-current animate-[spin_8s_linear_infinite] ${className ?? "text-accent"}`} aria-hidden="true">
         <path d={SCALLOP_PATH} />
       </svg>
       <div className="relative z-10 flex items-center justify-center px-2 text-center">{children}</div>

@@ -15,12 +15,12 @@ export function FinalCtaSection({ section, ctaHref }: FinalCtaSectionProps) {
   return (
     <>
       <SectionDivider fromClassName="bg-background" toClassName="text-accent" />
-      <section className="relative overflow-hidden bg-accent py-16 sm:py-24">
+      <section id="final-cta" className="relative overflow-hidden bg-accent py-16 sm:py-24">
         <div className="relative mx-auto w-[90vw] sm:w-[80vw]">
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-pop">{section.eyebrow}</p>
           <div className="flex flex-col items-start gap-8 sm:flex-row sm:items-center sm:justify-between">
             <div className="max-w-2xl">
-              <h2 className="font-heading text-4xl uppercase leading-[0.95] tracking-tight text-background sm:text-5xl md:text-6xl">
+              <h2 className="font-heading text-4xl uppercase leading-[1.3] tracking-tight text-background sm:text-5xl md:text-6xl">
                 {section.title}
               </h2>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-background/75">{section.description}</p>
@@ -33,13 +33,12 @@ export function FinalCtaSection({ section, ctaHref }: FinalCtaSectionProps) {
                 {section.cta}
               </a>
             </div>
-            <ScallopBadge className="text-pop" rotateClassName="hidden h-32 w-32 shrink-0 -rotate-6 lg:flex">
+            <ScallopBadge className="text-pop" rotateClassName="flex h-32 w-32 shrink-0">
               <span className="text-xs font-bold uppercase leading-tight text-ink">{section.cta}</span>
             </ScallopBadge>
           </div>
         </div>
       </section>
-      <SectionDivider fromClassName="bg-accent" toClassName="text-background" flip />
     </>
   );
 }
