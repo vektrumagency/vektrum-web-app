@@ -27,9 +27,10 @@ export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHead
     const darkClasses = ["bg-accent", "bg-ink"];
 
     const hasDarkBg = (el: Element | null): boolean => {
-      while (el && el !== document.documentElement) {
-        if (darkClasses.some((cls) => el.classList.contains(cls))) return true;
-        el = el.parentElement;
+      let current = el;
+      while (current && current !== document.documentElement) {
+        if (darkClasses.some((cls) => current!.classList.contains(cls))) return true;
+        current = current.parentElement;
       }
       return false;
     };
