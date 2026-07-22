@@ -83,7 +83,6 @@ export default async function SectorPage({ params, searchParams }: SectorPagePro
       />
       <main className="pb-20 md:pb-0">
         <SectorsHero
-          eyebrow={sector.eyebrow}
           title={sector.title}
           description={sector.description}
           ctaLabel={content.hero.primaryCta}

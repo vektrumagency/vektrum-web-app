@@ -3,7 +3,7 @@ import { ScallopBadge } from "@/components/scallop-badge";
 import { SectionDivider } from "@/components/section-divider";
 
 type SectorsHeroProps = {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   description: string;
   ctaLabel: string;
@@ -36,9 +36,11 @@ export function SectorsHero({
               {backLabel}
             </Link>
           ) : null}
-          <p className="mb-8 max-w-md text-xs font-semibold uppercase tracking-[0.2em] text-background/80 sm:text-sm">
-            {eyebrow}
-          </p>
+          {eyebrow ? (
+            <p className="mb-8 max-w-md text-xs font-semibold uppercase tracking-[0.2em] text-background/80 sm:text-sm">
+              {eyebrow}
+            </p>
+          ) : null}
           <div className="flex flex-col items-start gap-8 sm:flex-row sm:items-end sm:justify-between">
             <h1 className="max-w-3xl font-heading text-4xl uppercase leading-[1.3] tracking-tight text-background sm:text-6xl lg:text-7xl">
               {title}

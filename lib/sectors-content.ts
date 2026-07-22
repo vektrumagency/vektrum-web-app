@@ -16,7 +16,6 @@ export type SectorProject = {
 
 export type Sector = {
   slug: string;
-  eyebrow: string;
   title: string;
   description: string;
   helpTitle: string;
@@ -61,8 +60,7 @@ export const sectorsContent: Record<Locale, SectorsContent> = {
     sectors: [
       {
         slug: "imobiliario",
-        eyebrow: "Sectors / Real Estate",
-        title: "Automation for agents and agencies.",
+        title: "Real Estate",
         description:
           "From first contact to closing, we help agents and agencies capture leads, organize opportunities, and free up time for what actually sells: the client relationship.",
         helpTitle: "Where we help real estate operations",
@@ -76,8 +74,7 @@ export const sectorsContent: Record<Locale, SectorsContent> = {
       },
       {
         slug: "ecommerce",
-        eyebrow: "Sectors / Ecommerce",
-        title: "Automation and technical performance for ecommerce brands.",
+        title: "Ecommerce",
         description:
           "We automate catalog, stock, pricing, and day-to-day operations, so online stores can grow without multiplying manual work.",
         helpTitle: "Where we help ecommerce brands grow",
@@ -160,8 +157,7 @@ export const sectorsContent: Record<Locale, SectorsContent> = {
     sectors: [
       {
         slug: "imobiliario",
-        eyebrow: "Setores / Imobiliário",
-        title: "Automação para consultores e agências imobiliárias.",
+        title: "Imobiliário",
         description:
           "Do primeiro contacto ao fecho, ajudamos consultores e agências a captar leads, organizar oportunidades e libertar tempo para o que realmente vende: a relação com o cliente.",
         helpTitle: "Onde ajudamos a sua operação imobiliária",
@@ -175,8 +171,7 @@ export const sectorsContent: Record<Locale, SectorsContent> = {
       },
       {
         slug: "ecommerce",
-        eyebrow: "Setores / Ecommerce",
-        title: "Automação e performance técnica para marcas de ecommerce.",
+        title: "Ecommerce",
         description:
           "Automatizamos catálogo, stock, pricing e operações do dia a dia, para lojas online crescerem sem multiplicar trabalho manual.",
         helpTitle: "Onde ajudamos as marcas de ecommerce a crescer",
