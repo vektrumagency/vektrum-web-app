@@ -1,4 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
+import { Locale } from "@/lib/site-config";
+
 type SiteFooterProps = {
   footer: {
     description?: string;
@@ -9,14 +11,17 @@ type SiteFooterProps = {
     quickLinks: { label: string; href: string }[];
   };
   email: string;
+  locale?: Locale;
 };
 
-export function SiteFooter({ footer, email }: SiteFooterProps) {
+export function SiteFooter({ footer, email, locale = "pt-PT" }: SiteFooterProps) {
+  const homeHref = locale === "en" ? "/?lang=en" : "/";
+
   return (
     <footer className="bg-accent py-12">
       <div className="mx-auto grid w-[90vw] sm:w-[80vw] gap-10 md:grid-cols-3">
         <div>
-          <a href="#home" aria-label="Vektrum" className="inline-flex items-center gap-3 px-1 py-1">
+          <a href={homeHref} aria-label="Vektrum" className="inline-flex items-center gap-3 px-1 py-1">
             <img src="/vektrum-icon.png" alt="Vektrum" className="h-10 w-auto object-contain" />
             <img src="/vektrum-wordmark.png" alt="" aria-hidden="true" className="h-10 w-auto object-contain brightness-0 invert" />
           </a>

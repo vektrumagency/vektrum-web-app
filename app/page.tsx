@@ -139,7 +139,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         />
       </main>
       <SectionDivider fromClassName="bg-background" toClassName="text-accent" />
-      <SiteFooter footer={content.footer} email={config.brand.email} />
+      <SiteFooter footer={content.footer} email={config.brand.email} locale={locale} />
       <MobileStickyCta label={content.hero.primaryCta} href={config.brand.bookCallUrl} />
     </div>
   );

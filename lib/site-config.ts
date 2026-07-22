@@ -109,11 +109,12 @@ export const defaultSiteConfig: SiteConfig = {
   locales: {
     en: {
       navItems: [
-        { href: "#services", label: "Capabilities" },
-        { href: "#process", label: "Process" },
-        { href: "#use-cases", label: "Use Cases" },
-        { href: "#calculator", label: "Savings" },
-        { href: "#contact", label: "Audit" }
+        { href: "/setores?lang=en", label: "Sectors" },
+        { href: "/?lang=en#services", label: "Capabilities" },
+        { href: "/?lang=en#process", label: "Process" },
+        { href: "/?lang=en#use-cases", label: "Use Cases" },
+        { href: "/?lang=en#calculator", label: "Savings" },
+        { href: "/?lang=en#contact", label: "Audit" }
       ],
       hero: {
         eyebrow: "Automation partner for modern teams",
@@ -306,21 +307,23 @@ export const defaultSiteConfig: SiteConfig = {
         contactNote: "Free AI audit requests and business inquiries",
         responseNote: "Typical response time: within one business day.",
         quickLinks: [
-          { label: "Capabilities", href: "#services" },
-          { label: "Process", href: "#process" },
-          { label: "Use Cases", href: "#use-cases" },
-          { label: "Savings", href: "#calculator" },
-          { label: "Audit", href: "#contact" }
+          { label: "Sectors", href: "/setores?lang=en" },
+          { label: "Capabilities", href: "/?lang=en#services" },
+          { label: "Process", href: "/?lang=en#process" },
+          { label: "Use Cases", href: "/?lang=en#use-cases" },
+          { label: "Savings", href: "/?lang=en#calculator" },
+          { label: "Audit", href: "/?lang=en#contact" }
         ]
       }
     },
     "pt-PT": {
       navItems: [
-        { href: "#services", label: "Capacidades" },
-        { href: "#process", label: "Processo" },
-        { href: "#use-cases", label: "Casos de Uso" },
-        { href: "#calculator", label: "Poupança" },
-        { href: "#contact", label: "Auditoria" }
+        { href: "/setores", label: "Setores" },
+        { href: "/#services", label: "Capacidades" },
+        { href: "/#process", label: "Processo" },
+        { href: "/#use-cases", label: "Casos de Uso" },
+        { href: "/#calculator", label: "Poupança" },
+        { href: "/#contact", label: "Auditoria" }
       ],
       hero: {
         eyebrow: "Parceiro de automação para equipas modernas",
@@ -513,11 +516,12 @@ export const defaultSiteConfig: SiteConfig = {
         contactNote: "Pedidos de auditoria gratuita de IA e contactos comerciais",
         responseNote: "Tempo típico de resposta: até um dia útil.",
         quickLinks: [
-          { label: "Capacidades", href: "#services" },
-          { label: "Processo", href: "#process" },
-          { label: "Casos de Uso", href: "#use-cases" },
-          { label: "Poupança", href: "#calculator" },
-          { label: "Auditoria", href: "#contact" }
+          { label: "Setores", href: "/setores" },
+          { label: "Capacidades", href: "/#services" },
+          { label: "Processo", href: "/#process" },
+          { label: "Casos de Uso", href: "/#use-cases" },
+          { label: "Poupança", href: "/#calculator" },
+          { label: "Auditoria", href: "/#contact" }
         ]
       }
     }

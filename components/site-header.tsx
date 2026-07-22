@@ -2,6 +2,7 @@
 
 import { Locale } from "@/lib/site-config";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type SiteHeaderProps = {
@@ -15,6 +16,10 @@ export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHead
   const [scrolled, setScrolled] = useState(false);
   const [overDark, setOverDark] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const enHref = `${pathname}?lang=en`;
+  const ptHref = pathname;
+  const homeHref = locale === "en" ? "/?lang=en" : "/";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -71,7 +76,7 @@ export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHead
       <div className="pointer-events-none fixed top-4 z-[70] flex h-16 w-full items-center">
         <div className="relative mx-auto flex w-[90vw] items-center justify-between">
           <a
-            href="#home"
+            href={homeHref}
             aria-label="Vektrum"
             className="pointer-events-auto inline-flex h-11 shrink-0 items-center"
           >
@@ -136,7 +141,7 @@ export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHead
               }`}
             />
             <Link
-              href="/?lang=en"
+              href={enHref}
               className={`relative z-10 flex h-6 w-9 items-center justify-center rounded-full text-xs font-bold uppercase tracking-wide transition-colors duration-200 ${
                 locale === "en" ? "text-ink" : overDark ? "text-background/70 hover:text-background" : "text-text/60 hover:text-text"
               }`}
@@ -144,7 +149,7 @@ export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHead
               EN
             </Link>
             <Link
-              href="/?lang=pt-PT"
+              href={ptHref}
               className={`relative z-10 flex h-6 w-9 items-center justify-center rounded-full text-xs font-bold uppercase tracking-wide transition-colors duration-200 ${
                 locale === "pt-PT" ? "text-ink" : overDark ? "text-background/70 hover:text-background" : "text-text/60 hover:text-text"
               }`}
@@ -188,12 +193,12 @@ export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHead
           ))}
         </nav>
         <div className="mt-6 flex items-center gap-3 text-sm text-background/70">
-          <Link href="/?lang=en" className={locale === "en" ? "text-background" : ""} onClick={() => setMenuOpen(false)}>
+          <Link href={enHref} className={locale === "en" ? "text-background" : ""} onClick={() => setMenuOpen(false)}>
             EN
           </Link>
           <span>/</span>
           <Link
-            href="/?lang=pt-PT"
+            href={ptHref}
             className={locale === "pt-PT" ? "text-background" : ""}
             onClick={() => setMenuOpen(false)}
           >
