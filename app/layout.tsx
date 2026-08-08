@@ -19,8 +19,9 @@ export const metadata: Metadata = {
   description:
     "Vektrum designs practical automation systems that save time, reduce manual work, and help businesses operate faster.",
   icons: {
-    icon: "/Favicon.ico",
-    shortcut: "/Favicon.ico"
+    icon: [{ url: "/favicon.ico", type: "image/x-icon" }],
+    shortcut: [{ url: "/favicon.ico", type: "image/x-icon" }],
+    apple: [{ url: "/vektrum-icon.png", type: "image/png" }]
   },
   openGraph: {
     title: "Vektrum | Practical Business Automation Systems",
