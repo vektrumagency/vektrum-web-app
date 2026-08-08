@@ -170,7 +170,6 @@ export default function AdminPage() {
         <SectionCard title="Brand & Contact">
           <div className="grid gap-3 md:grid-cols-2">
             <Field label="Contact Email" value={config.brand.email} onChange={(v) => updateBrandField("email", v)} />
-            <Field label="Book Call URL" value={config.brand.bookCallUrl} onChange={(v) => updateBrandField("bookCallUrl", v)} />
             <Field label="Main Domain" value={config.brand.domain} onChange={(v) => updateBrandField("domain", v)} />
           </div>
         </SectionCard>

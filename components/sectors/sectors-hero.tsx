@@ -52,14 +52,12 @@ export function SectorsHero({
             </ScallopBadge>
           </div>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-background/75">{description}</p>
-          <a
+          <Link
             href={ctaHref}
-            target="_blank"
-            rel="noopener noreferrer"
             className="mt-10 inline-flex rounded-full bg-background px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-ink transition hover:-translate-y-0.5 hover:bg-pop"
           >
             {ctaLabel}
-          </a>
+          </Link>
         </div>
       </section>
       <SectionDivider fromClassName="bg-accent" toClassName="text-background" />

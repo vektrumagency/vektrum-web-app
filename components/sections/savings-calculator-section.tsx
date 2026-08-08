@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Locale } from "@/lib/site-config";
 import { EyebrowTag } from "@/components/eyebrow-tag";
+import Link from "next/link";
 
 type SavingsCalculatorSectionProps = {
   section: {
@@ -72,14 +73,12 @@ export function SavingsCalculatorSection({ section, locale, ctaHref }: SavingsCa
           <p className="mt-4 max-w-xl text-base leading-relaxed text-muted">{section.description}</p>
           <div className="mt-8 rounded-2xl bg-pop p-5">
             <p className="font-heading text-xl uppercase text-ink">{section.ctaTitle}</p>
-            <a
+            <Link
               href={ctaHref}
-              target="_blank"
-              rel="noopener noreferrer"
               className="mt-4 inline-flex w-full justify-center rounded-full bg-ink px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-background transition hover:-translate-y-0.5 sm:w-auto"
             >
               {section.ctaLabel}
-            </a>
+            </Link>
           </div>
         </div>
 

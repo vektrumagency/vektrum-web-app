@@ -4,11 +4,9 @@ import { SectionDivider } from "@/components/section-divider";
 type ProcessSectionProps = {
   section: { eyebrow: string; title: string; description: string; note?: string };
   processSteps: { step: string; title: string; description: string }[];
-  ctaLabel: string;
-  ctaHref: string;
 };
 
-export function ProcessSection({ section, processSteps, ctaLabel, ctaHref }: ProcessSectionProps) {
+export function ProcessSection({ section, processSteps }: ProcessSectionProps) {
   return (
     <>
       <SectionDivider fromClassName="bg-background" toClassName="text-ink" />

@@ -6,7 +6,9 @@ import {
   universalQuestions
 } from "./diagnosis-config";
 
-export const AUTOMATION_DIAGNOSIS_SUBMIT_PATH = "/api/diagnostico/submit";
+export const AUTOMATION_DIAGNOSIS_SUBMIT_PATH = "/api/automation-diagnosis";
+
+const IS_DEVELOPMENT = process.env.NODE_ENV !== "production";
 
 export type DiagnosisAnswerValue = string | string[];
 
@@ -177,6 +179,17 @@ export async function submitAutomationDiagnosis(
   const timeout = window.setTimeout(() => controller.abort(), 20000);
 
   try {
+    if (IS_DEVELOPMENT) {
+      console.debug(
+        "[automation-diagnosis] request",
+        JSON.stringify(
+          { url: AUTOMATION_DIAGNOSIS_SUBMIT_PATH, method: "POST", payload },
+          null,
+          2
+        )
+      );
+    }
+
     const response = await fetch(AUTOMATION_DIAGNOSIS_SUBMIT_PATH, {
       method: "POST",
       headers: {
@@ -187,16 +200,32 @@ export async function submitAutomationDiagnosis(
       cache: "no-store",
       signal: controller.signal
     });
+    const responseText = await response.text();
 
-    if (response.status !== 200) {
+    if (IS_DEVELOPMENT) {
+      console.debug("[automation-diagnosis] response", {
+        status: response.status,
+        body: responseText
+      });
+    }
+
+    if (!response.ok) {
+      let message = `The diagnosis submission returned HTTP ${response.status}.`;
+      try {
+        const responseBody = JSON.parse(responseText) as { error?: unknown };
+        if (typeof responseBody.error === "string") message = responseBody.error;
+      } catch {
+        // The status is sufficient when the response is not JSON.
+      }
       throw new DiagnosisSubmissionError(
-        `The diagnosis submission returned HTTP ${response.status}.`,
+        message,
         response.status
       );
     }
 
     return payload;
   } catch (error) {
+    if (IS_DEVELOPMENT) console.error("[automation-diagnosis] caught error", error);
     if (error instanceof DiagnosisSubmissionError) throw error;
     if (error instanceof DOMException && error.name === "AbortError") {
       throw new DiagnosisSubmissionError("The diagnosis submission timed out.");

@@ -6,8 +6,6 @@ import { SectionShell } from "@/components/section-shell";
 type FAQSectionProps = {
   section: { eyebrow: string; title: string; description: string };
   faqs: { question: string; answer: string }[];
-  ctaLabel: string;
-  ctaHref: string;
 };
 
 function PlusIcon({ isOpen }: { isOpen: boolean }) {
@@ -24,7 +22,7 @@ function PlusIcon({ isOpen }: { isOpen: boolean }) {
   );
 }
 
-export function FAQSection({ section, faqs, ctaLabel, ctaHref }: FAQSectionProps) {
+export function FAQSection({ section, faqs }: FAQSectionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (

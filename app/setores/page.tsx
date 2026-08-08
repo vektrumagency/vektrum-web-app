@@ -9,6 +9,7 @@ import { SiteHeader } from "@/components/site-header";
 import { getRuntimeConfig } from "@/lib/runtime-config";
 import { sectorsContent } from "@/lib/sectors-content";
 import { Locale } from "@/lib/site-config";
+import { getDiagnosisHref } from "@/lib/site-links";
 
 export const dynamic = "force-dynamic";
 
@@ -60,13 +61,14 @@ export default async function SectorsIndexPage({ searchParams }: SectorsIndexPag
   const config = getRuntimeConfig();
   const content = config.locales[locale];
   const sectorsData = sectorsContent[locale];
+  const diagnosisHref = getDiagnosisHref(locale);
 
   return (
     <div className="relative min-h-screen bg-background">
       <SiteHeader
         locale={locale}
         navItems={content.navItems}
-        bookCallUrl={config.brand.bookCallUrl}
+        ctaHref={diagnosisHref}
         ctaLabel={content.hero.primaryCta}
       />
       <main className="pb-20 md:pb-0">
@@ -75,7 +77,7 @@ export default async function SectorsIndexPage({ searchParams }: SectorsIndexPag
           title={sectorsData.labels.title}
           description={sectorsData.labels.description}
           ctaLabel={content.hero.primaryCta}
-          ctaHref={config.brand.bookCallUrl}
+          ctaHref={diagnosisHref}
           badgeLabel={sectorsData.labels.badgeLabel}
         />
         <section className="bg-background py-16 sm:py-24">
@@ -83,11 +85,11 @@ export default async function SectorsIndexPage({ searchParams }: SectorsIndexPag
             <SectorGrid sectors={sectorsData.sectors} locale={locale} viewSectorLabel={sectorsData.labels.viewSectorLabel} />
           </div>
         </section>
-        <FinalCtaSection section={content.finalCtaSection} ctaHref={config.brand.bookCallUrl} tone="plain" />
+        <FinalCtaSection section={content.finalCtaSection} ctaHref={diagnosisHref} tone="plain" />
       </main>
       <SectionDivider fromClassName="bg-background" toClassName="text-accent" />
       <SiteFooter footer={content.footer} email={config.brand.email} locale={locale} />
-      <MobileStickyCta label={content.hero.primaryCta} href={config.brand.bookCallUrl} />
+      <MobileStickyCta label={content.hero.primaryCta} href={diagnosisHref} />
     </div>
   );
 }

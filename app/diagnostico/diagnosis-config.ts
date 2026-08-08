@@ -107,7 +107,7 @@ export const uiCopy = {
     successEyebrow: "Diagnóstico concluído",
     successTitle: "O seu pedido foi recebido!",
     successBody: "Estamos agora a analisar as suas respostas. A nossa equipa irá preparar o seu Relatório de Automação personalizado.",
-    successEmail: "Receberá brevemente uma confirmação por email com mais informações.",
+    successEmail: "Receberá brevemente um email de confirmação com mais informações. Se não o encontrar, verifique a pasta de SPAM e marque-o como seguro para que os nossos emails não se percam.",
     visit: "Conhecer a Vektrum",
     restart: "Iniciar outro diagnóstico",
     encouragement: [
@@ -170,7 +170,7 @@ export const uiCopy = {
     successEyebrow: "Diagnosis complete",
     successTitle: "Your request has been received!",
     successBody: "We're now analyzing your answers. Our team will prepare your personalized Automation Report.",
-    successEmail: "You'll shortly receive a confirmation email with more information.",
+    successEmail: "You'll shortly receive a confirmation email with more information. If you can't find it, check your spam folder and mark it as safe so you don't miss our emails.",
     visit: "Visit Vektrum",
     restart: "Start another diagnosis",
     encouragement: [

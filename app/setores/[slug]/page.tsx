@@ -11,6 +11,7 @@ import { SiteHeader } from "@/components/site-header";
 import { getRuntimeConfig } from "@/lib/runtime-config";
 import { getSector, getSectorProjects, sectorsContent } from "@/lib/sectors-content";
 import { Locale } from "@/lib/site-config";
+import { getDiagnosisHref } from "@/lib/site-links";
 
 export const dynamic = "force-dynamic";
 
@@ -65,6 +66,7 @@ export default async function SectorPage({ params, searchParams }: SectorPagePro
   const content = config.locales[locale];
   const labels = sectorsContent[locale].labels;
   const backHref = locale === "en" ? "/setores?lang=en" : "/setores";
+  const diagnosisHref = getDiagnosisHref(locale);
 
   const ctaSection = {
     eyebrow: content.finalCtaSection.eyebrow,
@@ -78,7 +80,7 @@ export default async function SectorPage({ params, searchParams }: SectorPagePro
       <SiteHeader
         locale={locale}
         navItems={content.navItems}
-        bookCallUrl={config.brand.bookCallUrl}
+        ctaHref={diagnosisHref}
         ctaLabel={content.hero.primaryCta}
       />
       <main className="pb-20 md:pb-0">
@@ -86,7 +88,7 @@ export default async function SectorPage({ params, searchParams }: SectorPagePro
           title={sector.title}
           description={sector.description}
           ctaLabel={content.hero.primaryCta}
-          ctaHref={config.brand.bookCallUrl}
+          ctaHref={diagnosisHref}
           badgeLabel={labels.badgeLabel}
           backHref={backHref}
           backLabel={labels.backLabel}
@@ -99,11 +101,11 @@ export default async function SectorPage({ params, searchParams }: SectorPagePro
           resultsLabel={labels.resultsLabel}
           disclaimer={labels.disclaimer}
         />
-        <FinalCtaSection section={ctaSection} ctaHref={config.brand.bookCallUrl} tone="plain" />
+        <FinalCtaSection section={ctaSection} ctaHref={diagnosisHref} tone="plain" />
       </main>
       <SectionDivider fromClassName="bg-background" toClassName="text-accent" />
       <SiteFooter footer={content.footer} email={config.brand.email} locale={locale} />
-      <MobileStickyCta label={content.hero.primaryCta} href={config.brand.bookCallUrl} />
+      <MobileStickyCta label={content.hero.primaryCta} href={diagnosisHref} />
     </div>
   );
 }

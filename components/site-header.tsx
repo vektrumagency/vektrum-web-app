@@ -8,11 +8,11 @@ import { useEffect, useState } from "react";
 type SiteHeaderProps = {
   locale: Locale;
   navItems: { href: string; label: string }[];
-  bookCallUrl: string;
+  ctaHref: string;
   ctaLabel: string;
 };
 
-export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHeaderProps) {
+export function SiteHeader({ locale, navItems, ctaHref, ctaLabel }: SiteHeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [overDark, setOverDark] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -157,14 +157,12 @@ export function SiteHeader({ locale, navItems, bookCallUrl, ctaLabel }: SiteHead
               PT
             </Link>
           </div>
-          <a
-            href={bookCallUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href={ctaHref}
             className="hidden max-w-[178px] shrink-0 truncate rounded-full bg-background px-3 py-1.5 text-center text-xs font-bold uppercase tracking-wide text-ink transition hover:-translate-y-0.5 hover:bg-pop md:inline-flex sm:max-w-none sm:px-4 sm:py-2 sm:text-sm"
           >
             {ctaLabel}
-          </a>
+          </Link>
         </div>
       </header>
 

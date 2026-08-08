@@ -359,7 +359,10 @@ export function DiagnosisClient({ locale }: { locale: Locale }) {
       });
       sessionStorage.removeItem(STORAGE_KEY);
       setStatus("success");
-    } catch {
+    } catch (error) {
+      if (process.env.NODE_ENV !== "production") {
+        console.error("[automation-diagnosis] submit handler caught error", error);
+      }
       submissionInFlight.current = false;
       setStatus("editing");
       setError(t.errors.submit);

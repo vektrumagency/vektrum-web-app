@@ -1,4 +1,5 @@
 import { EyebrowTag } from "@/components/eyebrow-tag";
+import Link from "next/link";
 
 type ServicesSectionProps = {
   section: { eyebrow: string; title: string; description: string };
@@ -62,14 +63,12 @@ export function ServicesSection({ section, services, ctaLabel, ctaHref }: Servic
         </div>
 
         <div className="flex justify-center">
-          <a
+          <Link
             href={ctaHref}
-            target="_blank"
-            rel="noopener noreferrer"
             className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-background transition hover:bg-accent-soft"
           >
             {ctaLabel}
-          </a>
+          </Link>
         </div>
       </div>
     </section>

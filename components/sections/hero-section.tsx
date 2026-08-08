@@ -1,5 +1,6 @@
 import { ScallopBadge } from "@/components/scallop-badge";
 import { SectionDivider } from "@/components/section-divider";
+import Link from "next/link";
 
 type HeroSectionProps = {
   hero: {
@@ -36,14 +37,12 @@ export function HeroSection({ hero, heroStats, primaryHref, secondaryHref }: Her
             {hero.title}
           </h1>
           <div className="mt-10 flex flex-wrap items-center gap-4 sm:mt-12">
-            <a
+            <Link
               href={primaryHref}
-              target="_blank"
-              rel="noopener noreferrer"
               className="rounded-full bg-background px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-ink transition hover:-translate-y-0.5 hover:bg-pop"
             >
               {hero.primaryCta}
-            </a>
+            </Link>
             <a
               href={secondaryHref}
               className="rounded-full border-2 border-background/40 px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-background transition hover:border-background"

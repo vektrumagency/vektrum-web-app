@@ -14,7 +14,6 @@ type CardItem = {
 export type SiteConfig = {
   brand: {
     email: string;
-    bookCallUrl: string;
     domain: string;
   };
   locales: Record<
@@ -103,7 +102,6 @@ export type SiteConfig = {
 export const defaultSiteConfig: SiteConfig = {
   brand: {
     email: "vektrum.agency@gmail.com",
-    bookCallUrl: "https://tally.so/r/Gxq2OQ",
     domain: "vecktrum-agency.com"
   },
   locales: {

@@ -17,6 +17,7 @@ import { UseCasesSection } from "@/components/sections/use-cases-section";
 import { WhyChooseSection } from "@/components/sections/why-choose-section";
 import { getRuntimeConfig } from "@/lib/runtime-config";
 import { Locale } from "@/lib/site-config";
+import { getDiagnosisHref } from "@/lib/site-links";
 
 export const dynamic = "force-dynamic";
 
@@ -74,17 +75,14 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const locale: Locale = selected === "en" ? "en" : "pt-PT";
   const config = getRuntimeConfig();
   const content = config.locales[locale];
+  const diagnosisHref = getDiagnosisHref(locale);
   const ctaCopy =
     locale === "pt-PT"
       ? {
-          servicesLabel: "Auditoria gratuita de IA",
-          processLabel: "Auditoria gratuita de IA",
-          faqLabel: "Auditoria gratuita de IA"
+          servicesLabel: "Auditoria gratuita de IA"
         }
       : {
-          servicesLabel: "Free AI audit",
-          processLabel: "Free AI audit",
-          faqLabel: "Free AI audit"
+          servicesLabel: "Free AI audit"
         };
 
   return (
@@ -92,14 +90,14 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       <SiteHeader
         locale={locale}
         navItems={content.navItems}
-        bookCallUrl={config.brand.bookCallUrl}
+        ctaHref={diagnosisHref}
         ctaLabel={content.hero.primaryCta}
       />
       <main className="pb-20 md:pb-0">
         <HeroSection
           hero={content.hero}
           heroStats={content.heroStats}
-          primaryHref={config.brand.bookCallUrl}
+          primaryHref={diagnosisHref}
           secondaryHref="#process"
         />
         <SolutionSection section={content.solutionSection} />
@@ -107,19 +105,17 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         <SavingsCalculatorSection
           section={content.calculatorSection}
           locale={locale}
-          ctaHref={config.brand.bookCallUrl}
+          ctaHref={diagnosisHref}
         />
         <ServicesSection
           section={content.servicesSection}
           services={content.services}
           ctaLabel={ctaCopy.servicesLabel}
-          ctaHref={config.brand.bookCallUrl}
+          ctaHref={diagnosisHref}
         />
         <ProcessSection
           section={content.processSection}
           processSteps={content.processSteps}
-          ctaLabel={ctaCopy.processLabel}
-          ctaHref={config.brand.bookCallUrl}
         />
         <ResultsSection section={content.resultsSection} results={content.results} />
         <UseCasesSection section={content.useCasesSection} useCases={content.useCases} />
@@ -127,20 +123,18 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         <FAQSection
           section={content.faqSection}
           faqs={content.faqs}
-          ctaLabel={ctaCopy.faqLabel}
-          ctaHref={config.brand.bookCallUrl}
         />
-        <FinalCtaSection section={content.finalCtaSection} ctaHref={config.brand.bookCallUrl} />
+        <FinalCtaSection section={content.finalCtaSection} ctaHref={diagnosisHref} />
         <ContactSection
           section={content.contactSection}
-          bookCallUrl={config.brand.bookCallUrl}
+          ctaHref={diagnosisHref}
           email={config.brand.email}
           locale={locale}
         />
       </main>
       <SectionDivider fromClassName="bg-background" toClassName="text-accent" />
       <SiteFooter footer={content.footer} email={config.brand.email} locale={locale} />
-      <MobileStickyCta label={content.hero.primaryCta} href={config.brand.bookCallUrl} />
+      <MobileStickyCta label={content.hero.primaryCta} href={diagnosisHref} />
     </div>
   );
 }

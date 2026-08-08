@@ -1,13 +1,14 @@
 import { EyebrowTag } from "@/components/eyebrow-tag";
+import Link from "next/link";
 
 type ContactSectionProps = {
   section: { eyebrow: string; title: string; description: string; cta: string; submit: string };
-  bookCallUrl: string;
+  ctaHref: string;
   email: string;
   locale: "en" | "pt-PT";
 };
 
-export function ContactSection({ section, bookCallUrl, email, locale }: ContactSectionProps) {
+export function ContactSection({ section, ctaHref, email, locale }: ContactSectionProps) {
   const labels =
     locale === "pt-PT"
       ? {
@@ -31,14 +32,12 @@ export function ContactSection({ section, bookCallUrl, email, locale }: ContactS
           <p className="mt-4 max-w-md text-base leading-relaxed text-muted">
             {section.description}
           </p>
-          <a
-            href={bookCallUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href={ctaHref}
             className="mt-7 inline-flex w-full justify-center rounded-full bg-accent px-6 py-3 text-sm font-semibold text-background shadow-[0_18px_40px_-24px_rgb(var(--color-accent))] transition hover:-translate-y-0.5 hover:bg-accent-soft sm:w-auto"
           >
             {section.cta}
-          </a>
+          </Link>
         </div>
         <div className="reveal rounded-3xl border border-border bg-surface/85 p-6 shadow-glow md:p-8 lg:[animation-delay:160ms]">
           <div className="grid gap-3">

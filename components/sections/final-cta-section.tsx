@@ -1,5 +1,6 @@
 import { ScallopBadge } from "@/components/scallop-badge";
 import { SectionDivider } from "@/components/section-divider";
+import Link from "next/link";
 
 type FinalCtaSectionProps = {
   section: {
@@ -48,14 +49,12 @@ export function FinalCtaSection({ section, ctaHref, tone = "accent" }: FinalCtaS
                 {section.title}
               </h2>
               <p className={`mt-5 max-w-xl text-base leading-relaxed ${styles.description}`}>{section.description}</p>
-              <a
+              <Link
                 href={ctaHref}
-                target="_blank"
-                rel="noopener noreferrer"
                 className={`mt-8 inline-flex rounded-full px-7 py-3.5 text-sm font-bold uppercase tracking-wide transition hover:-translate-y-0.5 ${styles.cta}`}
               >
                 {section.cta}
-              </a>
+              </Link>
             </div>
             {tone === "accent" ? (
               <ScallopBadge className="text-pop" rotateClassName="flex h-32 w-32 shrink-0">
