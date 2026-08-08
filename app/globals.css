@@ -79,3 +79,115 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+@layer components {
+  .diagnosis-input {
+    @apply w-full rounded-2xl border border-border bg-surface px-4 py-4 text-base text-text shadow-[0_1px_0_rgb(255_255_255/0.8)_inset] outline-none transition placeholder:text-muted/45 hover:border-muted/40 focus:border-accent focus:ring-4 focus:ring-accent/10 sm:px-5 sm:py-[1.125rem] sm:text-lg;
+  }
+
+  .diagnosis-choice {
+    @apply flex min-h-16 w-full items-center gap-3 rounded-2xl border border-border bg-surface/85 px-3.5 py-3 text-left text-sm font-semibold text-text shadow-[0_1px_0_rgb(255_255_255/0.85)_inset] transition duration-200 hover:-translate-y-0.5 hover:border-accent/35 hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 active:translate-y-0 active:scale-[0.99] sm:min-h-[4.5rem] sm:px-4 sm:text-base;
+  }
+
+  .diagnosis-choice-active {
+    @apply border-accent/55 bg-accent/[0.07] text-accent-soft shadow-[0_0_0_1px_rgb(var(--color-accent)/0.08)_inset];
+  }
+
+  .diagnosis-choice-mark {
+    @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-background text-[11px] font-bold tracking-tight text-muted transition group-hover:border-accent/30 group-hover:text-accent;
+  }
+
+  .diagnosis-choice-active .diagnosis-choice-mark {
+    @apply border-accent bg-accent text-white;
+  }
+
+  .diagnosis-primary {
+    @apply inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-accent px-6 py-3 text-sm font-bold text-white shadow-[0_16px_36px_-18px_rgb(var(--color-accent)/0.8)] transition duration-200 hover:-translate-y-0.5 hover:bg-accent-soft hover:shadow-[0_18px_38px_-16px_rgb(var(--color-accent)/0.75)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 active:translate-y-0 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-55;
+  }
+
+  .diagnosis-secondary {
+    @apply inline-flex min-h-12 items-center gap-2 rounded-full border border-border bg-surface/70 px-5 py-3 text-sm font-semibold text-muted transition hover:-translate-y-0.5 hover:border-muted/40 hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 active:translate-y-0;
+  }
+}
+
+.diagnosis-shell {
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+  background-image:
+    linear-gradient(rgb(var(--color-border) / 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--color-border) / 0.12) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: center top;
+}
+
+.diagnosis-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(circle at 50% 20%, rgb(var(--color-surface) / 0.96), rgb(var(--color-background) / 0.76) 48%, rgb(var(--color-background) / 0.94));
+  pointer-events: none;
+}
+
+.diagnosis-enter,
+.diagnosis-step-forward,
+.diagnosis-step-back {
+  animation: diagnosisEnter 520ms var(--ease-out) both;
+}
+
+.diagnosis-step-back {
+  animation-name: diagnosisBack;
+}
+
+@keyframes diagnosisEnter {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes diagnosisBack {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.diagnosis-loader {
+  position: relative;
+  width: 76px;
+  height: 76px;
+}
+
+.diagnosis-loader span {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgb(var(--color-accent) / 0.2);
+  border-radius: 22px;
+  animation: diagnosisOrbit 2.4s ease-in-out infinite;
+}
+
+.diagnosis-loader span:nth-child(2) { inset: 10px; animation-delay: -0.8s; }
+.diagnosis-loader span:nth-child(3) { inset: 22px; border-color: rgb(var(--color-accent)); background: rgb(var(--color-accent) / 0.08); animation-delay: -1.6s; }
+
+@keyframes diagnosisOrbit {
+  0%, 100% { transform: rotate(0deg) scale(1); border-radius: 22px; }
+  50% { transform: rotate(90deg) scale(0.92); border-radius: 50%; }
+}
+
+.diagnosis-success-mark {
+  display: grid;
+  place-items: center;
+  width: 82px;
+  height: 82px;
+  border-radius: 27px;
+  background: rgb(var(--color-accent));
+  color: white;
+  box-shadow: 0 0 0 12px rgb(var(--color-accent) / 0.08), 0 24px 60px -25px rgb(var(--color-accent) / 0.8);
+  animation: diagnosisCelebrate 700ms var(--ease-out) both;
+}
+
+.diagnosis-success-mark span { font-size: 2rem; font-weight: 700; }
+
+@keyframes diagnosisCelebrate {
+  0% { opacity: 0; transform: scale(0.55) rotate(-12deg); }
+  65% { transform: scale(1.08) rotate(3deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0); }
+}
