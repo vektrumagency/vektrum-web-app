@@ -53,10 +53,11 @@ export function SavingsCalculatorSection({ section, locale, ctaHref }: SavingsCa
     };
   }, [employees, hours, hourlyCost, automationPotential]);
 
-  const numberFormatter = new Intl.NumberFormat(locale === "pt-PT" ? "pt-PT" : "en-US", {
+  const intlLocale = locale === "pt-PT" ? "pt-PT" : locale === "es" ? "es-ES" : "en-US";
+  const numberFormatter = new Intl.NumberFormat(intlLocale, {
     maximumFractionDigits: 0
   });
-  const currencyFormatter = new Intl.NumberFormat(locale === "pt-PT" ? "pt-PT" : "en-US", {
+  const currencyFormatter = new Intl.NumberFormat(intlLocale, {
     style: "currency",
     currency: "EUR",
     maximumFractionDigits: 0

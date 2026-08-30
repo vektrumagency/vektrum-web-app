@@ -17,9 +17,15 @@ export function SiteHeader({ locale, navItems, ctaHref, ctaLabel }: SiteHeaderPr
   const [overDark, setOverDark] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
-  const enHref = `${pathname}?lang=en`;
   const ptHref = pathname;
-  const homeHref = locale === "en" ? "/?lang=en" : "/";
+  const enHref = `${pathname}?lang=en`;
+  const esHref = `${pathname}?lang=es`;
+  const homeHref = locale === "en" ? "/?lang=en" : locale === "es" ? "/?lang=es" : "/";
+  const languageOptions: { value: Locale; label: string; href: string }[] = [
+    { value: "pt-PT", label: "PT", href: ptHref },
+    { value: "en", label: "EN", href: enHref },
+    { value: "es", label: "ES", href: esHref }
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -134,28 +140,23 @@ export function SiteHeader({ locale, navItems, ctaHref, ctaLabel }: SiteHeaderPr
 
       <header className="absolute inset-x-0 top-4 z-40">
         <div className="relative mx-auto flex h-16 w-[90vw] items-center justify-end gap-6">
-          <div className="relative hidden h-8 rounded-full bg-white/10 p-1 backdrop-blur-xl backdrop-saturate-150 md:flex">
-            <div
-              className={`absolute top-1 h-6 w-9 rounded-full bg-background transition-transform duration-200 ease-[var(--ease-out)] ${
-                locale === "pt-PT" ? "translate-x-9" : "translate-x-0"
-              }`}
-            />
-            <Link
-              href={enHref}
-              className={`relative z-10 flex h-6 w-9 items-center justify-center rounded-full text-xs font-bold uppercase tracking-wide transition-colors duration-200 ${
-                locale === "en" ? "text-ink" : overDark ? "text-background/70 hover:text-background" : "text-text/60 hover:text-text"
-              }`}
-            >
-              EN
-            </Link>
-            <Link
-              href={ptHref}
-              className={`relative z-10 flex h-6 w-9 items-center justify-center rounded-full text-xs font-bold uppercase tracking-wide transition-colors duration-200 ${
-                locale === "pt-PT" ? "text-ink" : overDark ? "text-background/70 hover:text-background" : "text-text/60 hover:text-text"
-              }`}
-            >
-              PT
-            </Link>
+          <div className="relative hidden h-8 items-center gap-0.5 rounded-full bg-white/10 p-1 backdrop-blur-xl backdrop-saturate-150 md:flex">
+            {languageOptions.map((option) => (
+              <Link
+                key={option.value}
+                href={option.href}
+                aria-current={locale === option.value ? "true" : undefined}
+                className={`relative z-10 flex h-6 min-w-9 items-center justify-center rounded-full px-2 text-xs font-bold uppercase tracking-wide transition-colors duration-200 ${
+                  locale === option.value
+                    ? "bg-background text-ink"
+                    : overDark
+                      ? "text-background/70 hover:text-background"
+                      : "text-text/60 hover:text-text"
+                }`}
+              >
+                {option.label}
+              </Link>
+            ))}
           </div>
           <Link
             href={ctaHref}
@@ -191,17 +192,19 @@ export function SiteHeader({ locale, navItems, ctaHref, ctaLabel }: SiteHeaderPr
           ))}
         </nav>
         <div className="mt-6 flex items-center gap-3 text-sm text-background/70">
-          <Link href={enHref} className={locale === "en" ? "text-background" : ""} onClick={() => setMenuOpen(false)}>
-            EN
-          </Link>
-          <span>/</span>
-          <Link
-            href={ptHref}
-            className={locale === "pt-PT" ? "text-background" : ""}
-            onClick={() => setMenuOpen(false)}
-          >
-            PT
-          </Link>
+          {languageOptions.map((option, index) => (
+            <span key={option.value} className="flex items-center gap-3">
+              {index > 0 ? <span aria-hidden="true">/</span> : null}
+              <Link
+                href={option.href}
+                aria-current={locale === option.value ? "true" : undefined}
+                className={locale === option.value ? "text-background" : ""}
+                onClick={() => setMenuOpen(false)}
+              >
+                {option.label}
+              </Link>
+            </span>
+          ))}
         </div>
       </div>
     </>

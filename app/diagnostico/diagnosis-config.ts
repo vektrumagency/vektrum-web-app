@@ -1,5 +1,5 @@
-export type Locale = "pt-PT" | "en";
-export type Localized = { "pt-PT": string; en: string };
+export type Locale = "pt-PT" | "en" | "es";
+export type Localized = { "pt-PT": string; en: string; es?: string };
 export type QuestionKind = "company" | "website" | "single" | "multi" | "text" | "contact";
 
 export type OptionDefinition = {
@@ -49,10 +49,10 @@ export type SectorDefinition = {
   questions: QuestionDefinition[];
 };
 
-const l = (pt: string, en: string): Localized => ({ "pt-PT": pt, en });
-const o = (id: string, pt: string, en: string, mark: string, exclusive = false): OptionDefinition => ({
+const l = (pt: string, en: string, es?: string): Localized => ({ "pt-PT": pt, en, es });
+const o = (id: string, pt: string, en: string, mark: string, exclusive = false, es?: string): OptionDefinition => ({
   id,
-  label: l(pt, en),
+  label: l(pt, en, es),
   mark,
   exclusive
 });
@@ -68,7 +68,7 @@ const q = (
 ): QuestionDefinition => ({
   id,
   kind,
-  eyebrow: l("A compreender o processo", "Understanding the workflow"),
+  eyebrow: l("A compreender o processo", "Understanding the workflow", "Entendiendo el proceso"),
   title: l(pt, en),
   help: l(ptHelp, enHelp),
   options,
@@ -80,7 +80,7 @@ export const uiCopy = {
   "pt-PT": {
     skip: "Ir para o conteúdo",
     brandLabel: "Vektrum — página inicial",
-    language: "English",
+    language: "Idioma",
     languageCode: "EN",
     introEyebrow: "Relatório gratuito de automação",
     introTitle: "Descubra onde a sua empresa pode poupar mais tempo e reduzir trabalho manual",
@@ -154,7 +154,7 @@ export const uiCopy = {
   en: {
     skip: "Skip to content",
     brandLabel: "Vektrum — homepage",
-    language: "Português",
+    language: "Language",
     languageCode: "PT",
     introEyebrow: "Free automation report",
     introTitle: "Discover where your business can save the most time and reduce manual work",
@@ -224,6 +224,80 @@ export const uiCopy = {
       "We're connecting processes and tools.", "This estimate helps us prioritize.",
       "Priority set.", "We understand your starting point.", "Almost done.", "Everything is ready for analysis."
     ]
+  },
+  es: {
+    skip: "Ir al contenido",
+    brandLabel: "Vektrum — página de inicio",
+    language: "Idioma",
+    languageCode: "PT",
+    introEyebrow: "Informe de automatización gratuito",
+    introTitle: "Descubre dónde tu empresa puede ahorrar más tiempo y reducir el trabajo manual",
+    introBody: "Responde a unas pocas preguntas adaptadas a tu sector y recibe, en pocos minutos, un informe con oportunidades priorizadas y próximos pasos prácticos.",
+    duration: "Menos de 3 minutos",
+    privateNote: "Tus datos se tratan de forma confidencial.",
+    start: "Ver mis oportunidades",
+    startHint: "Gratuito · personalizado · enviado por email en pocos minutos.",
+    introProof: ["Procesos evaluados", "Prioridades identificadas", "Próximos pasos prácticos"],
+    back: "Atrás",
+    continue: "Continuar",
+    optional: "Opcional",
+    step: "Paso",
+    of: "de",
+    remainingOne: "1 pregunta restante",
+    remainingMany: "preguntas restantes",
+    phase: "Fase",
+    phases: { business: "Tu negocio", operation: "Cómo funciona", impact: "Impacto y prioridades", report: "Tu informe" },
+    showAllSectors: "Ver todos los sectores",
+    showPrioritySectors: "Ver sectores prioritarios",
+    selectedSector: "Diagnóstico adaptado a",
+    otherPlaceholder: "Especifica aquí",
+    noWebsite: "La empresa no tiene sitio web",
+    labels: { name: "Nombre", email: "Email profesional", phone: "Teléfono", chars: "caracteres" },
+    placeholders: {
+      company: "Ej.: Empresa Ejemplo, S.L.",
+      website: "ejemplo.es",
+      name: "Tu nombre",
+      email: "nombre@empresa.es",
+      phone: "+34 912 345 678"
+    },
+    errors: {
+      company: "Indica el nombre de la empresa para continuar.",
+      website: "Introduce un sitio web válido, como ejemplo.es.",
+      required: "Elige una opción para continuar.",
+      multi: "Elige al menos una opción para continuar.",
+      group: "Elige al menos una opción en cada grupo marcado.",
+      other: "Especifica la opción seleccionada.",
+      text: "Comparte una respuesta breve para continuar.",
+      name: "Indica tu nombre.",
+      email: "Introduce una dirección de email válida.",
+      consent: "Es necesario aceptar el tratamiento de los datos para recibir el informe.",
+      submit: "No hemos podido entregar el diagnóstico. Tus respuestas están guardadas — inténtalo de nuevo.",
+      config: "El envío todavía no está configurado. Contacta con Vektrum o inténtalo de nuevo más tarde."
+    },
+    consentPrefix: "Autorizo a Vektrum a tratar estos datos para preparar el informe y contactarme sobre esta solicitud. He leído la",
+    privacy: "Política de Privacidad",
+    submit: "Crear mi informe",
+    retry: "Intentar de nuevo",
+    loadingEyebrow: "Enviando tu diagnóstico",
+    loadingTitle: "Preparando tu Informe de Automatización...",
+    loadingBody: "Estamos entregando tus respuestas de forma segura. Solo un momento más.",
+    successEyebrow: "Diagnóstico completado",
+    successTitle: "Tu informe se está creando",
+    successBody: "El análisis ya ha comenzado. Tu Informe de Automatización personalizado debería llegar a tu email en los próximos minutos.",
+    successEmail: "Si no aparece de inmediato, revisa también las carpetas de spam y promociones.",
+    successDestination: "Lo enviaremos a",
+    successRecap: "Lo que hemos analizado",
+    successNext: "Mientras esperas, puedes conocer ejemplos de sistemas ya construidos por Vektrum.",
+    visit: "Conocer Vektrum",
+    restart: "Iniciar otro diagnóstico",
+    encouragement: [
+      "Un gran comienzo.", "Ya tenemos el contexto esencial.", "Ahora la entrevista se adapta a tu sector.",
+      "Estamos mapeando por dónde entra el trabajo.", "Esto nos muestra cómo circula la información.",
+      "Ya podemos ver oportunidades concretas.", "Las herramientas actuales nos ayudan a evitar recomendaciones genéricas.",
+      "Solo faltan algunas preguntas.", "El tamaño del equipo nos ayuda a estimar el impacto.",
+      "Estamos conectando procesos y herramientas.", "Esta estimación nos ayuda a priorizar.",
+      "Prioridad definida.", "Ya entendemos tu punto de partida.", "Casi terminado.", "Todo listo para el análisis."
+    ]
   }
 } as const;
 
@@ -232,44 +306,44 @@ export const baseQuestions: QuestionDefinition[] = [
     id: "companyName",
     kind: "company",
     phase: "business",
-    eyebrow: l("Vamos começar", "Let's begin"),
-    title: l("Qual é o nome da sua empresa?", "What's your company name?"),
-    help: l("Usaremos este nome para personalizar o relatório.", "We'll use it to personalize your report.")
+    eyebrow: l("Vamos começar", "Let's begin", "Vamos a empezar"),
+    title: l("Qual é o nome da sua empresa?", "What's your company name?", "¿Cuál es el nombre de tu empresa?"),
+    help: l("Usaremos este nome para personalizar o relatório.", "We'll use it to personalize your report.", "Usaremos este nombre para personalizar tu informe.")
   },
   {
     id: "website",
     kind: "website",
     phase: "business",
-    eyebrow: l("Contexto digital", "Digital context"),
-    title: l("Qual é o website da empresa?", "What's your company website?"),
-    help: l("Ajuda-nos a compreender melhor o negócio antes da análise.", "It helps us understand the business before the analysis."),
+    eyebrow: l("Contexto digital", "Digital context", "Contexto digital"),
+    title: l("Qual é o website da empresa?", "What's your company website?", "¿Cuál es el sitio web de tu empresa?"),
+    help: l("Ajuda-nos a compreender melhor o negócio antes da análise.", "It helps us understand the business before the analysis.", "Nos ayuda a entender mejor el negocio antes del análisis."),
     optional: true
   }
 ];
 
 export const sectorOptions: OptionDefinition[] = [
-  o("accounting-consulting", "Contabilidade e consultoria", "Accounting and consulting", "CC"),
-  o("legal-admin", "Serviços jurídicos e administrativos", "Legal and administrative services", "SJ"),
-  o("real-estate", "Imobiliário", "Real estate", "IM"),
-  o("finance-insurance", "Finanças e seguros", "Finance and insurance", "FS"),
-  o("healthcare", "Saúde e clínicas", "Healthcare and clinics", "SC"),
-  o("construction", "Construção e serviços técnicos", "Construction and technical services", "CT"),
-  o("commerce", "Comércio e e-commerce", "Commerce and e-commerce", "CE"),
-  o("logistics", "Logística e transportes", "Logistics and transportation", "LT"),
-  o("hospitality", "Hotelaria e restauração", "Hospitality and restaurants", "HR"),
-  o("education", "Educação e formação", "Education and training", "EF"),
-  o("manufacturing", "Indústria", "Manufacturing", "IN"),
-  o("marketing-agency", "Agência de marketing ou criativa", "Marketing or creative agency", "MK"),
-  o("other", "Outro setor", "Other sector", "+")
+  o("accounting-consulting", "Contabilidade e consultoria", "Accounting and consulting", "CC", false, "Contabilidad y consultoría"),
+  o("legal-admin", "Serviços jurídicos e administrativos", "Legal and administrative services", "SJ", false, "Servicios jurídicos y administrativos"),
+  o("real-estate", "Imobiliário", "Real estate", "IM", false, "Inmobiliario"),
+  o("finance-insurance", "Finanças e seguros", "Finance and insurance", "FS", false, "Finanzas y seguros"),
+  o("healthcare", "Saúde e clínicas", "Healthcare and clinics", "SC", false, "Salud y clínicas"),
+  o("construction", "Construção e serviços técnicos", "Construction and technical services", "CT", false, "Construcción y servicios técnicos"),
+  o("commerce", "Comércio e e-commerce", "Commerce and e-commerce", "CE", false, "Comercio y ecommerce"),
+  o("logistics", "Logística e transportes", "Logistics and transportation", "LT", false, "Logística y transporte"),
+  o("hospitality", "Hotelaria e restauração", "Hospitality and restaurants", "HR", false, "Hostelería y restauración"),
+  o("education", "Educação e formação", "Education and training", "EF", false, "Educación y formación"),
+  o("manufacturing", "Indústria", "Manufacturing", "IN", false, "Industria"),
+  o("marketing-agency", "Agência de marketing ou criativa", "Marketing or creative agency", "MK", false, "Agencia de marketing o creativa"),
+  o("other", "Outro setor", "Other sector", "+", false, "Otro sector")
 ];
 
 export const sectorQuestion: QuestionDefinition = {
   id: "businessSector",
   kind: "single",
   phase: "business",
-  eyebrow: l("Sobre o negócio", "About the business"),
-  title: l("O que melhor descreve a sua empresa?", "What best describes your business?"),
-  help: l("A partir daqui, as perguntas adaptam-se à realidade do seu setor.", "From here, the questions adapt to the reality of your sector."),
+  eyebrow: l("Sobre o negócio", "About the business", "Sobre el negocio"),
+  title: l("O que melhor descreve a sua empresa?", "What best describes your business?", "¿Qué describe mejor a tu empresa?"),
+  help: l("A partir daqui, as perguntas adaptam-se à realidade do seu setor.", "From here, the questions adapt to the reality of your sector.", "A partir de aquí, las preguntas se adaptan a la realidad de tu sector."),
   options: sectorOptions
 };
 
@@ -645,9 +719,9 @@ export const contactQuestion: QuestionDefinition = {
   id: "contact",
   kind: "contact",
   phase: "report",
-  eyebrow: l("Último passo", "Final step"),
-  title: l("Para onde devemos enviar o relatório?", "Where should we send your report?"),
-  help: l("Precisamos apenas dos dados essenciais para entrar em contacto.", "We only need the essential details to get in touch.")
+  eyebrow: l("Último passo", "Final step", "Último paso"),
+  title: l("Para onde devemos enviar o relatório?", "Where should we send your report?", "¿A dónde debemos enviar el informe?"),
+  help: l("Precisamos apenas dos dados essenciais para entrar em contacto.", "We only need the essential details to get in touch.", "Solo necesitamos los datos esenciales para ponernos en contacto.")
 };
 
 export function getSector(sectorId: string) {
@@ -660,7 +734,7 @@ export function getFlow(sectorId: string): QuestionDefinition[] {
 }
 
 export function localize(value: Localized, locale: Locale) {
-  return value[locale];
+  return value[locale] ?? value.en;
 }
 
 export const prioritySectorIds = [
@@ -693,17 +767,25 @@ export function getCampaignIntro(sectorId: string | null, locale: Locale) {
   const sector = sectorId ? getSector(sectorId) : null;
   if (!sector) return null;
   const label = localize(sector.label, locale);
-  return locale === "en"
-    ? {
-        eyebrow: `Automation report for ${label}`,
-        title: "Discover where your business can save the most time and reduce manual work",
-        body: `A short diagnosis tailored to the ${label.toLowerCase()} sector, followed by a prioritized report delivered by email within minutes.`
-      }
-    : {
-        eyebrow: `Relatório de automação para ${label}`,
-        title: "Descubra onde a sua empresa pode poupar mais tempo e reduzir trabalho manual",
-        body: `Um diagnóstico curto, adaptado ao setor ${label.toLowerCase()}, seguido de um relatório priorizado enviado por email em poucos minutos.`
-      };
+  if (locale === "en") {
+    return {
+      eyebrow: `Automation report for ${label}`,
+      title: "Discover where your business can save the most time and reduce manual work",
+      body: `A short diagnosis tailored to the ${label.toLowerCase()} sector, followed by a prioritized report delivered by email within minutes.`
+    };
+  }
+  if (locale === "es") {
+    return {
+      eyebrow: `Informe de automatización para ${label}`,
+      title: "Descubre dónde tu empresa puede ahorrar más tiempo y reducir el trabajo manual",
+      body: `Un diagnóstico breve, adaptado al sector ${label.toLowerCase()}, seguido de un informe priorizado enviado por email en pocos minutos.`
+    };
+  }
+  return {
+    eyebrow: `Relatório de automação para ${label}`,
+    title: "Descubra onde a sua empresa pode poupar mais tempo e reduzir trabalho manual",
+    body: `Um diagnóstico curto, adaptado ao setor ${label.toLowerCase()}, seguido de um relatório priorizado enviado por email em poucos minutos.`
+  };
 }
 
 export function getQuestionInsight(
@@ -721,42 +803,60 @@ export function getQuestionInsight(
   ]);
   const hasManualSignal = values.some((value) => manualSignals.has(value));
 
+  const pick = (en: string, pt: string, es: string) => (locale === "en" ? en : locale === "es" ? es : pt);
+
   if (question.insightKey === "speed-to-lead" && hasManualSignal) {
-    return locale === "en"
-      ? "Lead response and follow-up still depend on manual action — a likely commercial priority for the report."
-      : "A resposta e o follow-up ainda dependem de ação manual — uma provável prioridade comercial para o relatório.";
+    return pick(
+      "Lead response and follow-up still depend on manual action — a likely commercial priority for the report.",
+      "A resposta e o follow-up ainda dependem de ação manual — uma provável prioridade comercial para o relatório.",
+      "La respuesta y el seguimiento de leads todavía dependen de una acción manual — una probable prioridad comercial para el informe."
+    );
   }
   if (question.insightKey === "no-show-control" && (hasManualSignal || values.includes("none"))) {
-    return locale === "en"
-      ? "Confirmations, cancellations, and waitlists can often share one automated workflow."
-      : "Confirmações, cancelamentos e listas de espera podem normalmente partilhar um único fluxo automático.";
+    return pick(
+      "Confirmations, cancellations, and waitlists can often share one automated workflow.",
+      "Confirmações, cancelamentos e listas de espera podem normalmente partilhar um único fluxo automático.",
+      "Las confirmaciones, cancelaciones y listas de espera suelen poder compartir un único flujo automatizado."
+    );
   }
   if (question.insightKey === "inventory-sync" && hasManualSignal) {
-    return locale === "en"
-      ? "Manual stock updates create a direct risk of overselling, delays, and repeated data entry."
-      : "A atualização manual de stock cria risco direto de ruturas, atrasos e introdução repetida de dados.";
+    return pick(
+      "Manual stock updates create a direct risk of overselling, delays, and repeated data entry.",
+      "A atualização manual de stock cria risco direto de ruturas, atrasos e introdução repetida de dados.",
+      "Las actualizaciones manuales de stock crean un riesgo directo de sobreventa, retrasos e introducción repetida de datos."
+    );
   }
   if (question.insightKey === "deadline-risk" && hasManualSignal) {
-    return locale === "en"
-      ? "Deadline control depends on individual reminders, which makes ownership and exception alerts especially important."
-      : "O controlo de prazos depende de lembretes individuais, tornando especialmente importantes a responsabilidade e os alertas de exceção.";
+    return pick(
+      "Deadline control depends on individual reminders, which makes ownership and exception alerts especially important.",
+      "O controlo de prazos depende de lembretes individuais, tornando especialmente importantes a responsabilidade e os alertas de exceção.",
+      "El control de plazos depende de recordatorios individuales, lo que hace especialmente importantes la responsabilidad y las alertas de excepción."
+    );
   }
   if (question.insightKey === "hospitality-intake") {
-    return locale === "en"
-      ? "The next questions are now filtered to the operation and channels you selected."
-      : "As próximas perguntas estão agora filtradas para a operação e os canais selecionados.";
+    return pick(
+      "The next questions are now filtered to the operation and channels you selected.",
+      "As próximas perguntas estão agora filtradas para a operação e os canais selecionados.",
+      "Las próximas preguntas ya están filtradas según la operación y los canales seleccionados."
+    );
   }
   if (values.length >= 3) {
-    return locale === "en"
-      ? "This workflow spans several inputs or systems — the report will look closely at handoffs and duplicated work."
-      : "Este fluxo atravessa várias entradas ou sistemas — o relatório irá analisar passagens e trabalho duplicado.";
+    return pick(
+      "This workflow spans several inputs or systems — the report will look closely at handoffs and duplicated work.",
+      "Este fluxo atravessa várias entradas ou sistemas — o relatório irá analisar passagens e trabalho duplicado.",
+      "Este flujo atraviesa varias entradas o sistemas — el informe analizará de cerca los traspasos y el trabajo duplicado."
+    );
   }
   if (hasManualSignal) {
-    return locale === "en"
-      ? "A manual handoff is visible here, giving the report a concrete process to assess."
-      : "Existe aqui uma passagem manual clara, dando ao relatório um processo concreto para avaliar.";
+    return pick(
+      "A manual handoff is visible here, giving the report a concrete process to assess.",
+      "Existe aqui uma passagem manual clara, dando ao relatório um processo concreto para avaliar.",
+      "Aquí se aprecia un traspaso manual claro, lo que da al informe un proceso concreto que evaluar."
+    );
   }
-  return locale === "en"
-    ? "This answer is already narrowing the automation opportunities that fit your operation."
-    : "Esta resposta já está a reduzir as oportunidades de automação às que fazem sentido para a sua operação.";
+  return pick(
+    "This answer is already narrowing the automation opportunities that fit your operation.",
+    "Esta resposta já está a reduzir as oportunidades de automação às que fazem sentido para a sua operação.",
+    "Esta respuesta ya está acotando las oportunidades de automatización que encajan con tu operación."
+  );
 }

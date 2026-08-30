@@ -5,7 +5,7 @@ type ContactSectionProps = {
   section: { eyebrow: string; title: string; description: string; cta: string; submit: string };
   ctaHref: string;
   email: string;
-  locale: "en" | "pt-PT";
+  locale: "en" | "pt-PT" | "es";
 };
 
 export function ContactSection({ section, ctaHref, email, locale }: ContactSectionProps) {
@@ -15,10 +15,15 @@ export function ContactSection({ section, ctaHref, email, locale }: ContactSecti
           items: ["Processos repetitivos", "Ferramentas atuais", "Primeiras oportunidades"],
           emailLabel: "Também pode contactar diretamente"
         }
-      : {
-          items: ["Repetitive workflows", "Current tools", "First opportunities"],
-          emailLabel: "You can also contact us directly"
-        };
+      : locale === "es"
+        ? {
+            items: ["Procesos repetitivos", "Herramientas actuales", "Primeras oportunidades"],
+            emailLabel: "También puedes contactarnos directamente"
+          }
+        : {
+            items: ["Repetitive workflows", "Current tools", "First opportunities"],
+            emailLabel: "You can also contact us directly"
+          };
 
   return (
     <section id="contact" className="relative overflow-hidden py-16 sm:py-24">

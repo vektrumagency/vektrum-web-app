@@ -22,7 +22,9 @@ type SectorPageProps = {
 
 function resolveLocale(langParam: string | string[] | undefined): Locale {
   const selected = Array.isArray(langParam) ? langParam[0] : langParam;
-  return selected === "en" ? "en" : "pt-PT";
+  if (selected === "en") return "en";
+  if (selected === "es") return "es";
+  return "pt-PT";
 }
 
 export async function generateMetadata({ params, searchParams }: SectorPageProps): Promise<Metadata> {
@@ -35,7 +37,7 @@ export async function generateMetadata({ params, searchParams }: SectorPageProps
     return { title: "Vektrum" };
   }
 
-  const canonical = locale === "en" ? `/setores/${slug}?lang=en` : `/setores/${slug}`;
+  const canonical = locale === "en" ? `/setores/${slug}?lang=en` : locale === "es" ? `/setores/${slug}?lang=es` : `/setores/${slug}`;
 
   return {
     title: `Vektrum | ${sector.title}`,
@@ -65,7 +67,7 @@ export default async function SectorPage({ params, searchParams }: SectorPagePro
   const config = getRuntimeConfig();
   const content = config.locales[locale];
   const labels = sectorsContent[locale].labels;
-  const backHref = locale === "en" ? "/setores?lang=en" : "/setores";
+  const backHref = locale === "en" ? "/setores?lang=en" : locale === "es" ? "/setores?lang=es" : "/setores";
   const diagnosisHref = getDiagnosisHref(locale);
 
   const ctaSection = {

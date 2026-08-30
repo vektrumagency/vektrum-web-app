@@ -15,7 +15,7 @@ type SiteFooterProps = {
 };
 
 export function SiteFooter({ footer, email, locale = "pt-PT" }: SiteFooterProps) {
-  const homeHref = locale === "en" ? "/?lang=en" : "/";
+  const homeHref = locale === "en" ? "/?lang=en" : locale === "es" ? "/?lang=es" : "/";
 
   return (
     <footer className="bg-accent py-12">

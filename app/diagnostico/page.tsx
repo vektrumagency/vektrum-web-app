@@ -8,7 +8,9 @@ type DiagnosisPageProps = {
 
 function getLocale(value: string | string[] | undefined) {
   const selected = Array.isArray(value) ? value[0] : value;
-  return selected === "en" ? "en" : "pt-PT";
+  if (selected === "en") return "en";
+  if (selected === "es") return "es";
+  return "pt-PT";
 }
 
 function getCampaignSector(value: string | string[] | undefined) {
@@ -23,17 +25,27 @@ export async function generateMetadata({ searchParams }: DiagnosisPageProps): Pr
   const sector = campaignSector ? getSector(campaignSector) : null;
   const sectorLabel = sector ? localize(sector.label, locale) : null;
 
-  return locale === "en"
-    ? {
-        title: sectorLabel ? `${sectorLabel} Automation Diagnosis | Vektrum` : "AI Automation Diagnosis | Vektrum",
-        description: sectorLabel ? `Assess manual workflows in ${sectorLabel.toLowerCase()} and receive a prioritized automation report.` : "Answer a few quick questions and receive a personalized AI Automation Report.",
-        alternates: { canonical: "/diagnostico?lang=en" }
-      }
-    : {
-        title: sectorLabel ? `Diagnóstico de Automação para ${sectorLabel} | Vektrum` : "Diagnóstico de Automação com IA | Vektrum",
-        description: sectorLabel ? `Avalie os processos manuais em ${sectorLabel.toLowerCase()} e receba um relatório de automação priorizado.` : "Responda a algumas perguntas rápidas e receba um Relatório de Automação com IA personalizado.",
-        alternates: { canonical: "/diagnostico" }
-      };
+  if (locale === "en") {
+    return {
+      title: sectorLabel ? `${sectorLabel} Automation Diagnosis | Vektrum` : "AI Automation Diagnosis | Vektrum",
+      description: sectorLabel ? `Assess manual workflows in ${sectorLabel.toLowerCase()} and receive a prioritized automation report.` : "Answer a few quick questions and receive a personalized AI Automation Report.",
+      alternates: { canonical: "/diagnostico?lang=en" }
+    };
+  }
+
+  if (locale === "es") {
+    return {
+      title: sectorLabel ? `Diagnóstico de Automatización para ${sectorLabel} | Vektrum` : "Diagnóstico de Automatización con IA | Vektrum",
+      description: sectorLabel ? `Evalúa los procesos manuales en ${sectorLabel.toLowerCase()} y recibe un informe de automatización priorizado.` : "Responde a unas pocas preguntas rápidas y recibe un Informe de Automatización con IA personalizado.",
+      alternates: { canonical: "/diagnostico?lang=es" }
+    };
+  }
+
+  return {
+    title: sectorLabel ? `Diagnóstico de Automação para ${sectorLabel} | Vektrum` : "Diagnóstico de Automação com IA | Vektrum",
+    description: sectorLabel ? `Avalie os processos manuais em ${sectorLabel.toLowerCase()} e receba um relatório de automação priorizado.` : "Responda a algumas perguntas rápidas e receba um Relatório de Automação com IA personalizado.",
+    alternates: { canonical: "/diagnostico" }
+  };
 }
 
 export default async function DiagnosisPage({ searchParams }: DiagnosisPageProps) {

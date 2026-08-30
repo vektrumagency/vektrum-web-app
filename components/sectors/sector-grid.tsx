@@ -14,7 +14,7 @@ const THEMES = [
 ];
 
 export function SectorGrid({ sectors, locale, viewSectorLabel }: SectorGridProps) {
-  const langSuffix = locale === "en" ? "?lang=en" : "";
+  const langSuffix = locale === "en" ? "?lang=en" : locale === "es" ? "?lang=es" : "";
 
   return (
     <div className="grid gap-6 sm:grid-cols-2">

@@ -460,11 +460,18 @@ export function DiagnosisClient({ locale, campaignSectorId = null }: { locale: L
     setError(null);
   };
 
-  const languageParams = new URLSearchParams();
-  if (locale !== "en") languageParams.set("lang", "en");
-  if (campaignSectorId) languageParams.set("sector", campaignSectorId);
-  const languageHref = `/diagnostico${languageParams.size ? `?${languageParams.toString()}` : ""}`;
-  const homeHref = locale === "en" ? "/?lang=en" : "/?lang=pt-PT";
+  const buildLanguageHref = (target: Locale) => {
+    const languageParams = new URLSearchParams();
+    if (target !== "pt-PT") languageParams.set("lang", target);
+    if (campaignSectorId) languageParams.set("sector", campaignSectorId);
+    return `/diagnostico${languageParams.size ? `?${languageParams.toString()}` : ""}`;
+  };
+  const languageOptions: { value: Locale; label: string }[] = [
+    { value: "pt-PT", label: "PT" },
+    { value: "en", label: "EN" },
+    { value: "es", label: "ES" }
+  ];
+  const homeHref = locale === "en" ? "/?lang=en" : locale === "es" ? "/?lang=es" : "/?lang=pt-PT";
   const selectedValue = question.id === sectorQuestion.id
     ? answers.sectorId
     : answers.responses[question.id] ?? (question.kind === "multi" ? [] : "");
@@ -481,9 +488,22 @@ export function DiagnosisClient({ locale, campaignSectorId = null }: { locale: L
         <Link href={homeHref} aria-label={t.brandLabel} className="inline-flex items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4">
           <Image src="/vektrum-logo-transparent.png" alt="Vektrum" width={168} height={48} priority className="h-9 w-auto sm:h-10" />
         </Link>
-        <Link href={languageHref} className="rounded-full border border-border/90 bg-surface/80 px-3.5 py-2 text-xs font-bold tracking-[0.12em] text-muted transition hover:-translate-y-0.5 hover:border-accent/40 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2" aria-label={t.language}>
-          {t.languageCode}
-        </Link>
+        <div className="flex items-center gap-1 rounded-full border border-border/90 bg-surface/80 p-1" role="group" aria-label={t.language}>
+          {languageOptions.map((option) => (
+            <Link
+              key={option.value}
+              href={buildLanguageHref(option.value)}
+              aria-current={locale === option.value ? "true" : undefined}
+              className={`rounded-full px-2.5 py-1.5 text-xs font-bold tracking-[0.12em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
+                locale === option.value
+                  ? "bg-accent text-white"
+                  : "text-muted hover:text-accent"
+              }`}
+            >
+              {option.label}
+            </Link>
+          ))}
+        </div>
       </header>
 
       <main id="diagnosis-content" className="relative z-10 mx-auto flex w-[calc(100%-32px)] max-w-3xl flex-1 flex-col pb-12 sm:w-[calc(100%-64px)]">
@@ -698,7 +718,7 @@ function QuestionInput({
       <TextField fieldId="phone" label={`${t.labels.phone} · ${t.optional}`} value={answers.phone} placeholder={t.placeholders.phone} type="tel" inputMode="tel" autoComplete="tel" maxLength={40} onChange={(value) => onFieldChange("phone", value)} />
       <label data-field="privacyConsent" className={`flex cursor-pointer items-start gap-3 rounded-2xl border bg-surface/70 p-4 text-sm leading-relaxed text-muted transition hover:border-accent/35 ${invalidField === "privacyConsent" ? "border-red-500" : "border-border"}`}>
         <input type="checkbox" checked={answers.privacyConsent} aria-invalid={invalidField === "privacyConsent"} aria-describedby={invalidField === "privacyConsent" ? "diagnosis-error" : undefined} onChange={(event) => onFieldChange("privacyConsent", event.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 rounded border-border accent-[rgb(var(--color-accent))]" />
-        <span>{t.consentPrefix} <Link href={locale === "en" ? "/privacidade?lang=en" : "/privacidade"} target="_blank" className="font-semibold text-text underline decoration-accent/40 underline-offset-4 hover:text-accent">{t.privacy}</Link>.</span>
+        <span>{t.consentPrefix} <Link href={locale === "en" ? "/privacidade?lang=en" : locale === "es" ? "/privacidade?lang=es" : "/privacidade"} target="_blank" className="font-semibold text-text underline decoration-accent/40 underline-offset-4 hover:text-accent">{t.privacy}</Link>.</span>
       </label>
     </div>
   );
@@ -780,7 +800,11 @@ function SuccessScreen({ copy: t, homeHref, answers, locale, onRestart }: { copy
   const bottleneckQuestion = sector?.questions.find((item) => item.legacyRole === "challenge" || item.legacyRole === "task") ?? sector?.questions.at(-1);
   const bottleneck = bottleneckQuestion ? resolveOptionLabel(bottleneckQuestion.id, answers.responses[bottleneckQuestion.id], answers.sectorId, locale) : "";
   const caseHref = answers.sectorId === "real-estate" ? "/setores/imobiliario" : answers.sectorId === "commerce" ? "/setores/ecommerce" : null;
-  const recapLabels = locale === "en" ? ["Industry", "Priority", "Manual time", "Leading bottleneck"] : ["Setor", "Prioridade", "Tempo manual", "Principal bloqueio"];
+  const recapLabels = locale === "en"
+    ? ["Industry", "Priority", "Manual time", "Leading bottleneck"]
+    : locale === "es"
+      ? ["Sector", "Prioridad", "Tiempo manual", "Principal cuello de botella"]
+      : ["Setor", "Prioridade", "Tempo manual", "Principal bloqueio"];
 
   return (
     <section className="diagnosis-enter flex min-h-[calc(100svh-120px)] flex-col items-center justify-center pb-20 text-center">
@@ -803,7 +827,7 @@ function SuccessScreen({ copy: t, homeHref, answers, locale, onRestart }: { copy
       <p className="mt-5 max-w-xl text-sm font-medium text-text/75">{t.successEmail}</p>
       <p className="mt-2 max-w-xl text-sm text-muted">{t.successNext}</p>
       <div className="mt-8 flex w-full max-w-lg flex-col justify-center gap-3 sm:flex-row">
-        {caseHref ? <Link href={`${caseHref}${locale === "en" ? "?lang=en" : ""}`} className="diagnosis-primary justify-center">{locale === "en" ? "See a relevant case" : "Ver um caso relevante"}<span aria-hidden="true">→</span></Link> : <Link href={homeHref} className="diagnosis-primary justify-center">{t.visit}<span aria-hidden="true">→</span></Link>}
+        {caseHref ? <Link href={`${caseHref}${locale === "en" ? "?lang=en" : locale === "es" ? "?lang=es" : ""}`} className="diagnosis-primary justify-center">{locale === "en" ? "See a relevant case" : locale === "es" ? "Ver un caso relevante" : "Ver um caso relevante"}<span aria-hidden="true">→</span></Link> : <Link href={homeHref} className="diagnosis-primary justify-center">{t.visit}<span aria-hidden="true">→</span></Link>}
         <button type="button" onClick={onRestart} className="diagnosis-secondary justify-center">{t.restart}</button>
       </div>
     </section>

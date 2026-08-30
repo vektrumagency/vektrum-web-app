@@ -150,6 +150,13 @@ export default function AdminPage() {
           </button>
           <button
             type="button"
+            onClick={() => setLocale("es")}
+            className={`rounded-full px-3 py-1.5 text-xs ${locale === "es" ? "bg-text text-white" : "bg-white text-muted border border-border"}`}
+          >
+            ES
+          </button>
+          <button
+            type="button"
             onClick={saveConfig}
             disabled={saving}
             className="ml-2 rounded-full bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-blue-600 disabled:opacity-60"

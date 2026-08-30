@@ -19,7 +19,9 @@ type SectorsIndexPageProps = {
 
 function resolveLocale(langParam: string | string[] | undefined): Locale {
   const selected = Array.isArray(langParam) ? langParam[0] : langParam;
-  return selected === "en" ? "en" : "pt-PT";
+  if (selected === "en") return "en";
+  if (selected === "es") return "es";
+  return "pt-PT";
 }
 
 export async function generateMetadata({ searchParams }: SectorsIndexPageProps): Promise<Metadata> {
@@ -35,6 +37,21 @@ export async function generateMetadata({ searchParams }: SectorsIndexPageProps):
         title: "Vektrum | Sectors and Portfolio",
         description: "Real estate, ecommerce, and the practical automation systems Vektrum has built for each.",
         url: "https://vecktrum-agency.com/setores?lang=en",
+        siteName: "Vektrum",
+        type: "website"
+      }
+    };
+  }
+
+  if (locale === "es") {
+    return {
+      title: "Vektrum | Sectores y Portafolio",
+      description: "Los sectores donde Vektrum ya ha construido sistemas reales de automatización, con los proyectos y resultados que lo demuestran.",
+      alternates: { canonical: "/setores?lang=es" },
+      openGraph: {
+        title: "Vektrum | Sectores y Portafolio",
+        description: "Inmobiliario, ecommerce y los sistemas prácticos de automatización que Vektrum ha construido en cada uno.",
+        url: "https://vecktrum-agency.com/setores?lang=es",
         siteName: "Vektrum",
         type: "website"
       }

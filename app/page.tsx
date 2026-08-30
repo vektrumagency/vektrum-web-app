@@ -29,7 +29,7 @@ export async function generateMetadata({ searchParams }: HomePageProps): Promise
   const params = await searchParams;
   const langParam = params.lang;
   const selected = Array.isArray(langParam) ? langParam[0] : langParam;
-  const locale: Locale = selected === "en" ? "en" : "pt-PT";
+  const locale: Locale = selected === "en" ? "en" : selected === "es" ? "es" : "pt-PT";
 
   if (locale === "pt-PT") {
     return {
@@ -44,6 +44,25 @@ export async function generateMetadata({ searchParams }: HomePageProps): Promise
         description:
           "A Vektrum desenha e constrói automações práticas para leads, suporte, reporting, CRM, administração e follow-ups.",
         url: "https://vecktrum-agency.com/?lang=pt-PT",
+        siteName: "Vektrum",
+        type: "website"
+      }
+    };
+  }
+
+  if (locale === "es") {
+    return {
+      title: "Vektrum | Sistemas prácticos de automatización empresarial",
+      description:
+        "Automatiza el trabajo que frena tu negocio con sistemas prácticos que ahorran tiempo, reducen el trabajo manual y mejoran las operaciones.",
+      alternates: {
+        canonical: "/?lang=es"
+      },
+      openGraph: {
+        title: "Vektrum | Sistemas prácticos de automatización empresarial",
+        description:
+          "Vektrum diseña y construye automatizaciones prácticas para leads, soporte, informes, CRM, administración y seguimientos.",
+        url: "https://vecktrum-agency.com/?lang=es",
         siteName: "Vektrum",
         type: "website"
       }
@@ -72,7 +91,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const params = await searchParams;
   const langParam = params.lang;
   const selected = Array.isArray(langParam) ? langParam[0] : langParam;
-  const locale: Locale = selected === "en" ? "en" : "pt-PT";
+  const locale: Locale = selected === "en" ? "en" : selected === "es" ? "es" : "pt-PT";
   const config = getRuntimeConfig();
   const content = config.locales[locale];
   const diagnosisHref = getDiagnosisHref(locale);
@@ -81,9 +100,13 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       ? {
           servicesLabel: "Auditoria gratuita de IA"
         }
-      : {
-          servicesLabel: "Free AI audit"
-        };
+      : locale === "es"
+        ? {
+            servicesLabel: "Auditoría de IA gratuita"
+          }
+        : {
+            servicesLabel: "Free AI audit"
+          };
 
   return (
     <div className="relative min-h-screen bg-background">

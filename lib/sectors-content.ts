@@ -236,6 +236,103 @@ export const sectorsContent: Record<Locale, SectorsContent> = {
         }
       ]
     }
+  },
+  es: {
+    labels: {
+      eyebrow: "Sectores",
+      title: "Automatización adaptada a la realidad de cada sector.",
+      description:
+        "Cada mercado tiene sus propios cuellos de botella. Estos son los sectores donde ya hemos construido sistemas reales, con los proyectos y resultados que lo demuestran.",
+      badgeLabel: "Portafolio",
+      viewSectorLabel: "Ver sector",
+      backLabel: "Sectores",
+      whatWeBuiltLabel: "Lo que construimos",
+      resultsLabel: "Resultados",
+      disclaimer: "Los resultados y métricas solo se publican una vez confirmados con el cliente.",
+      ctaTitle: "¿Quieres un sistema así para tu negocio?"
+    },
+    sectors: [
+      {
+        slug: "imobiliario",
+        title: "Inmobiliario",
+        description:
+          "Desde el primer contacto hasta el cierre, ayudamos a agentes y agencias a captar leads, organizar oportunidades y liberar tiempo para lo que realmente vende: la relación con el cliente.",
+        helpTitle: "Dónde ayudamos a las operaciones inmobiliarias",
+        helpPoints: [
+          "Centralizamos los leads de portales, redes sociales y referencias en un único lugar, con un registro claro de quién fue contactado y cuándo",
+          "Automatizamos la investigación de mercado y los comparables, para tener los datos listos en cada nuevo proyecto",
+          "Construimos procesos de seguimiento automático, para que ninguna oportunidad dependa de la memoria de nadie",
+          "Damos visibilidad total sobre el pipeline, para que siempre sepas cuántas oportunidades reales existen ahora mismo"
+        ],
+        projectsTitle: "Proyectos inmobiliarios"
+      },
+      {
+        slug: "ecommerce",
+        title: "Ecommerce",
+        description:
+          "Automatizamos catálogo, stock, precios y operativa diaria, para que las tiendas online crezcan sin multiplicar el trabajo manual.",
+        helpTitle: "Dónde ayudamos a crecer a las marcas de ecommerce",
+        helpPoints: [
+          "Automatizamos la sincronización de catálogo y stock entre proveedores y la tienda, sin actualizaciones manuales producto a producto",
+          "Construimos motores de precios con IA que vigilan a la competencia y ajustan los precios al mercado automáticamente",
+          "Automatizamos el trabajo operativo recurrente, como confirmaciones de pedido, actualizaciones de stock y facturación, para que el equipo no pierda tiempo en tareas repetitivas",
+          "Nos encargamos de la velocidad del sitio y el SEO técnico, para que la base tecnológica sostenga el crecimiento en lugar de frenarlo"
+        ],
+        projectsTitle: "Proyectos de ecommerce"
+      }
+    ],
+    projects: {
+      imobiliario: [
+        {
+          name: "André Reis — Agente IAD (Miraflores y Cascais)",
+          context:
+            "Un agente inmobiliario independiente que construye una estructura escalable, con el objetivo de dejar atrás el trabajo manual y ganar inteligencia comercial real sobre su mercado.",
+          work: [
+            "Generación de leads e investigación de mercado automatizadas",
+            "Enriquecimiento automático de los leads captados",
+            "Seguimiento automático de oportunidades comerciales",
+            "CRM a medida con paneles de actividad y pipeline",
+            "Base tecnológica preparada para sostener el crecimiento de un equipo"
+          ],
+          results: [],
+          tags: ["Generación de Leads", "CRM", "Automatización de Seguimiento", "Paneles"],
+          phases: [
+            { label: "Fase 1", title: "Generación de leads, investigación de mercado y enriquecimiento" },
+            { label: "Fase 2", title: "Seguimiento automático + CRM con paneles" },
+            { label: "Fase 3", title: "Soporte al crecimiento del equipo" }
+          ]
+        },
+        {
+          name: "Pixel & Property",
+          context:
+            "Una plataforma de gestión de propiedades que necesitaba una presencia online a la altura de su producto, con opciones de suscripción claras.",
+          work: [
+            "Reconstrucción completa del sitio web corporativo",
+            "Estructura de precios en tres niveles",
+            "CMS para gestión de contenidos sin dependencia técnica",
+            "Sistema de reservas opcional para gestión de propiedades"
+          ],
+          results: [],
+          tags: ["Sitio Web", "CMS", "Precios", "Sistema de Reservas"]
+        }
+      ],
+      ecommerce: [
+        {
+          name: "order2party.pt",
+          context:
+            "Una tienda WooCommerce de artículos de fiesta, desde la automatización de catálogo y precios con IA hasta la optimización técnica y una nueva identidad visual.",
+          work: [
+            "Sincronización automática de catálogo entre el proveedor y la tienda: subida de Excel/CSV, clasificación automática de productos nuevos frente a actualizaciones de stock, y envío directo a WooCommerce vía n8n",
+            "Motor de precios con IA que investiga los precios de la competencia, valida las coincidencias de producto con un LLM y fija automáticamente el precio de venta según el mercado",
+            "Optimización técnica de SEO: schema markup, robots.txt, sitemap y Open Graph",
+            "Reconstrucción visual con un child theme: paleta turquesa/lila, tipografía Bricolage Grotesque + DM Sans",
+            "Propuesta de arquitectura headless (WordPress + Next.js), respaldada por datos reales de PageSpeed"
+          ],
+          results: [],
+          tags: ["Automatización de Catálogo", "Precios con IA", "WooCommerce", "SEO Técnico", "Headless"]
+        }
+      ]
+    }
   }
 };
 
