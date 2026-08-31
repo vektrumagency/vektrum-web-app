@@ -3,7 +3,7 @@
 import { Locale } from "@/lib/site-config";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type SiteHeaderProps = {
   locale: Locale;
@@ -16,6 +16,8 @@ export function SiteHeader({ locale, navItems, ctaHref, ctaLabel }: SiteHeaderPr
   const [scrolled, setScrolled] = useState(false);
   const [overDark, setOverDark] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const langMenuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const ptHref = pathname;
   const enHref = `${pathname}?lang=en`;
@@ -75,6 +77,17 @@ export function SiteHeader({ locale, navItems, ctaHref, ctaLabel }: SiteHeaderPr
     };
   }, [menuOpen]);
 
+  useEffect(() => {
+    if (!langMenuOpen) return;
+    const onClickOutside = (event: MouseEvent) => {
+      if (langMenuRef.current && !langMenuRef.current.contains(event.target as Node)) {
+        setLangMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, [langMenuOpen]);
+
   const burgerColor = overDark ? "bg-background" : "bg-text";
 
   return (
@@ -102,13 +115,13 @@ export function SiteHeader({ locale, navItems, ctaHref, ctaLabel }: SiteHeaderPr
           </a>
           <nav
             aria-label="Primary"
-            className="pointer-events-auto absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 rounded-full bg-white/10 px-2 py-2 backdrop-blur-xl backdrop-saturate-150 md:flex"
+            className="pointer-events-auto absolute left-1/2 hidden -translate-x-1/2 items-center gap-0.5 rounded-full bg-white/10 px-1.5 py-2 backdrop-blur-xl backdrop-saturate-150 xl:flex"
           >
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
-                className={`group flex items-center whitespace-nowrap rounded-full px-3 py-2.5 text-sm transition-colors hover:bg-white hover:text-text ${
+                className={`group flex items-center whitespace-nowrap rounded-full px-2 py-2.5 text-sm transition-colors hover:bg-white hover:text-text ${
                   overDark ? "text-background/90" : "text-text"
                 }`}
               >
@@ -122,7 +135,7 @@ export function SiteHeader({ locale, navItems, ctaHref, ctaLabel }: SiteHeaderPr
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((open) => !open)}
-            className="pointer-events-auto flex h-9 w-9 shrink-0 flex-col items-center justify-center gap-1.5 rounded-full bg-white/10 backdrop-blur-xl backdrop-saturate-150 md:hidden"
+            className="pointer-events-auto flex h-9 w-9 shrink-0 flex-col items-center justify-center gap-1.5 rounded-full bg-white/10 backdrop-blur-xl backdrop-saturate-150 xl:hidden"
           >
             <span
               className={`h-0.5 w-4 rounded-full transition-transform duration-200 ${burgerColor} ${
@@ -139,28 +152,50 @@ export function SiteHeader({ locale, navItems, ctaHref, ctaLabel }: SiteHeaderPr
       </div>
 
       <header className="absolute inset-x-0 top-4 z-40">
-        <div className="relative mx-auto flex h-16 w-[90vw] items-center justify-end gap-6">
-          <div className="relative hidden h-8 items-center gap-0.5 rounded-full bg-white/10 p-1 backdrop-blur-xl backdrop-saturate-150 md:flex">
-            {languageOptions.map((option) => (
-              <Link
-                key={option.value}
-                href={option.href}
-                aria-current={locale === option.value ? "true" : undefined}
-                className={`relative z-10 flex h-6 min-w-9 items-center justify-center rounded-full px-2 text-xs font-bold uppercase tracking-wide transition-colors duration-200 ${
-                  locale === option.value
-                    ? "bg-background text-ink"
-                    : overDark
-                      ? "text-background/70 hover:text-background"
-                      : "text-text/60 hover:text-text"
-                }`}
+        <div className="relative mx-auto flex h-16 w-[90vw] items-center justify-end gap-3">
+          <div ref={langMenuRef} className="relative hidden xl:block">
+            <button
+              type="button"
+              aria-haspopup="listbox"
+              aria-expanded={langMenuOpen}
+              onClick={() => setLangMenuOpen((open) => !open)}
+              className={`flex h-8 items-center gap-1 rounded-full bg-white/10 px-2.5 text-xs font-bold uppercase tracking-wide backdrop-blur-xl backdrop-saturate-150 transition-colors duration-200 ${
+                overDark ? "text-background" : "text-text"
+              }`}
+            >
+              {languageOptions.find((option) => option.value === locale)?.label}
+              <svg
+                viewBox="0 0 10 6"
+                aria-hidden="true"
+                className={`h-2 w-2.5 shrink-0 transition-transform duration-200 ${langMenuOpen ? "rotate-180" : ""}`}
               >
-                {option.label}
-              </Link>
-            ))}
+                <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <div
+              role="listbox"
+              className={`absolute right-0 top-full mt-2 flex min-w-[4rem] flex-col overflow-hidden rounded-2xl bg-background/95 p-1 shadow-lg backdrop-blur-xl backdrop-saturate-150 transition-all duration-150 ${
+                langMenuOpen ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none -translate-y-1 opacity-0"
+              }`}
+            >
+              {languageOptions.map((option) => (
+                <Link
+                  key={option.value}
+                  href={option.href}
+                  aria-current={locale === option.value ? "true" : undefined}
+                  onClick={() => setLangMenuOpen(false)}
+                  className={`flex h-8 items-center justify-center rounded-xl px-3 text-xs font-bold uppercase tracking-wide transition-colors duration-200 ${
+                    locale === option.value ? "bg-ink text-background" : "text-ink/70 hover:bg-ink/10 hover:text-ink"
+                  }`}
+                >
+                  {option.label}
+                </Link>
+              ))}
+            </div>
           </div>
           <Link
             href={ctaHref}
-            className="hidden max-w-[178px] shrink-0 truncate rounded-full bg-background px-3 py-1.5 text-center text-xs font-bold uppercase tracking-wide text-ink transition hover:-translate-y-0.5 hover:bg-pop md:inline-flex sm:max-w-none sm:px-4 sm:py-2 sm:text-sm"
+            className="hidden max-w-[178px] shrink-0 truncate rounded-full bg-background px-3 py-1.5 text-center text-xs font-bold uppercase tracking-wide text-ink transition hover:-translate-y-0.5 hover:bg-pop xl:inline-flex sm:max-w-none sm:px-4 sm:py-2 sm:text-sm"
           >
             {ctaLabel}
           </Link>
@@ -169,7 +204,7 @@ export function SiteHeader({ locale, navItems, ctaHref, ctaLabel }: SiteHeaderPr
 
       <div
         aria-hidden={!menuOpen}
-        className={`fixed inset-0 z-[60] flex h-screen w-screen flex-col items-center justify-center gap-3 bg-ink px-6 transition-all duration-300 ease-[var(--ease-out)] md:hidden ${
+        className={`fixed inset-0 z-[60] flex h-screen w-screen flex-col items-center justify-center gap-3 bg-ink px-6 transition-all duration-300 ease-[var(--ease-out)] xl:hidden ${
           menuOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
