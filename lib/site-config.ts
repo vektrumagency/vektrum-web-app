@@ -396,7 +396,7 @@ export const defaultSiteConfig: SiteConfig = {
         hoursSavedLabel: "Horas poupadas / mês",
         monthlySavingsLabel: "Poupança mensal estimada",
         yearlySavingsLabel: "Poupança anual estimada",
-        ctaTitle: "Quer saber quais processos valem mesmo a pena automatizar?",
+        ctaTitle: "Quer saber que processos vale mesmo a pena automatizar?",
         ctaLabel: "Auditoria gratuita de IA",
         disclaimer:
           "Estimativa indicativa. Os resultados reais dependem do volume dos processos, acesso às ferramentas, qualidade operacional e adoção pela equipa."
