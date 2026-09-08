@@ -30,6 +30,8 @@ ORDER2PARTY_ORCHESTRATOR_SECRET=
 BLOB_READ_WRITE_TOKEN=        # Vercel Blob token
 ORDER2PARTY_MAX_FILE_MB=4
 ORDER2PARTY_ORCHESTRATOR_TIMEOUT_MS=25000
+SUPABASE_URL=                 # Same Supabase project as vektrum-crm
+SUPABASE_SERVICE_ROLE_KEY=    # Newsletter subscribe/unsubscribe only
 ```
 
 ```bash
@@ -46,6 +48,7 @@ npm run start
 | `/admin` | Runtime content editor (password-protected) |
 | `/order2party` | Excel upload portal (PIN-gated) |
 | `/order2party/categories` | WooCommerce category review UI |
+| `/newsletter/unsubscribe` | Token-based unsubscribe link (from the email footer) |
 
 ## Architecture
 
@@ -56,5 +59,7 @@ npm run start
 **Subdomain routing.** `next.config.ts` rewrites `order2party.vektrum.agency/*` → `/order2party/*` — one deployment, two domains.
 
 **Category review persistence.** Decisions stored as a single JSON file on Vercel Blob (`order2party/category-review-v1.json`) with localStorage fallback in the client.
+
+**Newsletter is the one exception to "no database".** The subscribe form lives inline in `components/site-footer.tsx` (`components/newsletter-footer-form.tsx`, every page that renders `SiteFooter`), not a standalone page. It and `/newsletter/unsubscribe` write directly to the `newsletter_subscribers` table in vektrum-crm's Supabase project (`lib/supabase/server.ts`, service-role key, server-only). Drafting and sending issues happens entirely in vektrum-crm — this app only ever touches the subscriber list.
 
 > Note: `lib/content.ts` is dead code. `app/order2party/categories` route has no auth guard — see TODO comments in `page.tsx` and `categories/review/route.ts`.

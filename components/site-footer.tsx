@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { Locale } from "@/lib/site-config";
+import { NewsletterFooterForm } from "@/components/newsletter-footer-form";
 
 type SiteFooterProps = {
   footer: {
@@ -19,7 +20,7 @@ export function SiteFooter({ footer, email, locale = "pt-PT" }: SiteFooterProps)
 
   return (
     <footer className="bg-accent py-12">
-      <div className="mx-auto grid w-[90vw] sm:w-[80vw] gap-10 md:grid-cols-3">
+      <div className="mx-auto grid w-[90vw] sm:w-[80vw] gap-10 md:grid-cols-4">
         <div>
           <a href={homeHref} aria-label="Vektrum" className="inline-flex items-center gap-3 px-1 py-1">
             <img src="/vektrum-icon.png" alt="Vektrum" className="h-10 w-auto object-contain" />
@@ -29,6 +30,7 @@ export function SiteFooter({ footer, email, locale = "pt-PT" }: SiteFooterProps)
             {footer.description ?? "AI automation systems for businesses that value speed, reliability, and operational clarity."}
           </p>
         </div>
+        <NewsletterFooterForm locale={locale} />
         <nav aria-label="Footer links">
           <p className="text-sm font-bold uppercase tracking-wide text-pop">{footer.quickLinksTitle}</p>
           <div className="mt-3 flex flex-col gap-2">

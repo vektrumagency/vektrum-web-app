@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { FinalCtaSection } from "@/components/sections/final-cta-section";
 import { MobileStickyCta } from "@/components/mobile-sticky-cta";
+import { NewsletterPopup } from "@/components/newsletter-popup";
 import { SectionDivider } from "@/components/section-divider";
 import { SectorHelpPoints } from "@/components/sectors/sector-help-points";
 import { SectorPortfolio } from "@/components/sectors/sector-portfolio";
@@ -35,7 +36,7 @@ export async function generateMetadata({ params, searchParams }: SectorPageProps
     return { title: "Vektrum" };
   }
 
-  const canonical = locale === "en" ? `/setores/${slug}?lang=en` : `/setores/${slug}`;
+  const canonical = locale === "en" ? `/projetos/${slug}?lang=en` : `/projetos/${slug}`;
 
   return {
     title: `Vektrum | ${sector.title}`,
@@ -65,7 +66,7 @@ export default async function SectorPage({ params, searchParams }: SectorPagePro
   const config = getRuntimeConfig();
   const content = config.locales[locale];
   const labels = sectorsContent[locale].labels;
-  const backHref = locale === "en" ? "/setores?lang=en" : "/setores";
+  const backHref = locale === "en" ? "/projetos?lang=en" : "/projetos";
   const diagnosisHref = getDiagnosisHref(locale);
 
   const ctaSection = {
@@ -80,8 +81,6 @@ export default async function SectorPage({ params, searchParams }: SectorPagePro
       <SiteHeader
         locale={locale}
         navItems={content.navItems}
-        ctaHref={diagnosisHref}
-        ctaLabel={content.hero.primaryCta}
       />
       <main className="pb-20 md:pb-0">
         <SectorsHero
@@ -106,6 +105,7 @@ export default async function SectorPage({ params, searchParams }: SectorPagePro
       <SectionDivider fromClassName="bg-background" toClassName="text-accent" />
       <SiteFooter footer={content.footer} email={config.brand.email} locale={locale} />
       <MobileStickyCta label={content.hero.primaryCta} href={diagnosisHref} />
+      <NewsletterPopup locale={locale} />
     </div>
   );
 }

@@ -42,6 +42,10 @@ npm run start
 | `app/api/order2party/categories/review/route.ts` | CRUD de decisões no Vercel Blob |
 | `app/order2party/categories/review-client.tsx` | UI de revisão de categorias (componente grande) |
 | `next.config.ts` | Rewrite: `order2party.vektrum.agency/*` → `/order2party/*` |
+| `lib/supabase/server.ts` | Cliente Supabase (service-role, server-only) — mesmo projeto do `vektrum-crm` |
+| `components/newsletter-footer-form.tsx` | Input de subscrição inline no `SiteFooter` (não é uma página) |
+| `app/api/newsletter/subscribe/route.ts` | Recebe a subscrição do formulário do rodapé |
+| `app/newsletter/unsubscribe/page.tsx` | Cancelamento por token (link no rodapé do email) |
 
 ## Arquitetura
 
@@ -56,6 +60,9 @@ O rewrite de subdomínio em `next.config.ts` faz com que `order2party.vektrum.ag
 
 **Persistência de revisão de categorias.**
 Decisões guardadas como JSON no Vercel Blob (`order2party/category-review-v1.json`) com fallback em localStorage no cliente.
+
+**Newsletter é a única exceção a "sem base de dados".**
+O formulário de subscrição vive inline no `SiteFooter` (`components/newsletter-footer-form.tsx`), não numa página própria — aparece em todas as páginas que renderizam o rodapé (`/`, `/setores`, `/setores/[slug]`). Ele e o `/newsletter/unsubscribe` escrevem diretamente na tabela `newsletter_subscribers` do projeto Supabase do `vektrum-crm` (mesmo projeto, chave service-role, só server-side). A redação e o envio das edições acontecem inteiramente no `vektrum-crm` — este site só toca a lista de subscritores.
 
 ## Código morto / issues conhecidos
 

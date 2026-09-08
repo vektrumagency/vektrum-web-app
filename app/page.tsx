@@ -2,12 +2,13 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import type { Metadata } from "next";
 import { MobileStickyCta } from "@/components/mobile-sticky-cta";
-import { ContactSection } from "@/components/sections/contact-section";
+import { NewsletterPopup } from "@/components/newsletter-popup";
 import { FAQSection } from "@/components/sections/faq-section";
 import { FinalCtaSection } from "@/components/sections/final-cta-section";
 import { HeroSection } from "@/components/sections/hero-section";
 import { ProcessSection } from "@/components/sections/process-section";
 import { ProblemSection } from "@/components/sections/problem-section";
+import { ProjectsSection } from "@/components/sections/projects-section";
 import { ResultsSection } from "@/components/sections/results-section";
 import { SectionDivider } from "@/components/section-divider";
 import { SavingsCalculatorSection } from "@/components/sections/savings-calculator-section";
@@ -16,6 +17,7 @@ import { SolutionSection } from "@/components/sections/solution-section";
 import { UseCasesSection } from "@/components/sections/use-cases-section";
 import { WhyChooseSection } from "@/components/sections/why-choose-section";
 import { getRuntimeConfig } from "@/lib/runtime-config";
+import { sectorsContent } from "@/lib/sectors-content";
 import { Locale } from "@/lib/site-config";
 import { getDiagnosisHref } from "@/lib/site-links";
 
@@ -76,6 +78,16 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const config = getRuntimeConfig();
   const content = config.locales[locale];
   const diagnosisHref = getDiagnosisHref(locale);
+  const sectorsData = sectorsContent[locale];
+  const featuredProjects = sectorsData.sectors.flatMap((sector) =>
+    (sectorsData.projects[sector.slug] ?? []).map((project) => ({
+      sectorSlug: sector.slug,
+      sectorLabel: sector.title,
+      name: project.name,
+      context: project.context,
+      tags: project.tags
+    }))
+  );
   const ctaCopy =
     locale === "pt-PT"
       ? {
@@ -90,8 +102,6 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       <SiteHeader
         locale={locale}
         navItems={content.navItems}
-        ctaHref={diagnosisHref}
-        ctaLabel={content.hero.primaryCta}
       />
       <main className="pb-20 md:pb-0">
         <HeroSection
@@ -113,6 +123,13 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           ctaLabel={ctaCopy.servicesLabel}
           ctaHref={diagnosisHref}
         />
+        <ProjectsSection
+          eyebrow={content.featuredProjectsSection.eyebrow}
+          title={content.featuredProjectsSection.title}
+          description={content.featuredProjectsSection.description}
+          projects={featuredProjects}
+          locale={locale}
+        />
         <ProcessSection
           section={content.processSection}
           processSteps={content.processSteps}
@@ -124,17 +141,12 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           section={content.faqSection}
           faqs={content.faqs}
         />
-        <FinalCtaSection section={content.finalCtaSection} ctaHref={diagnosisHref} />
-        <ContactSection
-          section={content.contactSection}
-          ctaHref={diagnosisHref}
-          email={config.brand.email}
-          locale={locale}
-        />
+        <FinalCtaSection section={content.finalCtaSection} ctaHref={diagnosisHref} tone="plain" />
       </main>
       <SectionDivider fromClassName="bg-background" toClassName="text-accent" />
       <SiteFooter footer={content.footer} email={config.brand.email} locale={locale} />
       <MobileStickyCta label={content.hero.primaryCta} href={diagnosisHref} />
+      <NewsletterPopup locale={locale} />
     </div>
   );
 }
