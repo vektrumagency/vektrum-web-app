@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+import Image from "next/image";
 
 type BrandLogoProps = {
   href?: string;
@@ -15,9 +15,12 @@ export function BrandLogo({ href = "#home", className, compact = false, showTagl
       className={`inline-flex min-w-0 items-center gap-3 px-1 py-1 ${className ?? ""}`}
       aria-label="Vektrum"
     >
-      <img
+      <Image
         src="/vektrum-logo-transparent.png"
         alt="Vektrum"
+        width={2000}
+        height={501}
+        priority
         className={`${compact ? "h-8 w-auto max-w-[132px] object-contain sm:h-9 sm:max-w-[150px]" : "h-10 w-auto max-w-[168px] object-contain sm:h-12 sm:max-w-[210px]"} ${light ? "brightness-0 invert" : ""}`}
       />
       {showTagline ? (

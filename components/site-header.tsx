@@ -1,6 +1,8 @@
 "use client";
 
 import { Locale } from "@/lib/site-config";
+import { localizePath, stripLocalePrefix } from "@/lib/site-links";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -15,9 +17,10 @@ export function SiteHeader({ locale, navItems }: SiteHeaderProps) {
   const [overDark, setOverDark] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
-  const enHref = `${pathname}?lang=en`;
-  const ptHref = pathname;
-  const homeHref = locale === "en" ? "/?lang=en" : "/";
+  const bareHref = stripLocalePrefix(pathname);
+  const enHref = localizePath(bareHref, "en");
+  const ptHref = bareHref;
+  const homeHref = localizePath("/", locale);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -78,16 +81,26 @@ export function SiteHeader({ locale, navItems }: SiteHeaderProps) {
             aria-label="Vektrum"
             className="pointer-events-auto inline-flex h-11 shrink-0 items-center"
           >
-            <img src="/vektrum-icon.png" alt="Vektrum" className="h-11 w-auto shrink-0 object-contain" />
+            <Image
+              src="/vektrum-icon.png"
+              alt="Vektrum"
+              width={525}
+              height={501}
+              priority
+              className="h-11 w-auto shrink-0 object-contain"
+            />
             <div
               className={`h-11 shrink-0 overflow-hidden transition-[width] duration-500 ease-[var(--ease-out)] ${
                 scrolled ? "w-0" : "w-[129px]"
               }`}
             >
-              <img
+              <Image
                 src="/vektrum-wordmark.png"
                 alt=""
                 aria-hidden="true"
+                width={1465}
+                height={501}
+                priority
                 className={`h-11 w-auto shrink-0 object-contain ${overDark ? "brightness-0 invert" : ""}`}
               />
             </div>

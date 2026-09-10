@@ -1,5 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
+import Image from "next/image";
 import { Locale } from "@/lib/site-config";
+import { localizePath } from "@/lib/site-links";
 import { NewsletterFooterForm } from "@/components/newsletter-footer-form";
 
 type SiteFooterProps = {
@@ -16,15 +17,22 @@ type SiteFooterProps = {
 };
 
 export function SiteFooter({ footer, email, locale = "pt-PT" }: SiteFooterProps) {
-  const homeHref = locale === "en" ? "/?lang=en" : "/";
+  const homeHref = localizePath("/", locale);
 
   return (
     <footer className="bg-accent py-12">
       <div className="mx-auto grid w-[90vw] sm:w-[80vw] gap-10 md:grid-cols-4">
         <div>
           <a href={homeHref} aria-label="Vektrum" className="inline-flex items-center gap-3 px-1 py-1">
-            <img src="/vektrum-icon.png" alt="Vektrum" className="h-10 w-auto object-contain" />
-            <img src="/vektrum-wordmark.png" alt="" aria-hidden="true" className="h-10 w-auto object-contain brightness-0 invert" />
+            <Image src="/vektrum-icon.png" alt="Vektrum" width={525} height={501} className="h-10 w-auto object-contain" />
+            <Image
+              src="/vektrum-wordmark.png"
+              alt=""
+              aria-hidden="true"
+              width={1465}
+              height={501}
+              className="h-10 w-auto object-contain brightness-0 invert"
+            />
           </a>
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-background/65">
             {footer.description ?? "AI automation systems for businesses that value speed, reliability, and operational clarity."}

@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { getSupabaseAdminClient } from "@/lib/supabase/server";
-import { PrivacyLanguage } from "../../privacidade/privacy-language";
 
-export const metadata: Metadata = { title: "Cancelar subscrição | Vektrum" };
+export const metadata: Metadata = {
+  title: "Cancelar subscrição | Vektrum",
+  robots: { index: false, follow: false }
+};
 
 type UnsubscribePageProps = { searchParams: Promise<Record<string, string | string[] | undefined>> };
 
@@ -47,7 +49,6 @@ export default async function UnsubscribePage({ searchParams }: UnsubscribePageP
 
   return (
     <div className="min-h-screen bg-background">
-      <PrivacyLanguage language="pt-PT" />
       <header className="mx-auto flex w-[calc(100%-32px)] max-w-4xl items-center justify-between py-6 sm:w-[calc(100%-64px)] sm:py-8">
         <Link href="/" aria-label="Vektrum">
           <Image src="/vektrum-logo-transparent.png" alt="Vektrum" width={168} height={48} priority className="h-9 w-auto" />

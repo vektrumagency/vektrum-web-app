@@ -7,10 +7,10 @@ type SectorPageParams = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: SectorPageParams): Promise<Metadata> {
   const { slug } = await params;
-  return getSectorMetadata("pt-PT", slug);
+  return getSectorMetadata("en", slug);
 }
 
-export default async function SectorPage({ params }: SectorPageParams) {
+export default async function SectorPageEn({ params }: SectorPageParams) {
   const { slug } = await params;
-  return <SectorPageContent locale="pt-PT" slug={slug} />;
+  return <SectorPageContent locale="en" slug={slug} />;
 }

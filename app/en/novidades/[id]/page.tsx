@@ -7,10 +7,10 @@ type NovidadePageParams = { params: Promise<{ id: string }> };
 
 export async function generateMetadata({ params }: NovidadePageParams): Promise<Metadata> {
   const { id } = await params;
-  return getNovidadeMetadata("pt-PT", id);
+  return getNovidadeMetadata("en", id);
 }
 
-export default async function NovidadePage({ params }: NovidadePageParams) {
+export default async function NovidadePageEn({ params }: NovidadePageParams) {
   const { id } = await params;
-  return <NovidadePageContent locale="pt-PT" id={id} />;
+  return <NovidadePageContent locale="en" id={id} />;
 }
