@@ -10,10 +10,9 @@ type SectorPortfolioProps = {
   projects: SectorProject[];
   whatWeBuiltLabel: string;
   resultsLabel: string;
-  disclaimer: string;
 };
 
-export function SectorPortfolio({ title, projects, whatWeBuiltLabel, resultsLabel, disclaimer }: SectorPortfolioProps) {
+export function SectorPortfolio({ title, projects, whatWeBuiltLabel, resultsLabel }: SectorPortfolioProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
@@ -31,7 +30,6 @@ export function SectorPortfolio({ title, projects, whatWeBuiltLabel, resultsLabe
           />
         ))}
       </div>
-      <p className="mt-8 text-xs leading-relaxed text-muted">{disclaimer}</p>
     </SectionShell>
   );
 }

@@ -32,7 +32,6 @@ export type SectorsLabels = {
   backLabel: string;
   whatWeBuiltLabel: string;
   resultsLabel: string;
-  disclaimer: string;
   ctaTitle: string;
 };
 
@@ -54,7 +53,6 @@ export const sectorsContent: Record<Locale, SectorsContent> = {
       backLabel: "Projects",
       whatWeBuiltLabel: "What we built",
       resultsLabel: "Results",
-      disclaimer: "Results and metrics are only published once confirmed with the client.",
       ctaTitle: "Want a system like this for your business?"
     },
     sectors: [
@@ -85,6 +83,20 @@ export const sectorsContent: Record<Locale, SectorsContent> = {
           "We handle site speed and technical SEO, so the technical foundation supports growth instead of holding it back"
         ],
         projectsTitle: "Ecommerce projects"
+      },
+      {
+        slug: "plataformas",
+        title: "Marketplaces and Platforms",
+        description:
+          "For online platforms and marketplaces, we handle the reporting, analytics, and automation that usually gets deprioritized once the product itself is live.",
+        helpTitle: "Where we help marketplaces and platforms",
+        helpPoints: [
+          "We build automated weekly SEO reports, with a technical audit and Search Console data",
+          "We use AI to summarize those reports in plain language, based on the actual code, not just the metrics",
+          "We set up analytics dashboards for bookings, conversion, and feature adoption by partners",
+          "We automate routing website forms straight to email via n8n, with no manual step in between"
+        ],
+        projectsTitle: "Platform projects"
       }
     ],
     projects: {
@@ -137,6 +149,21 @@ export const sectorsContent: Record<Locale, SectorsContent> = {
           results: [],
           tags: ["Catalog Automation", "AI Pricing", "WooCommerce", "Technical SEO", "Headless"]
         }
+      ],
+      plataformas: [
+        {
+          name: "Petabook",
+          context:
+            "A dog-hotel booking marketplace, with search, reviews, and its own dashboard for partner hotels. Vektrum built the SEO reporting, the analytics dashboards, and the form automation.",
+          work: [
+            "Weekly automated SEO report: technical audit plus Search Console data, right in the admin panel",
+            "AI-written summary of that report, generated from the site's actual code, not just the metrics",
+            "Analytics dashboards: conversion funnel (bookings, contact forms, WhatsApp clicks), visitor engagement, and feature adoption by partner hotels",
+            "Website form automation (contact and hotel-partner applications) via n8n, routed straight to email"
+          ],
+          results: [],
+          tags: ["SEO Automation", "AI Reporting", "Analytics", "n8n Automation"]
+        }
       ]
     }
   },
@@ -151,7 +178,6 @@ export const sectorsContent: Record<Locale, SectorsContent> = {
       backLabel: "Projetos",
       whatWeBuiltLabel: "O que construímos",
       resultsLabel: "Resultados",
-      disclaimer: "Resultados e métricas só são publicados depois de confirmados com o cliente.",
       ctaTitle: "Quer um sistema assim para o seu negócio?"
     },
     sectors: [
@@ -182,6 +208,20 @@ export const sectorsContent: Record<Locale, SectorsContent> = {
           "Tratamos da velocidade do site e do SEO técnico, para que a base tecnológica sustente o crescimento em vez de o travar"
         ],
         projectsTitle: "Projetos em ecommerce"
+      },
+      {
+        slug: "plataformas",
+        title: "Marketplaces e Plataformas",
+        description:
+          "Para plataformas e marketplaces online, tratamos do reporting, analytics e automação que costuma ficar em segundo plano depois do produto estar no ar.",
+        helpTitle: "Onde ajudamos plataformas e marketplaces",
+        helpPoints: [
+          "Construímos relatórios semanais automáticos de SEO, com auditoria técnica e dados do Search Console",
+          "Usamos IA para resumir esses relatórios em linguagem simples, a partir do código real e não só das métricas",
+          "Montamos dashboards de analytics para reservas, conversão e adoção de funcionalidades pelos parceiros",
+          "Automatizamos o encaminhamento de formulários do site para email via n8n, sem intervenção manual"
+        ],
+        projectsTitle: "Projetos em plataformas"
       }
     ],
     projects: {
@@ -233,6 +273,21 @@ export const sectorsContent: Record<Locale, SectorsContent> = {
           ],
           results: [],
           tags: ["Automação de Catálogo", "Pricing com IA", "WooCommerce", "SEO Técnico", "Headless"]
+        }
+      ],
+      plataformas: [
+        {
+          name: "Petabook",
+          context:
+            "Marketplace de reservas de hotéis para cães, com pesquisa, avaliações e um painel próprio para os hotéis parceiros. A Vektrum implementou o reporting de SEO, os dashboards de analytics e a automação de formulários da plataforma.",
+          work: [
+            "Relatório semanal automático de SEO: auditoria técnica e dados do Search Console, direto no painel de administração",
+            "Resumo desse relatório escrito por IA a partir do código real do site, e não só das métricas",
+            "Dashboards de analytics: motor de conversão (reservas, contactos, cliques no WhatsApp), envolvimento de visitantes e adoção de funcionalidades pelos hotéis parceiros",
+            "Automação dos formulários do site (contacto e candidatura de hotel parceiro) via n8n, com encaminhamento direto por email"
+          ],
+          results: [],
+          tags: ["Automação de SEO", "Relatórios com IA", "Analytics", "Automação com n8n"]
         }
       ]
     }

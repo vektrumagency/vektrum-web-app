@@ -98,7 +98,6 @@ export default async function SectorPage({ params, searchParams }: SectorPagePro
           projects={projects}
           whatWeBuiltLabel={labels.whatWeBuiltLabel}
           resultsLabel={labels.resultsLabel}
-          disclaimer={labels.disclaimer}
         />
         <FinalCtaSection section={ctaSection} ctaHref={diagnosisHref} tone="plain" />
       </main>
