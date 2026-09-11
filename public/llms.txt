@@ -2,15 +2,15 @@
 
 > Vektrum designs and builds practical automation systems for businesses — for lead handling, customer support, reporting, CRM updates, admin workflows, and follow-ups. Based in Portugal, working in Portuguese (PT-PT) and English.
 
-Vektrum starts with a free, no-commitment automation audit, then builds systems around the tools a team already uses (CRM, inbox, spreadsheets, calendars) rather than replacing them. Content on this site is available in both English (default) and European Portuguese (`?lang=en` toggles to English; the default is Portuguese).
+Vektrum starts with a free, no-commitment automation audit, then builds systems around the tools a team already uses (CRM, inbox, spreadsheets, calendars) rather than replacing them. Content on this site is available in both European Portuguese (default, unprefixed paths) and English (under `/en`).
 
 ## Key pages
 
-- [Homepage](https://vektrum.agency/): what Vektrum does, the process, pricing-relevant savings calculator, and FAQs.
-- [Free automation audit](https://vektrum.agency/diagnostico): the intake tool that starts an engagement — a short questionnaire that produces a personalized automation report.
-- [Projects and portfolio](https://vektrum.agency/projetos): real projects Vektrum has built, grouped by sector (real estate, ecommerce, marketplaces/platforms), with the work and outcomes for each.
-- [Novidades](https://vektrum.agency/novidades): public archive of "Semana em IA", Vektrum's weekly newsletter about AI and automation, in Portuguese.
-- [Privacy policy](https://vektrum.agency/privacidade): how Vektrum processes information submitted through the automation audit.
+- [Homepage](https://www.vektrum.agency/): what Vektrum does, the process, pricing-relevant savings calculator, and FAQs.
+- [Free automation audit](https://www.vektrum.agency/diagnostico): the intake tool that starts an engagement — a short questionnaire that produces a personalized automation report.
+- [Projects and portfolio](https://www.vektrum.agency/projetos): real projects Vektrum has built, grouped by sector (real estate, ecommerce, marketplaces/platforms), with the work and outcomes for each.
+- [Novidades](https://www.vektrum.agency/novidades): public archive of "Semana em IA", Vektrum's weekly newsletter about AI and automation, in Portuguese.
+- [Privacy policy](https://www.vektrum.agency/privacidade): how Vektrum processes information submitted through the automation audit.
 
 ## Contact
 

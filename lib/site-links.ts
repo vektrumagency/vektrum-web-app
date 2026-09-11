@@ -1,6 +1,9 @@
 import type { Locale } from "@/lib/site-config";
 
-export const SITE_URL = "https://vektrum.agency";
+// The bare domain 307-redirects here at the Vercel/DNS level, so this must
+// be the domain that actually serves the site — otherwise canonical/OG/
+// sitemap URLs all take an extra redirect hop.
+export const SITE_URL = "https://www.vektrum.agency";
 
 /** Prefixes a PT-default path with `/en` for the English route. `ptPath` must start with "/". */
 export function localizePath(ptPath: string, locale: Locale): string {
