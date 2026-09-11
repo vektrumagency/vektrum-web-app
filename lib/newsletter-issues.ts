@@ -19,18 +19,27 @@ export type NewsletterIssueDetail = NewsletterIssueSummary & { body_html: string
 // edition is never reachable publicly, even by guessing an id.
 
 export async function listSentIssues(): Promise<NewsletterIssueSummary[]> {
-  const { data, error } = await getSupabaseAdminClient()
-    .from("newsletter_issues")
-    .select("id, week_of, subject, body_text, sent_at")
-    .eq("status", "sent")
-    .order("sent_at", { ascending: false });
+  // Also called from app/sitemap.ts, which Next.js can prerender at build
+  // time — a build environment without the Supabase service-role vars set
+  // (getSupabaseAdminClient throws synchronously) must not fail the whole
+  // build, so this degrades to "no issues" the same way a query error does.
+  try {
+    const { data, error } = await getSupabaseAdminClient()
+      .from("newsletter_issues")
+      .select("id, week_of, subject, body_text, sent_at")
+      .eq("status", "sent")
+      .order("sent_at", { ascending: false });
 
-  if (error) {
-    console.error("[newsletter-issues] listSentIssues failed", { message: error.message });
+    if (error) {
+      console.error("[newsletter-issues] listSentIssues failed", { message: error.message });
+      return [];
+    }
+
+    return data as NewsletterIssueSummary[];
+  } catch (error) {
+    console.error("[newsletter-issues] listSentIssues failed", { message: (error as Error).message });
     return [];
   }
-
-  return data as NewsletterIssueSummary[];
 }
 
 export async function getSentIssue(id: string): Promise<NewsletterIssueDetail | null> {
