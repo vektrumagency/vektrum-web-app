@@ -130,13 +130,13 @@
     },
     {
       "parameters": {
-        "jsCode": "// ==== Validate input — responds 400 on first failure via error thrown to caller's own IF, ====\n// or simply pass-through with { valid, reason }. Here we set json.valid for a following IF.\nconst CFG = $('Config').first().json;\nconst b = $json.body || {};\nconst now = DateTime.now().setZone(CFG.timezone);\n\nfunction fail(reason) { return [{ json: { valid: false, reason } }]; }\n\nif (!b.name || typeof b.name !== 'string' || !b.name.trim()) return fail('missing_name');\nif (!b.email || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(b.email)) return fail('invalid_email');\nif (!b.startUTC) return fail('missing_start');\n\nconst start = DateTime.fromISO(b.startUTC).setZone(CFG.timezone);\nif (!start.isValid) return fail('invalid_start');\nif (start <= now) return fail('start_not_future');\n\nconst end = start.plus({ minutes: CFG.meetingMin });\n\n// Aligned to grid: minutes-from-midnight must be a multiple of slotStepMin.\nconst dayStart = start.startOf('day');\nconst minutesFromMidnight = start.diff(dayStart, 'minutes').minutes;\nif (minutesFromMidnight % CFG.slotStepMin !== 0) return fail('not_on_grid');\n\n// Inside a business-hours window for its weekday.\nconst hm = (s) => ({ hour: +s.slice(0, 2), minute: +s.slice(3, 5), second: 0, millisecond: 0 });\nconst windows = CFG.businessHours[start.weekday] || [];\nconst inWindow = windows.some(([s, e]) => {\n  const ws = dayStart.set(hm(s)), we = dayStart.set(hm(e));\n  return start >= ws && end <= we;\n});\nif (!inWindow) return fail('outside_business_hours');\n\n// Within horizon.\nif (start > now.plus({ days: CFG.horizonDays })) return fail('beyond_horizon');\n\nreturn [{ json: { valid: true, name: b.name.trim(), email: b.email, note: b.note || '', lang: b.lang || 'pt', startUTC: start.toUTC().toISO(), endUTC: end.toUTC().toISO() } }];"
+        "jsCode": "// ==== Validate input — responds 400 on first failure via error thrown to caller's own IF, ====\n// or simply pass-through with { valid, reason }. Here we set json.valid for a following IF.\n// CFG comes from Config1 — this branch's own Config node, which runs BEFORE this node.\n// Never reference the /disponibilidade branch's Config node here: n8n 2.x throws when\n// $() points at a node that did not execute in the current run.\nconst CFG = $('Config1').first().json;\nconst b = $json.body || {};\nconst now = DateTime.now().setZone(CFG.timezone);\n\nfunction fail(reason) { return [{ json: { valid: false, reason } }]; }\n\nif (!b.name || typeof b.name !== 'string' || !b.name.trim()) return fail('missing_name');\nif (!b.email || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(b.email)) return fail('invalid_email');\nif (!b.startUTC) return fail('missing_start');\n\nconst start = DateTime.fromISO(b.startUTC).setZone(CFG.timezone);\nif (!start.isValid) return fail('invalid_start');\nif (start <= now) return fail('start_not_future');\n\nconst end = start.plus({ minutes: CFG.meetingMin });\n\n// Aligned to grid: minutes-from-midnight must be a multiple of slotStepMin.\nconst dayStart = start.startOf('day');\nconst minutesFromMidnight = start.diff(dayStart, 'minutes').minutes;\nif (minutesFromMidnight % CFG.slotStepMin !== 0) return fail('not_on_grid');\n\n// Inside a business-hours window for its weekday.\nconst hm = (s) => ({ hour: +s.slice(0, 2), minute: +s.slice(3, 5), second: 0, millisecond: 0 });\nconst windows = CFG.businessHours[start.weekday] || [];\nconst inWindow = windows.some(([s, e]) => {\n  const ws = dayStart.set(hm(s)), we = dayStart.set(hm(e));\n  return start >= ws && end <= we;\n});\nif (!inWindow) return fail('outside_business_hours');\n\n// Within horizon.\nif (start > now.plus({ days: CFG.horizonDays })) return fail('beyond_horizon');\n\nreturn [{ json: { valid: true, name: b.name.trim(), email: b.email, note: b.note || '', lang: b.lang || 'pt', startUTC: start.toUTC().toISO(), endUTC: end.toUTC().toISO() } }];"
       },
       "id": "validate-input",
       "name": "Validate input",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-760, 320]
+      "position": [-540, 320]
     },
     {
       "parameters": {
@@ -158,7 +158,7 @@
       "name": "IF valid",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [-540, 320]
+      "position": [-320, 320]
     },
     {
       "parameters": {
@@ -180,7 +180,7 @@
       "name": "Config1",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-320, 240]
+      "position": [-760, 240]
     },
     {
       "parameters": {
@@ -349,7 +349,7 @@
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ { status: \"confirmed\", startUTC: $('Re-check slot').first().json.startUTC, endUTC: $('Re-check slot').first().json.endUTC, meetLink: $('Send confirmation email').first().json.hangoutLink || '' } }}",
+        "responseBody": "={{ { status: \"confirmed\", startUTC: $('Re-check slot').first().json.startUTC, endUTC: $('Re-check slot').first().json.endUTC, meetLink: $('HTTP Request: events.insert').first().json.hangoutLink || '' } }}",
         "options": { "responseCode": 200 }
       },
       "id": "respond-confirmed",
@@ -381,20 +381,20 @@
     "IF honeypot filled": {
       "main": [
         [{ "node": "Respond: fake success", "type": "main", "index": 0 }],
-        [{ "node": "Validate input", "type": "main", "index": 0 }]
+        [{ "node": "Config1", "type": "main", "index": 0 }]
       ]
+    },
+    "Config1": {
+      "main": [[{ "node": "Validate input", "type": "main", "index": 0 }]]
     },
     "Validate input": {
       "main": [[{ "node": "IF valid", "type": "main", "index": 0 }]]
     },
     "IF valid": {
       "main": [
-        [{ "node": "Config1", "type": "main", "index": 0 }],
+        [{ "node": "Build freeBusy body (recheck)", "type": "main", "index": 0 }],
         [{ "node": "Respond: invalid", "type": "main", "index": 0 }]
       ]
-    },
-    "Config1": {
-      "main": [[{ "node": "Build freeBusy body (recheck)", "type": "main", "index": 0 }]]
     },
     "Build freeBusy body (recheck)": {
       "main": [[{ "node": "HTTP Request: freeBusy recheck", "type": "main", "index": 0 }]]

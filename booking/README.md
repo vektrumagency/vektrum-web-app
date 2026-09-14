@@ -58,9 +58,9 @@ POST /marcar
     -> Honeypot IF (body._hp non-empty?)
          true  -> Respond fake success (200, no side effects)
          false -> continue
+    -> Config1 (Code — this branch's own Config; must run BEFORE Validate input)
     -> Validate input (Code: email regex, slot in future, aligned to grid
-       and business hours, within horizon)
-    -> Config (Code)
+       and business hours, within horizon; reads CFG via $('Config1'))
     -> Build freeBusy body — single slot (Code)
     -> HTTP Request: freeBusy recheck (POST, OAuth2)
     -> Re-check slot (Code — reuses evaluate() on the one requested slot)
@@ -145,6 +145,12 @@ Condition: `{{$json.body._hp}}` is not empty. If true, go straight to a
 specially (just silently drop it as if it succeeded, per anti-bot spec).
 
 ### Validate input (Code)
+
+Reads `CFG` from this branch's own Config node (**Config1**), which is wired to
+run immediately before it. Never reference the `/disponibilidade` branch's
+`Config` node from the POST branch — n8n 2.x throws
+`Node 'X' hasn't been executed` when `$()` points at a node that did not run in
+the current execution.
 
 Checks, in order, and responds 400 on first failure:
 1. `name` non-empty string.
