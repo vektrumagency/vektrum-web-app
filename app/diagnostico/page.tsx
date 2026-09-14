@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DiagnosisClient } from "./diagnosis-client";
+import { DiagnosisGate } from "./short-gate";
 import { getSector, localize, type Locale } from "./diagnosis-config";
 
 type DiagnosisPageProps = {
@@ -38,5 +38,5 @@ export async function generateMetadata({ searchParams }: DiagnosisPageProps): Pr
 
 export default async function DiagnosisPage({ searchParams }: DiagnosisPageProps) {
   const params = await searchParams;
-  return <DiagnosisClient locale={getLocale(params.lang)} campaignSectorId={getCampaignSector(params.sector)} />;
+  return <DiagnosisGate locale={getLocale(params.lang)} campaignSectorId={getCampaignSector(params.sector)} />;
 }
