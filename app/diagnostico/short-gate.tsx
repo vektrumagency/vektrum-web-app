@@ -155,7 +155,11 @@ export function DiagnosisGate({ locale, campaignSectorId = null }: { locale: Loc
 
   if (showLongForm) {
     return (
-      <DiagnosisClient locale={locale} campaignSectorId={campaignSectorId} />
+      <DiagnosisClient
+        locale={locale}
+        campaignSectorId={campaignSectorId}
+        prefill={{ contactName: lead.name, email: lead.email, phone: lead.phone }}
+      />
     );
   }
 
