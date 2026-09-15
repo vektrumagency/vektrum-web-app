@@ -10,6 +10,7 @@ import { localize, type Locale } from "./diagnosis-config";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_PATTERN = /^[+\d][\d\s().-]{6,}$/;
+const LEAD_SUBMITTED_KEY = "vektrum_lead_submitted";
 
 type GateStep = "form" | "choice";
 
@@ -38,6 +39,7 @@ const COPY = {
       consent: "É necessário aceitar o tratamento dos dados para continuar."
     },
     choiceEyebrow: "Obrigado, {name}",
+    thanksReturning: "Obrigado pelo seu contacto",
     choiceTitle: "Como prefere continuar?",
     choiceBody: "Pode marcar uma chamada connosco agora ou responder a algumas perguntas para receber um relatório personalizado.",
     bookTitle: "Marcar reunião",
@@ -69,6 +71,7 @@ const COPY = {
       consent: "You need to accept data processing to continue."
     },
     choiceEyebrow: "Thanks, {name}",
+    thanksReturning: "Thank you for your contact",
     choiceTitle: "How would you like to continue?",
     choiceBody: "You can book a call with us now or answer a few questions to get a personalized report.",
     bookTitle: "Book a meeting",
@@ -91,6 +94,7 @@ export function DiagnosisGate({ locale, campaignSectorId = null }: { locale: Loc
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [showLongForm, setShowLongForm] = useState(false);
+  const [returning, setReturning] = useState(false);
   const startedAt = useRef<number>(Date.now());
   const homeHref = locale === "en" ? "/?lang=en" : "/?lang=pt-PT";
 
@@ -101,6 +105,17 @@ export function DiagnosisGate({ locale, campaignSectorId = null }: { locale: Loc
       document.documentElement.lang = previousLanguage;
     };
   }, [locale]);
+
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined" && window.localStorage.getItem(LEAD_SUBMITTED_KEY)) {
+        setReturning(true);
+        setStep("choice");
+      }
+    } catch {
+      /* localStorage unavailable (private mode) — just show the form */
+    }
+  }, []);
 
   const validate = (): FieldErrors => {
     const issues: FieldErrors = {};
@@ -136,6 +151,11 @@ export function DiagnosisGate({ locale, campaignSectorId = null }: { locale: Loc
         console.error("[diagnosis-gate] lead submission failed (best-effort, continuing)", error);
       }
     } finally {
+      try {
+        window.localStorage.setItem(LEAD_SUBMITTED_KEY, new Date().toISOString());
+      } catch {
+        /* ignore */
+      }
       setSubmitting(false);
       setStep("choice");
     }
@@ -246,7 +266,7 @@ export function DiagnosisGate({ locale, campaignSectorId = null }: { locale: Loc
           </section>
         ) : (
           <section className="diagnosis-enter w-full text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">{t.choiceEyebrow.replace("{name}", lead.name.split(" ")[0] || lead.name)}</p>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">{returning ? t.thanksReturning : t.choiceEyebrow.replace("{name}", lead.name.split(" ")[0] || lead.name)}</p>
             <h1 className="mt-5 text-balance text-[clamp(1.9rem,5.5vw,3rem)] font-semibold leading-[1.05] tracking-[-0.05em] text-text">{t.choiceTitle}</h1>
             <p className="mt-4 max-w-xl text-pretty text-base leading-relaxed text-muted sm:text-lg">{t.choiceBody}</p>
 
