@@ -2,7 +2,11 @@
 
 import { useEffect, useMemo, useReducer } from "react";
 
+import { BrandLogo } from "./brand-logo";
+
 type Locale = "en" | "pt-PT" | "es";
+
+const HORIZON_DAYS = 15;
 
 type Slot = {
   startUTC: string;
@@ -114,7 +118,7 @@ const COPY: Record<
     heading: "Marcar uma chamada",
     subheading: "Escolha um dia com disponibilidade e depois o horário.",
     loading: "A carregar disponibilidade...",
-    empty: "Sem horários nos próximos 30 dias. Contacte-nos diretamente.",
+    empty: "Sem horários nos próximos 15 dias. Contacte-nos diretamente.",
     error: "Não foi possível carregar os horários. Tente novamente.",
     retry: "Tentar novamente",
     pickTime: "Horários disponíveis",
@@ -146,7 +150,7 @@ const COPY: Record<
     heading: "Book a call",
     subheading: "Pick a day with availability, then a time.",
     loading: "Loading availability...",
-    empty: "No times in the next 30 days. Please contact us directly.",
+    empty: "No times in the next 15 days. Please contact us directly.",
     error: "Could not load available times. Please try again.",
     retry: "Retry",
     pickTime: "Available times",
@@ -178,7 +182,7 @@ const COPY: Record<
     heading: "Reservar una llamada",
     subheading: "Elige un día con disponibilidad y luego la hora.",
     loading: "Cargando disponibilidad...",
-    empty: "No hay horarios en los próximos 30 días. Contáctanos directamente.",
+    empty: "No hay horarios en los próximos 15 días. Contáctanos directamente.",
     error: "No se pudieron cargar los horarios. Inténtalo de nuevo.",
     retry: "Reintentar",
     pickTime: "Horarios disponibles",
@@ -297,20 +301,35 @@ export function Booker({ name = "", email = "", locale = "pt-PT" }: BookerProps)
     return map;
   }, [state.slots]);
 
-  // 6-week grid starting on the Monday of the current week.
-  const grid = useMemo(() => {
+  // Grid spanning only the current week through the week that contains
+  // today + HORIZON_DAYS. Nothing beyond the 15-day horizon is rendered.
+  const { grid, horizonKey, monthLabel } = useMemo(() => {
     const now = new Date();
-    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const dow = (start.getDay() + 6) % 7; // Mon = 0
-    start.setDate(start.getDate() - dow);
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    const horizon = new Date(today);
+    horizon.setDate(today.getDate() + HORIZON_DAYS);
+
+    const start = new Date(today);
+    start.setDate(start.getDate() - ((start.getDay() + 6) % 7)); // back to Monday
+
+    const end = new Date(horizon);
+    end.setDate(end.getDate() + (6 - ((end.getDay() + 6) % 7))); // forward to Sunday
+
     const days: Date[] = [];
-    for (let i = 0; i < 42; i += 1) {
-      const d = new Date(start);
-      d.setDate(start.getDate() + i);
-      days.push(d);
+    const cur = new Date(start);
+    while (cur <= end) {
+      days.push(new Date(cur));
+      cur.setDate(cur.getDate() + 1);
     }
-    return days;
-  }, []);
+
+    const monthFmt = new Intl.DateTimeFormat(t.intl, { month: "long", year: "numeric" });
+    const first = monthFmt.format(today);
+    const last = monthFmt.format(horizon);
+    const label = first === last ? first : `${first} – ${last}`;
+
+    return { grid: days, horizonKey: dayKey(horizon), monthLabel: label };
+  }, [t.intl]);
 
   const weekdayHeaders = useMemo(() => {
     const fmt = new Intl.DateTimeFormat(t.intl, { weekday: "short" });
@@ -418,6 +437,7 @@ export function Booker({ name = "", email = "", locale = "pt-PT" }: BookerProps)
 
     return (
       <div className="rounded-3xl border border-accent/20 bg-surface/85 p-6 shadow-glow md:p-8">
+        <BrandLogo href={t.homeHref} className="mb-4" />
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">✓</p>
         <h3 className="mt-2 font-heading text-2xl uppercase tracking-tight text-text">{t.successTitle}</h3>
         <p className="mt-2 text-sm text-muted">{t.successBody}</p>
@@ -468,6 +488,7 @@ export function Booker({ name = "", email = "", locale = "pt-PT" }: BookerProps)
 
   return (
     <div className="rounded-3xl border border-border bg-surface/85 p-6 shadow-glow md:p-8">
+      <BrandLogo href={t.homeHref} className="mb-4" />
       <h3 className="font-heading text-2xl uppercase tracking-tight text-text">{t.heading}</h3>
       <p className="mt-2 text-sm text-muted">{t.subheading}</p>
 
@@ -480,6 +501,8 @@ export function Booker({ name = "", email = "", locale = "pt-PT" }: BookerProps)
 
       {!state.selected ? (
         <div className="mt-6">
+          {/* Month label */}
+          <p className="mb-3 text-center text-sm font-semibold capitalize text-text">{monthLabel}</p>
           {/* Calendar grid */}
           <div className="grid grid-cols-7 gap-1 text-center">
             {weekdayHeaders.map((w, i) => (
@@ -489,7 +512,8 @@ export function Booker({ name = "", email = "", locale = "pt-PT" }: BookerProps)
             ))}
             {grid.map((d) => {
               const k = dayKey(d);
-              const has = byDay.has(k);
+              const isBeyond = k > horizonKey;
+              const has = byDay.has(k) && !isBeyond;
               const isPast = k < todayKey;
               const isSelected = k === state.selectedDay;
               return (
@@ -505,7 +529,7 @@ export function Booker({ name = "", email = "", locale = "pt-PT" }: BookerProps)
                       ? "cursor-pointer font-semibold text-text hover:border-accent/50 hover:bg-accent/10 border border-border"
                       : "cursor-default text-muted/40",
                     isSelected ? "border-accent bg-accent/15 text-text" : "",
-                    isPast && !has ? "opacity-40" : ""
+                    (isPast || isBeyond) && !has ? "opacity-40" : ""
                   ].join(" ")}
                 >
                   {d.getDate()}
