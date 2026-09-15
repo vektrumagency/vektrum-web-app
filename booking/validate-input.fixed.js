@@ -6,7 +6,7 @@ const CFG = {
   timezone: 'Europe/Lisbon',
   meetingMin: 30,
   slotStepMin: 30,
-  horizonDays: 14,
+  horizonDays: 30,
   businessHours: {
     1: [['10:00','13:00'],['14:00','18:00']],
     2: [['10:00','13:00'],['14:00','18:00']],
