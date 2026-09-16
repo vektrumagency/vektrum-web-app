@@ -54,7 +54,7 @@
       "credentials": {
         "googleOAuth2Api": {
           "id": "PLACEHOLDER_GOOGLE_OAUTH2_CREDENTIAL_ID",
-          "name": "Vektrum Google (booking)"
+          "name": "Vektrum Google Calendar (booking)"
         }
       }
     },
@@ -211,7 +211,7 @@
       "credentials": {
         "googleOAuth2Api": {
           "id": "PLACEHOLDER_GOOGLE_OAUTH2_CREDENTIAL_ID",
-          "name": "Vektrum Google (booking)"
+          "name": "Vektrum Google Calendar (booking)"
         }
       }
     },
@@ -276,7 +276,7 @@
       "credentials": {
         "googleOAuth2Api": {
           "id": "PLACEHOLDER_GOOGLE_OAUTH2_CREDENTIAL_ID",
-          "name": "Vektrum Google (booking)"
+          "name": "Vektrum Google Calendar (booking)"
         }
       }
     },
@@ -321,28 +321,28 @@
       "credentials": {
         "googleOAuth2Api": {
           "id": "PLACEHOLDER_GOOGLE_OAUTH2_CREDENTIAL_ID",
-          "name": "Vektrum Google (booking)"
+          "name": "Vektrum Google Calendar (booking)"
         }
       }
     },
     {
       "parameters": {
-        "sendTo": "={{ $('Re-check slot').first().json.email }}",
+        "fromEmail": "vektrum.agency@gmail.com",
+        "toEmail": "={{ $('Re-check slot').first().json.email }}",
         "subject": "={{ $('Re-check slot').first().json.lang === 'en' ? 'Your Vektrum meeting is confirmed' : 'A sua reunião com a Vektrum está confirmada' }}",
-        "emailType": "html",
-        "message": "={{ (() => { const v = $('Re-check slot').first().json; const meet = $json.hangoutLink || ($json.conferenceData && $json.conferenceData.entryPoints && $json.conferenceData.entryPoints[0] && $json.conferenceData.entryPoints[0].uri) || ''; const isEn = v.lang === 'en'; return isEn ? `<p>Hi ${v.name},</p><p>Your meeting with Vektrum is confirmed.</p><p>Google Meet: <a href=\"${meet}\">${meet}</a></p>` : `<p>Olá ${v.name},</p><p>A sua reunião com a Vektrum está confirmada.</p><p>Google Meet: <a href=\"${meet}\">${meet}</a></p>`; })() }}",
+        "emailFormat": "html",
+        "html": "={{ (() => { const v = $('Re-check slot').first().json; const meet = $json.hangoutLink || ($json.conferenceData && $json.conferenceData.entryPoints && $json.conferenceData.entryPoints[0] && $json.conferenceData.entryPoints[0].uri) || ''; const isEn = v.lang === 'en'; return isEn ? `<p>Hi ${v.name},</p><p>Your meeting with Vektrum is confirmed.</p><p>Google Meet: <a href=\"${meet}\">${meet}</a></p>` : `<p>Olá ${v.name},</p><p>A sua reunião com a Vektrum está confirmada.</p><p>Google Meet: <a href=\"${meet}\">${meet}</a></p>`; })() }}",
         "options": {}
       },
-      "id": "gmail-send-confirmation",
+      "id": "smtp-send-confirmation",
       "name": "Send confirmation email",
-      "type": "n8n-nodes-base.gmail",
+      "type": "n8n-nodes-base.emailSend",
       "typeVersion": 2.1,
       "position": [1000, 140],
-      "webhookId": "PLACEHOLDER_NOT_USED",
       "credentials": {
-        "googleOAuth2Api": {
-          "id": "PLACEHOLDER_GOOGLE_OAUTH2_CREDENTIAL_ID",
-          "name": "Vektrum Google (booking)"
+        "smtp": {
+          "id": "PLACEHOLDER_SMTP_CREDENTIAL_ID",
+          "name": "Vektrum Gmail SMTP (booking)"
         }
       }
     },

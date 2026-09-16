@@ -22,22 +22,36 @@ functions are copy-pasted verbatim, not reimplemented. If you change
   shared PT holidays calendar, a Vektrum PTO calendar, and one calendar
   dedicated to holding confirmed booking events.
 
-## 2. Google Cloud / OAuth2 credential
+## 2. Google Cloud / OAuth2 credential + Gmail SMTP
+
+Only Calendar needs Google OAuth. Email goes out over Gmail SMTP with an App
+Password instead of the Gmail API — one fewer sensitive scope to justify
+during OAuth verification, and no separate Google credential for email.
 
 1. In Google Cloud Console, create (or reuse) a project and enable the
-   **Google Calendar API** and **Gmail API**.
+   **Google Calendar API** only.
 2. Create an OAuth 2.0 Client ID (type: Web application) and add n8n's OAuth
    redirect URL (shown by n8n when you create the credential in step 3).
 3. In n8n, create ONE credential: **Google OAuth2 API**, named e.g.
-   `Vektrum Google (booking)`. Under scopes, request exactly:
+   `Vektrum Google Calendar (booking)`. Under scopes, request exactly:
    - `https://www.googleapis.com/auth/calendar.freebusy`
    - `https://www.googleapis.com/auth/calendar.events`
-   - `https://www.googleapis.com/auth/gmail.send`
 4. Complete the OAuth consent flow as the calendar-owning account
-   (`vektrum.agency@gmail.com` or equivalent).
-5. Attach this one credential to every HTTP Request / Gmail node in the
-   workflow that needs it (see node list below) — do not create per-node
-   credentials.
+   (`vektrum.agency@gmail.com` or equivalent). Because both scopes are
+   Google's "sensitive" tier (not "restricted"), publishing this app to
+   production only requires a verification review — no paid CASA security
+   assessment.
+5. Attach this one credential to every HTTP Request node in the workflow
+   that needs it (see node list below) — do not create per-node credentials.
+6. Separately, create an **SMTP** credential in n8n named e.g.
+   `Vektrum Gmail SMTP (booking)`:
+   - Host: `smtp.gmail.com`, Port: `465`, SSL: on
+   - User: `vektrum.agency@gmail.com`
+   - Password: a **Gmail App Password** (Google Account → Security → 2-Step
+     Verification must be on → App passwords → generate one for "Mail").
+     Do not use the account's normal login password.
+7. Attach the SMTP credential to the **Send confirmation email** node
+   (see below) — this node no longer uses the Google OAuth2 credential.
 
 ## 3. Workflow shape
 
@@ -69,7 +83,7 @@ POST /marcar
                   -> Respond 409 {status:"taken", slots:[...]}
          true  -> HTTP Request: events.insert (POST, OAuth2,
                   ?conferenceDataVersion=1&sendUpdates=all)
-                  -> Send confirmation email (Gmail node, OAuth2)
+                  -> Send confirmation email (Send Email node, SMTP)
                   -> Respond 200 {status:"confirmed", startUTC, endUTC, meetLink}
 ```
 
@@ -191,13 +205,13 @@ spec.
 }
 ```
 
-### Send confirmation email (Gmail node)
+### Send confirmation email (Send Email node, SMTP)
 
-Uses the same OAuth2 credential (Gmail scope above must be granted on it).
-Sends a bilingual (PT default / EN if `lang=en` was passed) branded
-confirmation to the requester, including the Google Meet link returned by
-`events.insert` (`hangoutMeetLink` or `conferenceData.entryPoints[].uri`)
-and the human-readable slot label.
+Uses the Gmail SMTP credential from step 2.6 — a Gmail App Password, not the
+Google OAuth2 credential. Sends a bilingual (PT default / EN if `lang=en` was
+passed) branded confirmation to the requester, including the Google Meet
+link returned by `events.insert` (`hangoutMeetLink` or
+`conferenceData.entryPoints[].uri`) and the human-readable slot label.
 
 ### Respond to Webhook (marcar, success)
 
@@ -209,14 +223,16 @@ JSON `{"status":"taken", "slots":[...]}` (freshly recomputed list), status 409.
 
 ## 5. Placeholders checklist — everything the human must fill before go-live
 
-- [ ] Google OAuth2 credential created and authorized with the three scopes above
+- [ ] Google OAuth2 credential created and authorized with the two Calendar scopes above
+- [ ] OAuth consent screen published to production (verification submitted/approved — see SETUP.md section A)
+- [ ] Gmail App Password generated and SMTP credential created in n8n
 - [ ] `CFG.people` — 3 real `{name, email, calendars:[calendarId]}` entries
 - [ ] `CFG.blockingCalendars` — real PT-holidays calendar ID + Vektrum PTO calendar ID
 - [ ] `CFG.bookingCalendarId` — real calendar ID confirmed events get written to
 - [ ] n8n webhook base URL wired into the Next.js proxy routes
       (`app/api/booking/availability/route.ts`, `app/api/booking/book/route.ts`) — out of scope for this package
 - [ ] A shared-secret header between the Next.js proxy and these webhooks, if you want to restrict direct access to the n8n URLs (not modeled in the imported JSON — add an IF/Header check node if desired)
-- [ ] Gmail "from" name/signature and PT/EN copy in the confirmation email node
+- [ ] "From" name/signature and PT/EN copy in the confirmation email node
 - [ ] Timezone assumption `Europe/Lisbon` confirmed correct for all business hours
 
 ## 6. Testing after import
