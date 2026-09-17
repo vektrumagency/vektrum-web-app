@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FormEvent, KeyboardEvent, useEffect, useMemo, useRef, useState } from "react";
+import { localizePath } from "@/lib/site-links";
 import {
   readUtmAttribution,
   submitAutomationDiagnosis,
@@ -460,11 +461,11 @@ export function DiagnosisClient({ locale, campaignSectorId = null }: { locale: L
     setError(null);
   };
 
+  const targetLocale = locale === "en" ? "pt-PT" : "en";
   const languageParams = new URLSearchParams();
-  if (locale !== "en") languageParams.set("lang", "en");
   if (campaignSectorId) languageParams.set("sector", campaignSectorId);
-  const languageHref = `/diagnostico${languageParams.size ? `?${languageParams.toString()}` : ""}`;
-  const homeHref = locale === "en" ? "/?lang=en" : "/?lang=pt-PT";
+  const languageHref = `${localizePath("/diagnostico", targetLocale)}${languageParams.size ? `?${languageParams.toString()}` : ""}`;
+  const homeHref = localizePath("/", locale);
   const selectedValue = question.id === sectorQuestion.id
     ? answers.sectorId
     : answers.responses[question.id] ?? (question.kind === "multi" ? [] : "");
@@ -698,7 +699,7 @@ function QuestionInput({
       <TextField fieldId="phone" label={`${t.labels.phone} · ${t.optional}`} value={answers.phone} placeholder={t.placeholders.phone} type="tel" inputMode="tel" autoComplete="tel" maxLength={40} onChange={(value) => onFieldChange("phone", value)} />
       <label data-field="privacyConsent" className={`flex cursor-pointer items-start gap-3 rounded-2xl border bg-surface/70 p-4 text-sm leading-relaxed text-muted transition hover:border-accent/35 ${invalidField === "privacyConsent" ? "border-red-500" : "border-border"}`}>
         <input type="checkbox" checked={answers.privacyConsent} aria-invalid={invalidField === "privacyConsent"} aria-describedby={invalidField === "privacyConsent" ? "diagnosis-error" : undefined} onChange={(event) => onFieldChange("privacyConsent", event.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 rounded border-border accent-[rgb(var(--color-accent))]" />
-        <span>{t.consentPrefix} <Link href={locale === "en" ? "/privacidade?lang=en" : "/privacidade"} target="_blank" className="font-semibold text-text underline decoration-accent/40 underline-offset-4 hover:text-accent">{t.privacy}</Link>.</span>
+        <span>{t.consentPrefix} <Link href={localizePath("/privacidade", locale)} target="_blank" className="font-semibold text-text underline decoration-accent/40 underline-offset-4 hover:text-accent">{t.privacy}</Link>.</span>
       </label>
     </div>
   );
@@ -779,7 +780,7 @@ function SuccessScreen({ copy: t, homeHref, answers, locale, onRestart }: { copy
   const hours = resolveOptionLabel("repetitiveHours", answers.responses.repetitiveHours, answers.sectorId, locale);
   const bottleneckQuestion = sector?.questions.find((item) => item.legacyRole === "challenge" || item.legacyRole === "task") ?? sector?.questions.at(-1);
   const bottleneck = bottleneckQuestion ? resolveOptionLabel(bottleneckQuestion.id, answers.responses[bottleneckQuestion.id], answers.sectorId, locale) : "";
-  const caseHref = answers.sectorId === "real-estate" ? "/setores/imobiliario" : answers.sectorId === "commerce" ? "/setores/ecommerce" : null;
+  const caseHref = answers.sectorId === "real-estate" ? "/projetos/imobiliario" : answers.sectorId === "commerce" ? "/projetos/ecommerce" : null;
   const recapLabels = locale === "en" ? ["Industry", "Priority", "Manual time", "Leading bottleneck"] : ["Setor", "Prioridade", "Tempo manual", "Principal bloqueio"];
 
   return (
@@ -803,7 +804,7 @@ function SuccessScreen({ copy: t, homeHref, answers, locale, onRestart }: { copy
       <p className="mt-5 max-w-xl text-sm font-medium text-text/75">{t.successEmail}</p>
       <p className="mt-2 max-w-xl text-sm text-muted">{t.successNext}</p>
       <div className="mt-8 flex w-full max-w-lg flex-col justify-center gap-3 sm:flex-row">
-        {caseHref ? <Link href={`${caseHref}${locale === "en" ? "?lang=en" : ""}`} className="diagnosis-primary justify-center">{locale === "en" ? "See a relevant case" : "Ver um caso relevante"}<span aria-hidden="true">→</span></Link> : <Link href={homeHref} className="diagnosis-primary justify-center">{t.visit}<span aria-hidden="true">→</span></Link>}
+        {caseHref ? <Link href={localizePath(caseHref, locale)} className="diagnosis-primary justify-center">{locale === "en" ? "See a relevant case" : "Ver um caso relevante"}<span aria-hidden="true">→</span></Link> : <Link href={homeHref} className="diagnosis-primary justify-center">{t.visit}<span aria-hidden="true">→</span></Link>}
         <button type="button" onClick={onRestart} className="diagnosis-secondary justify-center">{t.restart}</button>
       </div>
     </section>

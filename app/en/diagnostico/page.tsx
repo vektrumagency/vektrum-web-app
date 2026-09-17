@@ -6,9 +6,9 @@ type DiagnosisPageProps = {
 };
 
 export async function generateMetadata({ searchParams }: DiagnosisPageProps): Promise<Metadata> {
-  return getDiagnosisMetadata("pt-PT", searchParams);
+  return getDiagnosisMetadata("en", searchParams);
 }
 
-export default async function DiagnosisPage({ searchParams }: DiagnosisPageProps) {
-  return <DiagnosisPageContent locale="pt-PT" searchParams={searchParams} />;
+export default async function DiagnosisPageEn({ searchParams }: DiagnosisPageProps) {
+  return <DiagnosisPageContent locale="en" searchParams={searchParams} />;
 }
