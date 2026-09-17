@@ -83,6 +83,7 @@ const COPY: Record<
     eyebrow: string;
     heading: string;
     subheading: string;
+    confirmSubheading: string;
     loading: string;
     empty: string;
     error: string;
@@ -117,6 +118,7 @@ const COPY: Record<
     eyebrow: "Marcar reunião",
     heading: "Marcar uma chamada",
     subheading: "Escolha um dia com disponibilidade e depois o horário.",
+    confirmSubheading: "Confirme os seus dados para concluir a marcação.",
     loading: "A carregar disponibilidade...",
     empty: "Sem horários nos próximos 15 dias. Contacte-nos diretamente.",
     error: "Não foi possível carregar os horários. Tente novamente.",
@@ -150,6 +152,7 @@ const COPY: Record<
     eyebrow: "Book a meeting",
     heading: "Book a call",
     subheading: "Pick a day with availability, then a time.",
+    confirmSubheading: "Confirm your details to finish booking.",
     loading: "Loading availability...",
     empty: "No times in the next 15 days. Please contact us directly.",
     error: "Could not load available times. Please try again.",
@@ -183,6 +186,7 @@ const COPY: Record<
     eyebrow: "Reservar reunión",
     heading: "Reservar una llamada",
     subheading: "Elige un día con disponibilidad y luego la hora.",
+    confirmSubheading: "Confirma tus datos para completar la reserva.",
     loading: "Cargando disponibilidad...",
     empty: "No hay horarios en los próximos 15 días. Contáctanos directamente.",
     error: "No se pudieron cargar los horarios. Inténtalo de nuevo.",
@@ -330,10 +334,20 @@ export function Booker({ name = "", email = "", locale = "pt-PT" }: BookerProps)
       cur.setDate(cur.getDate() + 1);
     }
 
-    const monthFmt = new Intl.DateTimeFormat(t.intl, { month: "long", year: "numeric" });
-    const first = monthFmt.format(today);
-    const last = monthFmt.format(horizon);
-    const label = first === last ? first : `${first} – ${last}`;
+    // Month names are lowercase in pt-PT prose, but this is a UI label, so
+    // capitalize both sides — "Setembro de 2026 – outubro de 2026" reads
+    // lopsided. Within one year the year is stated once, at the end.
+    const monthOnly = new Intl.DateTimeFormat(t.intl, { month: "long" });
+    const monthYear = new Intl.DateTimeFormat(t.intl, { month: "long", year: "numeric" });
+    const cap = (value: string) => value.charAt(0).toUpperCase() + value.slice(1);
+
+    const lastLabel = cap(monthYear.format(horizon));
+    const label =
+      monthYear.format(today) === monthYear.format(horizon)
+        ? lastLabel
+        : today.getFullYear() === horizon.getFullYear()
+          ? `${cap(monthOnly.format(today))} – ${lastLabel}`
+          : `${cap(monthYear.format(today))} – ${lastLabel}`;
 
     return { grid: days, horizonKey: dayKey(horizon), monthLabel: label };
   }, [t.intl]);
@@ -449,8 +463,7 @@ export function Booker({ name = "", email = "", locale = "pt-PT" }: BookerProps)
         <div className="diagnosis-success-mark mb-8" aria-hidden="true">
           <span>✓</span>
         </div>
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">{t.eyebrow}</p>
-        <h1 className="mt-4 max-w-2xl text-balance text-[clamp(2rem,6vw,3.4rem)] font-semibold leading-[1.02] tracking-[-0.05em] text-text">
+        <h1 className="max-w-2xl text-balance text-[clamp(2rem,6vw,3.4rem)] font-semibold leading-[1.02] tracking-[-0.05em] text-text">
           {t.successTitle}
         </h1>
         <p className="mt-5 max-w-xl text-pretty text-base leading-relaxed text-muted sm:text-lg">{t.successBody}</p>
@@ -491,7 +504,7 @@ export function Booker({ name = "", email = "", locale = "pt-PT" }: BookerProps)
   const daySlots = state.selectedDay ? byDay.get(state.selectedDay) ?? [] : [];
 
   return (
-    <BookerShell eyebrow={t.eyebrow} title={t.heading} body={t.subheading}>
+    <BookerShell eyebrow={t.eyebrow} title={t.heading} body={state.selected ? t.confirmSubheading : t.subheading}>
       {state.status === "taken" ? (
         <div role="alert" className="diagnosis-insight mt-6">
           <span aria-hidden="true">!</span>
@@ -504,7 +517,7 @@ export function Booker({ name = "", email = "", locale = "pt-PT" }: BookerProps)
       <div className="mt-8 rounded-3xl border border-border bg-surface/85 p-6 shadow-glow md:p-8">
         {!state.selected ? (
           <div>
-            <p className="mb-4 text-center text-sm font-semibold first-letter:uppercase text-text">{monthLabel}</p>
+            <p className="mb-4 text-center text-sm font-semibold text-text">{monthLabel}</p>
 
             <div className="grid grid-cols-7 gap-1 text-center">
               {weekdayHeaders.map((w, i) => (
