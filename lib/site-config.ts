@@ -75,6 +75,7 @@ export type SiteConfig = {
       results: string[];
       useCasesSection: SectionIntro;
       useCases: CardItem[];
+      featuredProjectsSection: SectionIntro;
       aboutSection: { eyebrow: string; title: string; description: string; body: string };
       faqSection: SectionIntro;
       faqs: { question: string; answer: string }[];
@@ -86,7 +87,6 @@ export type SiteConfig = {
         description: string;
         cta: string;
       };
-      contactSection: { eyebrow: string; title: string; description: string; cta: string; submit: string };
       footer: {
         description: string;
         quickLinksTitle: string;
@@ -107,22 +107,18 @@ export const defaultSiteConfig: SiteConfig = {
   locales: {
     en: {
       navItems: [
-        { href: "/setores?lang=en", label: "Sectors" },
-        { href: "/?lang=en#services", label: "Capabilities" },
-        { href: "/?lang=en#process", label: "Process" },
-        { href: "/?lang=en#use-cases", label: "Use Cases" },
-        { href: "/?lang=en#calculator", label: "Savings" },
-        { href: "/?lang=en#contact", label: "Audit" }
+        { href: "/projetos?lang=en", label: "Projects" },
+        { href: "/diagnostico?lang=en", label: "Audit" }
       ],
       hero: {
-        eyebrow: "Automation partner for modern teams",
-        title: "Automate the work that slows your business down.",
+        eyebrow: "Process automation",
+        title: "We automate manual, repetitive business processes.",
         subtitle:
-          "We design and build automation systems that save hours every week, reduce manual work, and help your team focus on what actually grows the business.",
+          "We look at the everyday work: leads, support, reporting, CRM. Then we build the systems that automate what's currently done by hand.",
         primaryCta: "Free AI audit",
         secondaryCta: "See the process",
         auditLabel: "Operational audit",
-        proofPoints: ["Practical automation map", "Built around your current tools", "No hype, no generic AI demos"]
+        proofPoints: ["Reply within 1 business day", "Built around the tools you already use", "No-commitment audit"]
       },
       valueProp: {
         eyebrow: "Why Vektrum",
@@ -146,33 +142,33 @@ export const defaultSiteConfig: SiteConfig = {
         flowLabels: ["Lead captured", "CRM updated", "Follow-up queued"]
       },
       problemSection: {
-        eyebrow: "The hidden cost",
-        title: "Repetitive work compounds every week.",
+        eyebrow: "What usually happens",
+        title: "Manual tasks that repeat every week.",
         description:
-          "A few manual steps may look harmless. Across sales, support, admin, reporting, and follow-ups, they become slower response times and expensive operational drag."
+          "Copying an email into the CRM. Updating a spreadsheet. Confirming an order by hand. These are common in sales, support, and admin, and they add up to hours every week."
       },
       problems: [
-        "Leads wait while teams copy details between tools",
-        "Customer support loses time sorting routine requests",
-        "Reports depend on manual spreadsheet updates",
-        "CRM records are incomplete or updated too late",
-        "Follow-ups rely on memory instead of reliable workflows"
+        "A lead waits because nobody has copied their details into the CRM yet",
+        "Support spends the morning sorting routine requests from urgent ones",
+        "Friday's report depends on someone opening a spreadsheet and updating it by hand",
+        "The CRM is missing information, or it's updated days too late",
+        "Following up with a client depends on someone remembering, and they don't always remember"
       ],
       solutionSection: {
-        eyebrow: "What Vektrum builds",
-        title: "Practical automation systems, not AI theater.",
+        eyebrow: "What we do",
+        title: "What we build depends on what we find in the process.",
         description:
-          "We start with the operational bottleneck, then design the right workflow, integration, assistant, or internal tool to make the process faster and easier to trust.",
+          "Sometimes the answer is connecting tools you already use, like your CRM and your inbox. Other times there's no existing tool that solves the problem, so we build a new one. We decide after looking at the process, not before.",
         outcomes: [
-          { title: "Less manual admin", description: "Reduce repetitive data entry, copy-paste work, scheduling, reminders, and routine back-office tasks." },
-          { title: "Faster lead handling", description: "Capture, qualify, route, and follow up with opportunities before momentum disappears." },
-          { title: "Cleaner internal workflows", description: "Connect CRMs, inboxes, spreadsheets, dashboards, and team tools into dependable operating flows." },
-          { title: "Better team focus", description: "Move recurring work into reliable systems so people spend more time on work that grows the business." }
+          { title: "Leads", description: "A lead lands in the CRM automatically, gets qualified, and the right salesperson is notified, without anyone copying anything by hand." },
+          { title: "Support", description: "Tickets arrive already classified by urgency, with a first draft reply ready to review before it goes to the customer." },
+          { title: "Reporting", description: "This week's numbers are pulled automatically from the tools where they already live and land in an inbox, so nobody has to open a spreadsheet." },
+          { title: "Admin", description: "Documents, reminders, and updates that repeat every week start happening without anyone doing them by hand." }
         ]
       },
       calculatorSection: {
         eyebrow: "Savings estimate",
-        title: "Put a number on the manual work.",
+        title: "Savings calculator.",
         description:
           "Estimate how many hours repetitive work may be costing, then use the audit to identify which workflows are worth automating first.",
         employeesLabel: "Employees involved",
@@ -187,21 +183,21 @@ export const defaultSiteConfig: SiteConfig = {
         hoursSavedLabel: "Hours saved / month",
         monthlySavingsLabel: "Estimated monthly savings",
         yearlySavingsLabel: "Estimated yearly savings",
-        ctaTitle: "Want to know which workflows are actually worth automating?",
+        ctaTitle: "The audit shows which workflows to automate first.",
         ctaLabel: "Free AI audit",
         disclaimer:
-          "Indicative estimate. Actual results depend on workflow volume, tool access, process quality, and team adoption."
+          "Indicative estimate. Actual results depend on process volume, tool access, process quality, and how quickly the team adopts the new way of working."
       },
       servicesSection: {
         eyebrow: "Capabilities",
-        title: "Automation for the operational work businesses repeat every day.",
+        title: "What we usually build.",
         description:
-          "Vektrum builds focused systems for the points where teams lose time, miss follow-ups, or move information by hand."
+          "We focus on where teams lose the most time: leads, support, reporting, admin, and the tools that don't talk to each other."
       },
       services: [
         { title: "Lead management automation", description: "Capture, enrich, qualify, route, and follow up with leads across forms, CRM, email, and calendars." },
-        { title: "Customer support workflows", description: "Classify requests, prepare responses, escalate exceptions, and keep support data organized." },
-        { title: "Reporting and dashboards", description: "Turn scattered operational data into scheduled reports and decision-ready internal views." },
+        { title: "Customer support workflows", description: "Classify requests, draft first responses, and escalate the exceptions that actually need a person." },
+        { title: "Reporting and dashboards", description: "Scattered operational data turned into scheduled reports and views that management actually uses." },
         { title: "Admin workflow automation", description: "Automate recurring back-office tasks, document handling, reminders, updates, and handoffs." },
         { title: "CRM and tool integrations", description: "Keep CRM, inboxes, spreadsheets, databases, and internal tools in sync with fewer manual steps." },
         { title: "Internal AI assistants", description: "Build focused assistants for search, summarization, triage, drafting, and repeatable knowledge work." }
@@ -211,7 +207,7 @@ export const defaultSiteConfig: SiteConfig = {
         title: "From audit to a working automation system.",
         description:
           "The first step is a clear audit of where automation can create commercial value. If there is a fit, we map, build, test, deploy, and improve the system.",
-        note: "The audit is free and focused on practical next steps."
+        note: "The audit is free, with no sales pitch, just the next steps."
       },
       processSteps: [
         { step: "01", title: "Audit", description: "We review the team, tools, repetitive tasks, missed handoffs, and places where work slows down." },
@@ -220,35 +216,34 @@ export const defaultSiteConfig: SiteConfig = {
         { step: "04", title: "Test and deploy", description: "We validate edge cases, document the process, launch with the team, and improve based on real usage." }
       ],
       whySection: {
-        eyebrow: "Positioning",
-        title: "A serious automation partner for real business operations.",
+        eyebrow: "How we work",
+        title: "Four things we do on every project.",
         description:
-          "Vektrum is built for companies that want less operational friction, not novelty AI. The work starts with process clarity and ends with systems people can rely on."
+          "The technology (n8n, a CRM, an LLM) is a means, not the point. These four things stay the same across every project, regardless of what we end up building."
       },
       differentiators: [
-        "We diagnose operational bottlenecks before choosing tools",
-        "We design around your current stack instead of forcing a new one",
-        "We focus on adoption, reliability, and measurable time savings",
-        "We explain what should not be automated as clearly as what should"
+        "We look at the process before picking any tool",
+        "We work with what you already use (CRM, spreadsheets, email) instead of asking you to replace it all",
+        "We measure what actually saves time, not what looks impressive in a demo",
+        "We tell you when something isn't worth automating"
       ],
       resultsSection: {
         eyebrow: "Outcomes",
-        title: "Where automation creates business leverage.",
-        description:
-          "The right systems reduce busywork, tighten response times, and make operations easier to run as volume increases."
+        title: "After automating.",
+        description: "What usually changes for the teams we work with."
       },
       results: [
-        "Fewer hours lost to repetitive admin",
-        "Faster lead and customer response times",
-        "Cleaner CRM and operational data",
-        "More consistent follow-ups and handoffs",
-        "Reporting that updates without manual chasing"
+        "Fewer hours spent on repetitive admin",
+        "Faster replies to leads and customers",
+        "A CRM with more complete, more current data",
+        "Follow-ups that no longer depend on someone remembering",
+        "Reports that show up on their own, with nobody assembling them by hand"
       ],
       useCasesSection: {
         eyebrow: "Use cases",
-        title: "High-impact workflows Vektrum can automate.",
+        title: "A few concrete examples of what we automate.",
         description:
-          "These are practical starting points for businesses that want faster operations without adding extra headcount or complexity."
+          "Practical starting points for teams that want to move faster without hiring more people or adding more complexity."
       },
       useCases: [
         { title: "Client onboarding", description: "Automate contract creation, project folder setup, and welcome emails when a deal is closed won in your CRM." },
@@ -258,21 +253,26 @@ export const defaultSiteConfig: SiteConfig = {
         { title: "Data synchronization", description: "Keep Stripe purchases, operational Google Sheets, and CRM databases in sync automatically in real-time." },
         { title: "Meeting follow-ups", description: "Transcribe Zoom calls, extract action items, log them in your CRM under the client profile, and email follow-ups." }
       ],
+      featuredProjectsSection: {
+        eyebrow: "Projects",
+        title: "A few of the projects we've already built.",
+        description: "Real examples, with client names attached. See more detail on the Projects page."
+      },
       aboutSection: {
         eyebrow: "About",
-        title: "Vektrum is your practical automation partner.",
+        title: "Who we are.",
         description:
-          "We help businesses save time and reduce operational drag with systems that fit the way their teams already work.",
-        body: "No inflated promises or fake futuristic demos. Just clear strategy, careful implementation, and automation that supports real workflows."
+          "We build automation systems for businesses, starting from what they already have, or from something new when that's what the process needs.",
+        body: "We'd rather show real work than promise generic results. The projects on the Projects page have client names attached and can be checked."
       },
       faqSection: {
         eyebrow: "FAQ",
-        title: "Straight answers before the audit.",
+        title: "Frequently asked questions.",
         description: "A few practical details before requesting the free AI audit."
       },
       faqs: [
         { question: "Is the AI audit really free?", answer: "Yes. The audit is free and designed to identify practical automation opportunities with no commitment." },
-        { question: "Do we need to know what we want automated?", answer: "No. The audit exists to find and prioritize the workflows where automation makes business sense." },
+        { question: "Do we need to know what we want automated?", answer: "No. It's normal not to know exactly. The audit exists to find out what's actually worth automating first." },
         { question: "Can you work with our existing tools?", answer: "Yes. We usually build around current CRMs, inboxes, spreadsheets, calendars, databases, and team tools." },
         { question: "What happens after the audit?", answer: "You receive a clearer automation map. If there is a strong fit, Vektrum can design and build the system." }
       ],
@@ -284,18 +284,10 @@ export const defaultSiteConfig: SiteConfig = {
       reviews: [],
       finalCtaSection: {
         eyebrow: "Free AI audit",
-        title: "Find the work your team should not be doing manually.",
+        title: "Free audit, no commitment.",
         description:
-          "Use the free audit to identify the repetitive workflows, slow handoffs, and missed follow-ups that automation can remove first.",
+          "An audit to find out which processes are worth automating first.",
         cta: "Free AI audit"
-      },
-      contactSection: {
-        eyebrow: "Request the audit",
-        title: "Start with the work that is slowing the business down.",
-        description:
-          "The audit form asks a few focused questions so we can understand your workflows and identify the first automation opportunities worth reviewing.",
-        cta: "Free AI audit",
-        submit: "Free AI audit"
       },
       footer: {
         description:
@@ -305,33 +297,25 @@ export const defaultSiteConfig: SiteConfig = {
         contactNote: "Free AI audit requests and business inquiries",
         responseNote: "Typical response time: within one business day.",
         quickLinks: [
-          { label: "Sectors", href: "/setores?lang=en" },
-          { label: "Capabilities", href: "/?lang=en#services" },
-          { label: "Process", href: "/?lang=en#process" },
-          { label: "Use Cases", href: "/?lang=en#use-cases" },
-          { label: "Savings", href: "/?lang=en#calculator" },
-          { label: "Audit", href: "/?lang=en#contact" }
+          { label: "Projects", href: "/projetos?lang=en" },
+          { label: "Audit", href: "/diagnostico?lang=en" }
         ]
       }
     },
     "pt-PT": {
       navItems: [
-        { href: "/setores", label: "Setores" },
-        { href: "/#services", label: "Capacidades" },
-        { href: "/#process", label: "Processo" },
-        { href: "/#use-cases", label: "Casos de Uso" },
-        { href: "/#calculator", label: "Poupança" },
-        { href: "/#contact", label: "Auditoria" }
+        { href: "/projetos", label: "Projetos" },
+        { href: "/diagnostico", label: "Auditoria" }
       ],
       hero: {
-        eyebrow: "Parceiro de automação para equipas modernas",
-        title: "Automatize o trabalho que abranda o seu negócio.",
+        eyebrow: "Automação de processos",
+        title: "Automatizamos processos manuais e repetitivos.",
         subtitle:
-          "Desenhamos e construímos sistemas de automação que poupam horas todas as semanas, reduzem trabalho manual e ajudam a equipa a focar-se no que realmente faz crescer o negócio.",
+          "Olhamos para o dia a dia da equipa: leads, suporte, relatórios, CRM. Depois construímos os sistemas que faltam para automatizar o que hoje é feito à mão.",
         primaryCta: "Auditoria gratuita de IA",
         secondaryCta: "Ver o processo",
         auditLabel: "Auditoria operacional",
-        proofPoints: ["Mapa de automação prático", "Construído à volta das suas ferramentas", "Sem hype nem demos genéricas de IA"]
+        proofPoints: ["Resposta em 1 dia útil", "Construído à volta das ferramentas que já usa", "Auditoria sem compromisso"]
       },
       valueProp: {
         eyebrow: "Porquê a Vektrum",
@@ -355,33 +339,33 @@ export const defaultSiteConfig: SiteConfig = {
         flowLabels: ["Lead captada", "CRM atualizado", "Follow-up preparado"]
       },
       problemSection: {
-        eyebrow: "O custo escondido",
-        title: "O trabalho repetitivo acumula todas as semanas.",
+        eyebrow: "O que costuma acontecer",
+        title: "Tarefas manuais que se repetem todas as semanas.",
         description:
-          "Alguns passos manuais parecem inofensivos. Em vendas, suporte, administração, reporting e follow-ups, tornam-se respostas lentas e fricção operacional cara."
+          "Copiar um email para o CRM. Atualizar uma folha de Excel. Confirmar um pedido à mão. São tarefas comuns em vendas, suporte e administração, e ocupam horas todas as semanas."
       },
       problems: [
-        "Leads ficam à espera enquanto a equipa copia dados entre ferramentas",
-        "O suporte perde tempo a separar pedidos repetitivos",
-        "Relatórios dependem de atualizações manuais em folhas de cálculo",
-        "O CRM fica incompleto ou é atualizado tarde demais",
-        "Follow-ups dependem da memória em vez de fluxos fiáveis"
+        "Uma lead fica à espera porque ainda ninguém copiou os dados para o CRM",
+        "O suporte passa a manhã a separar pedidos repetidos dos urgentes",
+        "O relatório de sexta-feira depende de alguém abrir o Excel e atualizar tudo à mão",
+        "O CRM tem informação a menos, ou só é atualizado dias depois",
+        "O follow-up ao cliente depende de alguém se lembrar, e nem sempre se lembra"
       ],
       solutionSection: {
-        eyebrow: "O que a Vektrum constrói",
-        title: "Sistemas de automação práticos, não teatro de IA.",
+        eyebrow: "O que fazemos",
+        title: "O que construímos depende do que encontramos no processo.",
         description:
-          "Começamos pelo bloqueio operacional e depois desenhamos o fluxo, integração, assistente ou ferramenta interna certa para tornar o processo mais rápido e fiável.",
+          "Às vezes a resposta é ligar ferramentas que já usa, como o CRM ao email. Outras vezes não existe nenhuma ferramenta que resolva o problema, e construímos uma nova. Decidimos depois de ver o processo, não antes.",
         outcomes: [
-          { title: "Menos administração manual", description: "Reduza introdução de dados, copy-paste, marcações, lembretes e tarefas recorrentes de back-office." },
-          { title: "Tratamento de leads mais rápido", description: "Capture, qualifique, encaminhe e acompanhe oportunidades antes de perderem força." },
-          { title: "Fluxos internos mais limpos", description: "Ligue CRM, emails, folhas de cálculo, dashboards e ferramentas da equipa em processos fiáveis." },
-          { title: "Mais foco para a equipa", description: "Passe trabalho recorrente para sistemas estáveis para a equipa se concentrar no que faz crescer o negócio." }
+          { title: "Leads", description: "A lead entra automaticamente no CRM, fica qualificada e o vendedor certo recebe um aviso, sem ninguém copiar nada à mão." },
+          { title: "Suporte", description: "Os pedidos chegam já classificados por urgência, com uma primeira resposta pronta a rever antes de seguir para o cliente." },
+          { title: "Relatórios", description: "Os números da semana são recolhidos automaticamente das ferramentas onde já existem e chegam por email, sem ninguém abrir o Excel." },
+          { title: "Administração", description: "Documentos, lembretes e atualizações que se repetem todas as semanas passam a acontecer sem alguém ter de os fazer manualmente." }
         ]
       },
       calculatorSection: {
         eyebrow: "Estimativa de poupança",
-        title: "Dê um valor ao trabalho manual.",
+        title: "Calculadora de poupança.",
         description:
           "Estime quantas horas o trabalho repetitivo pode estar a custar e use a auditoria para identificar os processos certos para automatizar primeiro.",
         employeesLabel: "Colaboradores envolvidos",
@@ -396,31 +380,31 @@ export const defaultSiteConfig: SiteConfig = {
         hoursSavedLabel: "Horas poupadas / mês",
         monthlySavingsLabel: "Poupança mensal estimada",
         yearlySavingsLabel: "Poupança anual estimada",
-        ctaTitle: "Quer saber quais processos valem mesmo a pena automatizar?",
+        ctaTitle: "A auditoria mostra quais os processos a automatizar primeiro.",
         ctaLabel: "Auditoria gratuita de IA",
         disclaimer:
-          "Estimativa indicativa. Os resultados reais dependem do volume dos processos, acesso às ferramentas, qualidade operacional e adoção pela equipa."
+          "Estimativa indicativa. Os resultados reais dependem do volume dos processos, acesso às ferramentas, qualidade operacional e da rapidez com que a equipa passa a usar o novo processo."
       },
       servicesSection: {
         eyebrow: "Capacidades",
-        title: "Automação para o trabalho operacional que as empresas repetem todos os dias.",
+        title: "O que costumamos construir.",
         description:
-          "A Vektrum constrói sistemas focados nos pontos onde as equipas perdem tempo, falham follow-ups ou movem informação manualmente."
+          "Focamos nos sítios onde a equipa perde mais tempo: leads, suporte, relatórios, administração e ferramentas que não falam entre si."
       },
       services: [
         { title: "Automação de gestão de leads", description: "Captura, enriquecimento, qualificação, encaminhamento e follow-ups entre formulários, CRM, email e calendários." },
-        { title: "Fluxos de suporte ao cliente", description: "Classificação de pedidos, rascunhos de resposta, escalonamento de exceções e reporting de suporte." },
-        { title: "Reporting e dashboards", description: "Dados operacionais dispersos transformados em relatórios programados e vistas internas úteis." },
-        { title: "Automação administrativa", description: "Tarefas recorrentes de back-office, documentos, lembretes, atualizações e passagens de trabalho." },
+        { title: "Fluxos de suporte ao cliente", description: "Classificação de pedidos, rascunhos de resposta e escalonamento das excepções que precisam mesmo de uma pessoa." },
+        { title: "Reporting e dashboards", description: "Dados dispersos por várias ferramentas transformados em relatórios automáticos e vistas que a gestão consegue mesmo usar." },
+        { title: "Automação administrativa", description: "Tarefas recorrentes de back-office, documentos, lembretes, atualizações e passagens de trabalho entre pessoas." },
         { title: "Integrações com CRM e ferramentas", description: "CRM, emails, folhas de cálculo, bases de dados e ferramentas internas sincronizadas com menos passos manuais." },
-        { title: "Assistentes internos com IA", description: "Assistentes focados em pesquisa, resumo, triagem, escrita e trabalho de conhecimento repetitivo." }
+        { title: "Assistentes internos com IA", description: "Assistentes focados em pesquisa, resumo, triagem e primeiras versões de texto para trabalho de conhecimento repetitivo." }
       ],
       processSection: {
         eyebrow: "Processo",
         title: "Da auditoria a um sistema de automação em funcionamento.",
         description:
           "O primeiro passo é uma auditoria clara sobre onde a automação pode criar valor comercial. Se houver enquadramento, mapeamos, construímos, testamos, lançamos e melhoramos.",
-        note: "A auditoria é gratuita e focada em próximos passos práticos."
+        note: "A auditoria é gratuita e sem apresentação de vendas, só os próximos passos."
       },
       processSteps: [
         { step: "01", title: "Auditoria", description: "Revemos equipa, ferramentas, tarefas repetitivas, passagens falhadas e pontos onde o trabalho abranda." },
@@ -429,35 +413,34 @@ export const defaultSiteConfig: SiteConfig = {
         { step: "04", title: "Teste e lançamento", description: "Validamos exceções, documentamos o processo, lançamos com a equipa e melhoramos com uso real." }
       ],
       whySection: {
-        eyebrow: "Posicionamento",
-        title: "Um parceiro de automação sério para operações reais.",
+        eyebrow: "Como trabalhamos",
+        title: "Quatro coisas que fazemos sempre.",
         description:
-          "A Vektrum é para empresas que querem menos fricção operacional, não novidade tecnológica. O trabalho começa com clareza de processo e termina com sistemas fiáveis."
+          "A tecnologia (n8n, um CRM, um LLM) é um meio, não o objetivo. Estas quatro coisas mantêm-se iguais em qualquer projeto, seja o que for que acabamos por construir."
       },
       differentiators: [
-        "Diagnosticamos bloqueios operacionais antes de escolher ferramentas",
-        "Desenhamos à volta do seu stack atual em vez de impor um novo",
-        "Focamo-nos em adoção, fiabilidade e poupança de tempo mensurável",
-        "Explicamos o que não deve ser automatizado com a mesma clareza"
+        "Olhamos para o processo antes de escolher qualquer ferramenta",
+        "Trabalhamos com o que já usa (CRM, Excel, email) em vez de pedir para substituir tudo",
+        "Medimos o que poupa tempo de facto, não o que parece impressionante numa demonstração",
+        "Dizemos quando algo não vale a pena automatizar"
       ],
       resultsSection: {
         eyebrow: "Resultados",
-        title: "Onde a automação cria vantagem operacional.",
-        description:
-          "Os sistemas certos reduzem trabalho repetitivo, aceleram respostas e tornam a operação mais fácil de gerir à medida que o volume cresce."
+        title: "Depois de automatizar.",
+        description: "O que costuma mudar para as equipas com quem trabalhamos."
       },
       results: [
-        "Menos horas perdidas em administração repetitiva",
-        "Respostas mais rápidas a leads e clientes",
-        "Dados de CRM e operação mais limpos",
-        "Follow-ups e passagens de trabalho mais consistentes",
-        "Reporting atualizado sem perseguição manual"
+        "Menos horas gastas em administração repetitiva",
+        "Respostas mais rápidas a leads e a clientes",
+        "CRM com dados mais completos e mais atuais",
+        "Follow-ups que já não dependem de ninguém se lembrar",
+        "Relatórios que aparecem sozinhos, sem ninguém os montar à mão"
       ],
       useCasesSection: {
         eyebrow: "Casos de uso",
-        title: "Processos de alto impacto que a Vektrum pode automatizar.",
+        title: "Alguns exemplos concretos do que automatizamos.",
         description:
-          "Pontos de partida práticos para empresas que querem operações mais rápidas sem acrescentar equipa ou complexidade."
+          "Pontos de partida práticos para quem quer operar mais rápido sem contratar mais gente ou complicar o que já funciona."
       },
       useCases: [
         { title: "Onboarding de clientes", description: "Envio automático de contratos, criação de pastas de projeto e notificações de boas-vindas assim que um negócio é ganho no CRM." },
@@ -467,21 +450,26 @@ export const defaultSiteConfig: SiteConfig = {
         { title: "Atualização de bases de dados", description: "Sincronização bidirecional em tempo real entre dados de novos pedidos do Stripe, folha de cálculo operacional e o CRM." },
         { title: "Follow-ups de reuniões", description: "Resumos automáticos de reuniões de Zoom guardados nas notas do cliente, juntamente com o envio de tarefas propostas." }
       ],
+      featuredProjectsSection: {
+        eyebrow: "Projetos",
+        title: "Alguns dos projetos que já fizemos.",
+        description: "Exemplos reais, com nome de cliente. Veja mais detalhe na página de Projetos."
+      },
       aboutSection: {
         eyebrow: "Sobre",
-        title: "A Vektrum é o seu parceiro prático de automação.",
+        title: "Quem somos.",
         description:
-          "Ajudamos empresas a poupar tempo e reduzir fricção operacional com sistemas adaptados à forma como as equipas já trabalham.",
-        body: "Sem promessas inflacionadas ou demos futuristas falsas. Apenas estratégia clara, implementação cuidada e automação que apoia processos reais."
+          "Construímos sistemas de automação a partir do que o negócio já tem ou, quando o processo exige, de algo novo.",
+        body: "Preferimos mostrar trabalho real a prometer resultados genéricos. Os projetos na página de Projetos têm nome de cliente e podem ser confirmados."
       },
       faqSection: {
         eyebrow: "FAQ",
-        title: "Respostas diretas antes da auditoria.",
+        title: "Perguntas frequentes.",
         description: "Alguns detalhes práticos antes de pedir a auditoria gratuita de IA."
       },
       faqs: [
         { question: "A auditoria de IA é mesmo gratuita?", answer: "Sim. A auditoria é gratuita e serve para identificar oportunidades práticas de automação, sem compromisso." },
-        { question: "Temos de saber o que queremos automatizar?", answer: "Não. A auditoria existe para encontrar e priorizar os processos onde a automação faz sentido para o negócio." },
+        { question: "Temos de saber o que queremos automatizar?", answer: "Não. É normal não saber ao certo. A auditoria serve exatamente para descobrir onde vale a pena automatizar primeiro." },
         { question: "Conseguem trabalhar com as nossas ferramentas atuais?", answer: "Sim. Normalmente construímos sobre CRM, email, folhas de cálculo, calendários, bases de dados e ferramentas da equipa." },
         { question: "O que acontece depois da auditoria?", answer: "Recebe um mapa de automação mais claro. Se houver bom enquadramento, a Vektrum pode desenhar e construir o sistema." }
       ],
@@ -493,18 +481,10 @@ export const defaultSiteConfig: SiteConfig = {
       reviews: [],
       finalCtaSection: {
         eyebrow: "Auditoria gratuita de IA",
-        title: "Encontre o trabalho que a sua equipa não devia fazer manualmente.",
+        title: "Auditoria gratuita, sem compromisso.",
         description:
-          "Use a auditoria gratuita para identificar os processos repetitivos, passagens lentas e follow-ups falhados que a automação pode remover primeiro.",
+          "Uma auditoria para identificar os processos que vale a pena automatizar primeiro.",
         cta: "Auditoria gratuita de IA"
-      },
-      contactSection: {
-        eyebrow: "Pedir auditoria",
-        title: "Comece pelo trabalho que está a abrandar o negócio.",
-        description:
-          "O formulário da auditoria faz algumas perguntas diretas para entendermos os seus processos e identificarmos as primeiras oportunidades de automação a rever.",
-        cta: "Auditoria gratuita de IA",
-        submit: "Auditoria gratuita de IA"
       },
       footer: {
         description:
@@ -514,12 +494,8 @@ export const defaultSiteConfig: SiteConfig = {
         contactNote: "Pedidos de auditoria gratuita de IA e contactos comerciais",
         responseNote: "Tempo típico de resposta: até um dia útil.",
         quickLinks: [
-          { label: "Setores", href: "/setores" },
-          { label: "Capacidades", href: "/#services" },
-          { label: "Processo", href: "/#process" },
-          { label: "Casos de Uso", href: "/#use-cases" },
-          { label: "Poupança", href: "/#calculator" },
-          { label: "Auditoria", href: "/#contact" }
+          { label: "Projetos", href: "/projetos" },
+          { label: "Auditoria", href: "/diagnostico" }
         ]
       }
     }

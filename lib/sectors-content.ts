@@ -45,13 +45,13 @@ export type SectorsContent = {
 export const sectorsContent: Record<Locale, SectorsContent> = {
   en: {
     labels: {
-      eyebrow: "Sectors",
+      eyebrow: "Projects",
       title: "Automation shaped around every sector's reality.",
       description:
         "Every market has its own bottlenecks. These are the sectors where we've already built real systems, with the projects and outcomes to show for it.",
       badgeLabel: "Portfolio",
       viewSectorLabel: "View sector",
-      backLabel: "Sectors",
+      backLabel: "Projects",
       whatWeBuiltLabel: "What we built",
       resultsLabel: "Results",
       disclaimer: "Results and metrics are only published once confirmed with the client.",
@@ -142,13 +142,13 @@ export const sectorsContent: Record<Locale, SectorsContent> = {
   },
   "pt-PT": {
     labels: {
-      eyebrow: "Setores",
+      eyebrow: "Projetos",
       title: "Automação moldada à realidade de cada setor.",
       description:
         "Cada mercado tem os seus próprios bloqueios. Estes são os setores onde já construímos sistemas reais, com os projetos e resultados que provam isso.",
       badgeLabel: "Portefólio",
       viewSectorLabel: "Ver setor",
-      backLabel: "Setores",
+      backLabel: "Projetos",
       whatWeBuiltLabel: "O que construímos",
       resultsLabel: "Resultados",
       disclaimer: "Resultados e métricas só são publicados depois de confirmados com o cliente.",

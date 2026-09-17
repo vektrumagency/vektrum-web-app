@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { FinalCtaSection } from "@/components/sections/final-cta-section";
 import { MobileStickyCta } from "@/components/mobile-sticky-cta";
+import { NewsletterPopup } from "@/components/newsletter-popup";
 import { SectionDivider } from "@/components/section-divider";
 import { SectorGrid } from "@/components/sectors/sector-grid";
 import { SectorsHero } from "@/components/sectors/sectors-hero";
@@ -28,13 +29,13 @@ export async function generateMetadata({ searchParams }: SectorsIndexPageProps):
 
   if (locale === "en") {
     return {
-      title: "Vektrum | Sectors and Portfolio",
-      description: "The sectors where Vektrum has already built real automation systems, with the projects and outcomes to show for it.",
-      alternates: { canonical: "/setores?lang=en" },
+      title: "Vektrum | Projects and Portfolio",
+      description: "Real projects Vektrum has already built, with the sectors, work, and outcomes to show for it.",
+      alternates: { canonical: "/projetos?lang=en" },
       openGraph: {
-        title: "Vektrum | Sectors and Portfolio",
+        title: "Vektrum | Projects and Portfolio",
         description: "Real estate, ecommerce, and the practical automation systems Vektrum has built for each.",
-        url: "https://vecktrum-agency.com/setores?lang=en",
+        url: "https://vecktrum-agency.com/projetos?lang=en",
         siteName: "Vektrum",
         type: "website"
       }
@@ -42,13 +43,13 @@ export async function generateMetadata({ searchParams }: SectorsIndexPageProps):
   }
 
   return {
-    title: "Vektrum | Setores e Portefólio",
-    description: "Os setores onde a Vektrum já construiu sistemas reais de automação, com os projetos e resultados que provam isso.",
-    alternates: { canonical: "/setores" },
+    title: "Vektrum | Projetos e Portefólio",
+    description: "Projetos reais que a Vektrum já construiu, com os setores, o trabalho e os resultados que provam isso.",
+    alternates: { canonical: "/projetos" },
     openGraph: {
-      title: "Vektrum | Setores e Portefólio",
+      title: "Vektrum | Projetos e Portefólio",
       description: "Imobiliário, ecommerce, e os sistemas práticos de automação que a Vektrum já construiu em cada um.",
-      url: "https://vecktrum-agency.com/setores",
+      url: "https://vecktrum-agency.com/projetos",
       siteName: "Vektrum",
       type: "website"
     }
@@ -68,8 +69,6 @@ export default async function SectorsIndexPage({ searchParams }: SectorsIndexPag
       <SiteHeader
         locale={locale}
         navItems={content.navItems}
-        ctaHref={diagnosisHref}
-        ctaLabel={content.hero.primaryCta}
       />
       <main className="pb-20 md:pb-0">
         <SectorsHero
@@ -90,6 +89,7 @@ export default async function SectorsIndexPage({ searchParams }: SectorsIndexPag
       <SectionDivider fromClassName="bg-background" toClassName="text-accent" />
       <SiteFooter footer={content.footer} email={config.brand.email} locale={locale} />
       <MobileStickyCta label={content.hero.primaryCta} href={diagnosisHref} />
+      <NewsletterPopup locale={locale} />
     </div>
   );
 }

@@ -24,7 +24,7 @@ export function SectorGrid({ sectors, locale, viewSectorLabel }: SectorGridProps
         return (
           <Link
             key={sector.slug}
-            href={`/setores/${sector.slug}${langSuffix}`}
+            href={`/projetos/${sector.slug}${langSuffix}`}
             className={`group flex flex-col justify-between gap-10 rounded-2xl p-8 transition duration-200 ease-[var(--ease-out)] hover:-translate-y-1 sm:p-10 ${theme.bg}`}
           >
             <div>
