@@ -2,8 +2,6 @@
 
 import { useEffect, useMemo, useReducer } from "react";
 
-import { BrandLogo } from "./brand-logo";
-
 type Locale = "en" | "pt-PT" | "es";
 
 const HORIZON_DAYS = 15;
@@ -82,6 +80,7 @@ const COPY: Record<
     tag: string;
     intl: string;
     homeHref: string;
+    eyebrow: string;
     heading: string;
     subheading: string;
     loading: string;
@@ -114,7 +113,8 @@ const COPY: Record<
   "pt-PT": {
     tag: "pt-PT",
     intl: "pt-PT",
-    homeHref: "/",
+    homeHref: "/?lang=pt-PT",
+    eyebrow: "Marcar reunião",
     heading: "Marcar uma chamada",
     subheading: "Escolha um dia com disponibilidade e depois o horário.",
     loading: "A carregar disponibilidade...",
@@ -147,6 +147,7 @@ const COPY: Record<
     tag: "en",
     intl: "en-GB",
     homeHref: "/?lang=en",
+    eyebrow: "Book a meeting",
     heading: "Book a call",
     subheading: "Pick a day with availability, then a time.",
     loading: "Loading availability...",
@@ -179,6 +180,7 @@ const COPY: Record<
     tag: "es",
     intl: "es-ES",
     homeHref: "/?lang=es",
+    eyebrow: "Reservar reunión",
     heading: "Reservar una llamada",
     subheading: "Elige un día con disponibilidad y luego la hora.",
     loading: "Cargando disponibilidad...",
@@ -376,41 +378,45 @@ export function Booker({ name = "", email = "", locale = "pt-PT" }: BookerProps)
 
   if (state.status === "loading") {
     return (
-      <div className="rounded-3xl border border-border bg-surface/85 p-6 md:p-8">
-        <div className="h-6 w-40 animate-pulse rounded bg-border/60" />
-        <div className="mt-6 grid grid-cols-7 gap-2">
-          {Array.from({ length: 21 }).map((_, i) => (
-            <div key={i} className="aspect-square animate-pulse rounded-xl bg-border/40" />
-          ))}
+      <BookerShell eyebrow={t.eyebrow} title={t.heading} body={t.subheading}>
+        <div className="mt-8 rounded-3xl border border-border bg-surface/85 p-6 shadow-glow md:p-8">
+          <div className="mx-auto h-5 w-40 animate-pulse rounded bg-border/60" />
+          <div className="mt-6 grid grid-cols-7 gap-1">
+            {Array.from({ length: 21 }).map((_, i) => (
+              <div key={i} className="aspect-square animate-pulse rounded-xl bg-border/40" />
+            ))}
+          </div>
+          <p className="mt-4 text-center text-sm text-muted" aria-live="polite">
+            {t.loading}
+          </p>
         </div>
-        <p className="mt-4 text-sm text-muted">{t.loading}</p>
-      </div>
+      </BookerShell>
     );
   }
 
   if (state.status === "error") {
     return (
-      <div className="rounded-3xl border border-border bg-surface/85 p-6">
-        <p className="text-sm text-muted">{t.error}</p>
-        <button
-          type="button"
-          onClick={loadAvailability}
-          className="mt-4 w-full rounded-full bg-accent px-6 py-3 text-sm font-semibold text-background transition hover:bg-accent-soft sm:w-auto"
-        >
-          {t.retry}
-        </button>
-      </div>
+      <BookerShell eyebrow={t.eyebrow} title={t.heading}>
+        <div className="mt-8 rounded-3xl border border-border bg-surface/85 p-6 text-center shadow-glow md:p-8">
+          <p className="text-base leading-relaxed text-muted">{t.error}</p>
+          <button type="button" onClick={loadAvailability} className="diagnosis-primary mt-6">
+            {t.retry}
+          </button>
+        </div>
+      </BookerShell>
     );
   }
 
   if (state.status === "empty") {
     return (
-      <div className="rounded-3xl border border-border bg-surface/85 p-6">
-        <p className="text-sm text-muted">{t.empty}</p>
-        <a href={t.homeHref} className="mt-4 inline-flex text-sm font-semibold text-accent underline underline-offset-4">
-          {t.backToSite}
-        </a>
-      </div>
+      <BookerShell eyebrow={t.eyebrow} title={t.heading}>
+        <div className="mt-8 rounded-3xl border border-border bg-surface/85 p-6 text-center shadow-glow md:p-8">
+          <p className="text-base leading-relaxed text-muted">{t.empty}</p>
+          <a href={t.homeHref} className="diagnosis-secondary mt-6">
+            {t.backToSite}
+          </a>
+        </div>
+      </BookerShell>
     );
   }
 
@@ -432,218 +438,235 @@ export function Booker({ name = "", email = "", locale = "pt-PT" }: BookerProps)
     const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(summary)}&dates=${gStart}/${gEnd}&details=${encodeURIComponent(details)}&location=${encodeURIComponent(meet)}`;
     const outlookUrl = `https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=${encodeURIComponent(summary)}&startdt=${encodeURIComponent(start)}&enddt=${encodeURIComponent(end)}&body=${encodeURIComponent(details)}&location=${encodeURIComponent(meet)}`;
     const icsHref = `data:text/calendar;charset=utf-8,${encodeURIComponent(buildIcs(start, end, summary, details, meet))}`;
-    const calBtn =
-      "inline-flex items-center justify-center rounded-full border border-border bg-background/55 px-4 py-2.5 text-sm font-semibold text-text transition hover:border-accent/50 hover:bg-accent/10";
 
     return (
-      <div className="rounded-3xl border border-accent/20 bg-surface/85 p-6 shadow-glow md:p-8">
-        <BrandLogo href={t.homeHref} className="mb-4" />
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">✓</p>
-        <h3 className="mt-2 font-heading text-2xl uppercase tracking-tight text-text">{t.successTitle}</h3>
-        <p className="mt-2 text-sm text-muted">{t.successBody}</p>
+      <section className="diagnosis-enter flex w-full flex-col items-center text-center">
+        <div className="diagnosis-success-mark mb-8" aria-hidden="true">
+          <span>✓</span>
+        </div>
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">{t.eyebrow}</p>
+        <h1 className="mt-4 max-w-2xl text-balance text-[clamp(2rem,6vw,3.4rem)] font-semibold leading-[1.02] tracking-[-0.05em] text-text">
+          {t.successTitle}
+        </h1>
+        <p className="mt-5 max-w-xl text-pretty text-base leading-relaxed text-muted sm:text-lg">{t.successBody}</p>
 
-        <dl className="mt-5 space-y-1 rounded-2xl border border-border bg-background/55 p-4 text-sm">
-          <div className="font-semibold text-text">{when}</div>
-          <div className="text-muted">
-            {t.detailsWith} · {t.duration}
-          </div>
+        <dl className="mt-6 w-full rounded-2xl border border-accent/20 bg-accent/[0.06] px-5 py-4 text-sm">
+          <dt className="text-xs font-bold uppercase tracking-[0.14em] text-accent">{t.detailsWith}</dt>
+          <dd className="mt-1 font-semibold capitalize text-text">{when}</dd>
+          <dd className="text-muted">{t.duration}</dd>
         </dl>
 
-        <p className="mt-5 mb-2 text-sm font-semibold text-text">{t.addToCalendar}</p>
-        <div className="flex flex-wrap gap-2">
-          <a href={googleUrl} target="_blank" rel="noreferrer" className={calBtn}>
+        <p className="mt-8 text-sm font-semibold text-text">{t.addToCalendar}</p>
+        <div className="mt-3 flex flex-wrap justify-center gap-2">
+          <a href={googleUrl} target="_blank" rel="noreferrer" className="diagnosis-secondary">
             {t.google}
           </a>
-          <a href={outlookUrl} target="_blank" rel="noreferrer" className={calBtn}>
+          <a href={outlookUrl} target="_blank" rel="noreferrer" className="diagnosis-secondary">
             {t.outlook}
           </a>
-          <a href={icsHref} download="vektrum.ics" className={calBtn}>
+          <a href={icsHref} download="vektrum.ics" className="diagnosis-secondary">
             {t.apple}
           </a>
         </div>
 
-        <div className="mt-6 flex flex-wrap items-center gap-4">
+        <div className="mt-8 flex flex-col items-center gap-4">
           {meet ? (
-            <a
-              href={meet}
-              target="_blank"
-              rel="noreferrer"
-              className="text-sm font-semibold text-accent underline underline-offset-4"
-            >
+            <a href={meet} target="_blank" rel="noreferrer" className="diagnosis-primary">
               {t.meetCta}
             </a>
           ) : null}
-          <a
-            href={t.homeHref}
-            className="ml-auto inline-flex rounded-full bg-accent px-6 py-3 text-sm font-semibold text-background transition hover:bg-accent-soft"
-          >
+          <a href={t.homeHref} className={meet ? "text-sm font-semibold text-muted underline underline-offset-4 hover:text-text" : "diagnosis-primary"}>
             {t.backToSite}
           </a>
         </div>
-      </div>
+      </section>
     );
   }
 
   const daySlots = state.selectedDay ? byDay.get(state.selectedDay) ?? [] : [];
 
   return (
-    <div className="rounded-3xl border border-border bg-surface/85 p-6 shadow-glow md:p-8">
-      <BrandLogo href={t.homeHref} className="mb-4" />
-      <h3 className="font-heading text-2xl uppercase tracking-tight text-text">{t.heading}</h3>
-      <p className="mt-2 text-sm text-muted">{t.subheading}</p>
-
+    <BookerShell eyebrow={t.eyebrow} title={t.heading} body={t.subheading}>
       {state.status === "taken" ? (
-        <div className="mt-4 rounded-2xl border border-accent/30 bg-accent/10 p-4">
-          <p className="text-sm font-semibold text-text">{t.takenTitle}</p>
-          <p className="mt-1 text-sm text-muted">{t.takenBody}</p>
+        <div role="alert" className="diagnosis-insight mt-6">
+          <span aria-hidden="true">!</span>
+          <span>
+            {t.takenTitle} {t.takenBody}
+          </span>
         </div>
       ) : null}
 
-      {!state.selected ? (
-        <div className="mt-6">
-          {/* Month label */}
-          <p className="mb-3 text-center text-sm font-semibold capitalize text-text">{monthLabel}</p>
-          {/* Calendar grid */}
-          <div className="grid grid-cols-7 gap-1 text-center">
-            {weekdayHeaders.map((w, i) => (
-              <div key={i} className="pb-2 text-[0.7rem] font-semibold uppercase tracking-wide text-muted">
-                {w}
-              </div>
-            ))}
-            {grid.map((d) => {
-              const k = dayKey(d);
-              const isBeyond = k > horizonKey;
-              const has = byDay.has(k) && !isBeyond;
-              const isPast = k < todayKey;
-              const isSelected = k === state.selectedDay;
-              return (
-                <button
-                  key={k}
-                  type="button"
-                  disabled={!has}
-                  aria-pressed={isSelected}
-                  onClick={() => dispatch({ type: "SELECT_DAY", day: k })}
-                  className={[
-                    "relative flex aspect-square items-center justify-center rounded-xl text-sm transition",
-                    has
-                      ? "cursor-pointer font-semibold text-text hover:border-accent/50 hover:bg-accent/10 border border-border"
-                      : "cursor-default text-muted/40",
-                    isSelected ? "border-accent bg-accent/15 text-text" : "",
-                    (isPast || isBeyond) && !has ? "opacity-40" : ""
-                  ].join(" ")}
-                >
-                  {d.getDate()}
-                  {has ? (
-                    <span
-                      className={[
-                        "absolute bottom-1 h-1.5 w-1.5 rounded-full",
-                        isSelected ? "bg-accent" : "bg-emerald-500"
-                      ].join(" ")}
-                      aria-hidden="true"
-                    />
-                  ) : null}
-                </button>
-              );
-            })}
-          </div>
+      <div className="mt-8 rounded-3xl border border-border bg-surface/85 p-6 shadow-glow md:p-8">
+        {!state.selected ? (
+          <div>
+            <p className="mb-4 text-center text-sm font-semibold capitalize text-text">{monthLabel}</p>
 
-          <p className="mt-4 text-xs text-muted">
-            {t.tzPrefix} {timeZone}
-          </p>
-
-          {/* Times for the selected day */}
-          {state.selectedDay ? (
-            <div className="mt-5">
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">{t.pickTime}</p>
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                {daySlots.map((slot) => (
+            <div className="grid grid-cols-7 gap-1 text-center">
+              {weekdayHeaders.map((w, i) => (
+                <div key={i} className="pb-2 text-[0.7rem] font-semibold uppercase tracking-wide text-muted">
+                  {w}
+                </div>
+              ))}
+              {grid.map((d) => {
+                const k = dayKey(d);
+                const isBeyond = k > horizonKey;
+                const has = byDay.has(k) && !isBeyond;
+                const isPast = k < todayKey;
+                const isSelected = k === state.selectedDay;
+                return (
                   <button
-                    key={slot.startUTC}
+                    key={k}
                     type="button"
-                    onClick={() => dispatch({ type: "SELECT_SLOT", slot })}
-                    className="rounded-xl border border-border bg-background/55 px-3 py-3 text-sm font-semibold text-text transition hover:border-accent/50 hover:bg-accent/10"
+                    disabled={!has}
+                    aria-pressed={isSelected}
+                    className={[
+                      "relative flex aspect-square items-center justify-center rounded-xl text-sm transition duration-200",
+                      has
+                        ? "cursor-pointer border border-border bg-background/55 font-semibold text-text hover:-translate-y-0.5 hover:border-accent/50 hover:bg-accent/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                        : "cursor-default text-muted/40",
+                      isSelected ? "border-accent bg-accent/[0.12] text-accent-soft" : "",
+                      (isPast || isBeyond) && !has ? "opacity-40" : ""
+                    ].join(" ")}
+                    onClick={() => dispatch({ type: "SELECT_DAY", day: k })}
                   >
-                    {new Date(slot.startUTC).toLocaleTimeString(t.intl, { hour: "2-digit", minute: "2-digit" })}
+                    {d.getDate()}
+                    {has ? (
+                      <span
+                        className={["absolute bottom-1 h-1.5 w-1.5 rounded-full", isSelected ? "bg-accent" : "bg-emerald-500"].join(" ")}
+                        aria-hidden="true"
+                      />
+                    ) : null}
                   </button>
-                ))}
-              </div>
-            </div>
-          ) : null}
-        </div>
-      ) : (
-        <div className="mt-6 space-y-4">
-          <div className="flex items-center justify-between rounded-2xl border border-accent/20 bg-accent/10 p-4">
-            <span className="text-sm font-semibold text-text">
-              {new Date(state.selected.startUTC).toLocaleString(t.intl, {
-                weekday: "long",
-                day: "numeric",
-                month: "long",
-                hour: "2-digit",
-                minute: "2-digit"
+                );
               })}
-            </span>
-            <button
-              type="button"
-              onClick={() => dispatch({ type: "CANCEL_SELECT" })}
-              className="text-xs font-semibold text-accent underline underline-offset-2"
-            >
-              {t.backToCalendar}
-            </button>
+            </div>
+
+            <p className="mt-4 text-center text-xs text-muted">
+              {t.tzPrefix} {timeZone}
+            </p>
+
+            {state.selectedDay ? (
+              <div className="mt-6 border-t border-border/70 pt-5">
+                <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-accent">{t.pickTime}</p>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                  {daySlots.map((slot) => (
+                    <button
+                      key={slot.startUTC}
+                      type="button"
+                      onClick={() => dispatch({ type: "SELECT_SLOT", slot })}
+                      className="group diagnosis-choice diagnosis-choice-compact justify-center"
+                    >
+                      {new Date(slot.startUTC).toLocaleTimeString(t.intl, { hour: "2-digit", minute: "2-digit" })}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
+        ) : (
+          <div className="space-y-5">
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-accent/20 bg-accent/[0.06] px-4 py-3">
+              <span className="text-sm font-semibold capitalize text-accent-soft">
+                {new Date(state.selected.startUTC).toLocaleString(t.intl, {
+                  weekday: "long",
+                  day: "numeric",
+                  month: "long",
+                  hour: "2-digit",
+                  minute: "2-digit"
+                })}
+              </span>
+              <button
+                type="button"
+                onClick={() => dispatch({ type: "CANCEL_SELECT" })}
+                className="text-xs font-semibold text-accent underline underline-offset-2 hover:text-accent-soft"
+              >
+                {t.backToCalendar}
+              </button>
+            </div>
 
-          <input type="text" name="_hp" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
+            <input type="text" name="_hp" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
 
-          <label className="block text-sm">
-            <span className="mb-1 block font-medium text-text">{t.nameLabel}</span>
-            <input
-              type="text"
-              value={state.name}
-              onChange={(e) => dispatch({ type: "SET_FIELD", field: "name", value: e.target.value })}
-              className="w-full rounded-xl border border-border bg-background/55 px-4 py-2.5 text-sm text-text outline-none focus:border-accent/50"
-            />
-          </label>
+            <label className="block">
+              <span className="mb-2 block text-sm font-semibold text-text">{t.nameLabel}</span>
+              <input
+                type="text"
+                value={state.name}
+                autoComplete="name"
+                onChange={(e) => dispatch({ type: "SET_FIELD", field: "name", value: e.target.value })}
+                className="diagnosis-input"
+              />
+            </label>
 
-          <label className="block text-sm">
-            <span className="mb-1 block font-medium text-text">{t.emailLabel}</span>
-            <input
-              type="email"
-              value={state.email}
-              onChange={(e) => dispatch({ type: "SET_FIELD", field: "email", value: e.target.value })}
-              className="w-full rounded-xl border border-border bg-background/55 px-4 py-2.5 text-sm text-text outline-none focus:border-accent/50"
-            />
-          </label>
+            <label className="block">
+              <span className="mb-2 block text-sm font-semibold text-text">{t.emailLabel}</span>
+              <input
+                type="email"
+                value={state.email}
+                autoComplete="email"
+                onChange={(e) => dispatch({ type: "SET_FIELD", field: "email", value: e.target.value })}
+                className="diagnosis-input"
+              />
+            </label>
 
-          <label className="block text-sm">
-            <span className="mb-1 block font-medium text-text">
-              {t.noteLabel} <span className="text-muted">({t.noteHint})</span>
-            </span>
-            <textarea
-              value={state.note}
-              onChange={(e) => dispatch({ type: "SET_FIELD", field: "note", value: e.target.value })}
-              rows={3}
-              className="w-full rounded-xl border border-border bg-background/55 px-4 py-2.5 text-sm text-text outline-none focus:border-accent/50"
-            />
-          </label>
+            <label className="block">
+              <span className="mb-2 block text-sm font-semibold text-text">
+                {t.noteLabel} <span className="font-normal text-muted">({t.noteHint})</span>
+              </span>
+              <textarea
+                value={state.note}
+                rows={3}
+                onChange={(e) => dispatch({ type: "SET_FIELD", field: "note", value: e.target.value })}
+                className="diagnosis-input"
+              />
+            </label>
 
-          <div className="flex flex-col gap-2 sm:flex-row">
-            <button
-              type="button"
-              onClick={confirmBooking}
-              disabled={state.status === "confirming" || !state.email}
-              className="w-full rounded-full bg-accent px-6 py-3 text-sm font-semibold text-background transition hover:bg-accent-soft disabled:opacity-60 sm:w-auto"
-            >
-              {t.confirmCta}
-            </button>
-            <button
-              type="button"
-              onClick={() => dispatch({ type: "CANCEL_SELECT" })}
-              className="w-full rounded-full border border-border px-6 py-3 text-sm font-semibold text-text transition hover:border-accent/40 sm:w-auto"
-            >
-              {t.back}
-            </button>
+            <div className="flex flex-col gap-2 pt-1 sm:flex-row-reverse sm:justify-start">
+              <button
+                type="button"
+                onClick={confirmBooking}
+                disabled={state.status === "confirming" || !state.email}
+                className="diagnosis-primary w-full sm:w-auto"
+              >
+                {t.confirmCta}
+              </button>
+              <button
+                type="button"
+                onClick={() => dispatch({ type: "CANCEL_SELECT" })}
+                className="diagnosis-secondary w-full justify-center sm:w-auto"
+              >
+                {t.back}
+              </button>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </BookerShell>
+  );
+}
+
+function BookerShell({
+  eyebrow,
+  title,
+  body,
+  children
+}: {
+  eyebrow: string;
+  title: string;
+  body?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="diagnosis-enter w-full">
+      <div className="text-center">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">{eyebrow}</p>
+        <h1 className="mt-5 text-balance text-[clamp(2rem,6vw,3.4rem)] font-semibold leading-[1.02] tracking-[-0.05em] text-text">
+          {title}
+        </h1>
+        {body ? (
+          <p className="mx-auto mt-4 max-w-xl text-pretty text-base leading-relaxed text-muted sm:text-lg">{body}</p>
+        ) : null}
+      </div>
+      {children}
+    </section>
   );
 }

@@ -792,7 +792,7 @@ function SuccessScreen({ copy: t, homeHref, answers, locale, onRestart }: { copy
   const hours = resolveOptionLabel("repetitiveHours", answers.responses.repetitiveHours, answers.sectorId, locale);
   const bottleneckQuestion = sector?.questions.find((item) => item.legacyRole === "challenge" || item.legacyRole === "task") ?? sector?.questions.at(-1);
   const bottleneck = bottleneckQuestion ? resolveOptionLabel(bottleneckQuestion.id, answers.responses[bottleneckQuestion.id], answers.sectorId, locale) : "";
-  const caseHref = answers.sectorId === "real-estate" ? "/setores/imobiliario" : answers.sectorId === "commerce" ? "/setores/ecommerce" : null;
+  const caseHref = answers.sectorId === "real-estate" ? "/projetos/imobiliario" : answers.sectorId === "commerce" ? "/projetos/ecommerce" : null;
   const recapLabels = locale === "en" ? ["Industry", "Priority", "Manual time", "Leading bottleneck"] : ["Setor", "Prioridade", "Tempo manual", "Principal bloqueio"];
 
   return (
