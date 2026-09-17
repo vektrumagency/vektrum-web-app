@@ -15,3 +15,6 @@ tsconfig.tsbuildinfo
 .env.production.local
 .aider*
 .vercel
+
+# Playwright MCP debug output
+.playwright-mcp/
