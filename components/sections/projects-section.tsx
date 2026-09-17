@@ -1,4 +1,5 @@
 import { EyebrowTag } from "@/components/eyebrow-tag";
+import { localizePath } from "@/lib/site-links";
 import Link from "next/link";
 
 export type FeaturedProject = {
@@ -24,8 +25,6 @@ const THEMES = [
 ];
 
 export function ProjectsSection({ eyebrow, title, description, projects, locale }: ProjectsSectionProps) {
-  const langSuffix = locale === "en" ? "?lang=en" : "";
-
   return (
     <section id="projects" className="relative bg-background py-16 sm:py-24">
       <div className="mx-auto w-[90vw] sm:w-[80vw]">
@@ -44,7 +43,7 @@ export function ProjectsSection({ eyebrow, title, description, projects, locale 
             return (
               <Link
                 key={`${project.sectorSlug}-${project.name}`}
-                href={`/projetos/${project.sectorSlug}${langSuffix}`}
+                href={localizePath(`/projetos/${project.sectorSlug}`, locale)}
                 style={{ top: `${88 + index * 14}px`, zIndex: index + 1 }}
                 className={`sticky block overflow-hidden rounded-2xl p-8 sm:p-10 min-h-[70vh] flex flex-col justify-between ${theme.bg}`}
               >

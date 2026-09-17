@@ -102,13 +102,13 @@ export type SiteConfig = {
 export const defaultSiteConfig: SiteConfig = {
   brand: {
     email: "vektrum.agency@gmail.com",
-    domain: "vecktrum-agency.com"
+    domain: "vektrum.agency"
   },
   locales: {
     en: {
       navItems: [
-        { href: "/projetos?lang=en", label: "Projects" },
-        { href: "/diagnostico?lang=en", label: "Audit" }
+        { href: "/en/projetos", label: "Projects" },
+        { href: "/en/diagnostico", label: "Audit" }
       ],
       hero: {
         eyebrow: "Process automation",
@@ -297,8 +297,8 @@ export const defaultSiteConfig: SiteConfig = {
         contactNote: "Free AI audit requests and business inquiries",
         responseNote: "Typical response time: within one business day.",
         quickLinks: [
-          { label: "Projects", href: "/projetos?lang=en" },
-          { label: "Audit", href: "/diagnostico?lang=en" }
+          { label: "Projects", href: "/en/projetos" },
+          { label: "Audit", href: "/en/diagnostico" }
         ]
       }
     },

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { getSectorsIndexMetadata, SectorsIndexPageContent } from "@/app/projetos/sectors-index-content";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = getSectorsIndexMetadata("pt-PT");
+export const metadata: Metadata = getSectorsIndexMetadata("en");
 
-export default function SectorsIndexPage() {
-  return <SectorsIndexPageContent locale="pt-PT" />;
+export default function SectorsIndexPageEn() {
+  return <SectorsIndexPageContent locale="en" />;
 }
