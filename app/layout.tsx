@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Anton, Inter } from "next/font/google";
 import { headers } from "next/headers";
 import { SITE_URL } from "@/lib/site-links";
@@ -76,6 +77,7 @@ export default async function RootLayout({
       </head>
       <body className="bg-background font-body text-text antialiased">
         {children}
+        <Analytics />
       </body>
     </html>
   );
