@@ -211,6 +211,13 @@ const COPY: Record<
   }
 };
 
+async function fetchAvailability(): Promise<Slot[]> {
+  const res = await fetch("/api/booking/availability");
+  if (!res.ok) throw new Error(`availability ${res.status}`);
+  const data: { slots?: Slot[] } = await res.json();
+  return data.slots ?? [];
+}
+
 // YYYY-MM-DD in the visitor's local timezone.
 function dayKey(d: Date): string {
   return d.toLocaleDateString("en-CA");
@@ -268,19 +275,17 @@ export function Booker({ name = "", email = "", locale = "pt-PT" }: BookerProps)
 
   function loadAvailability() {
     dispatch({ type: "FETCH_START" });
-    fetch("/api/booking/availability")
-      .then((res) => res.json())
-      .then((data: { slots?: Slot[] }) => dispatch({ type: "FETCH_SUCCESS", slots: data.slots ?? [] }))
+    fetchAvailability()
+      .then((slots) => dispatch({ type: "FETCH_SUCCESS", slots }))
       .catch(() => dispatch({ type: "FETCH_ERROR" }));
   }
 
   useEffect(() => {
     let cancelled = false;
     dispatch({ type: "FETCH_START" });
-    fetch("/api/booking/availability")
-      .then((res) => res.json())
-      .then((data: { slots?: Slot[] }) => {
-        if (!cancelled) dispatch({ type: "FETCH_SUCCESS", slots: data.slots ?? [] });
+    fetchAvailability()
+      .then((slots) => {
+        if (!cancelled) dispatch({ type: "FETCH_SUCCESS", slots });
       })
       .catch(() => {
         if (!cancelled) dispatch({ type: "FETCH_ERROR" });
@@ -491,7 +496,7 @@ export function Booker({ name = "", email = "", locale = "pt-PT" }: BookerProps)
         <div role="alert" className="diagnosis-insight mt-6">
           <span aria-hidden="true">!</span>
           <span>
-            {t.takenTitle} {t.takenBody}
+            <strong className="font-bold">{t.takenTitle}.</strong> {t.takenBody}
           </span>
         </div>
       ) : null}
