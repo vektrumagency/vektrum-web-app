@@ -10,6 +10,8 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: ["./vitest.setup.ts"],
-    exclude: ["tests/**", "node_modules/**", ".next/**"]
+    // booking/ ships a plain-node assertion harness (no vitest suite);
+    // it runs via `npm run test:booking`.
+    exclude: ["tests/**", "booking/**", "node_modules/**", ".next/**"]
   }
 });

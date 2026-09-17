@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { buildLanguageAlternates } from "@/lib/site-links";
-import { DiagnosisClient } from "./diagnosis-client";
+import { DiagnosisGate } from "./short-gate";
 import { getSector, localize, type Locale } from "./diagnosis-config";
 
 type DiagnosisSearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -31,5 +31,5 @@ export async function getDiagnosisMetadata(locale: Locale, searchParams: Diagnos
 
 export async function DiagnosisPageContent({ locale, searchParams }: { locale: Locale; searchParams: DiagnosisSearchParams }) {
   const params = await searchParams;
-  return <DiagnosisClient locale={locale} campaignSectorId={getCampaignSector(params.sector)} />;
+  return <DiagnosisGate locale={locale} campaignSectorId={getCampaignSector(params.sector)} />;
 }

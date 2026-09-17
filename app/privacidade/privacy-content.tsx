@@ -31,7 +31,8 @@ export function PrivacyPageContent({ locale }: { locale: Locale }) {
     ["5. Service providers", "We may use carefully selected technology and communication providers to store, process, or transmit the information on our behalf. We do not sell your personal information."],
     ["6. Retention", "Diagnosis information is retained for up to 12 months after submission, unless a longer period is required by law or an ongoing business relationship justifies continued retention."],
     ["7. Your rights", "You may request access, correction, deletion, restriction, portability, or object to processing where applicable. You may also lodge a complaint with the Portuguese Data Protection Authority (CNPD)."],
-    ["8. Contact", `To exercise your rights or ask a privacy question, email ${defaultSiteConfig.brand.email}.`]
+    ["8. Google Calendar data (booking feature)", "To operate the meeting-booking feature, our booking system connects, via Google's authorization process, to the Google Calendar of the Vektrum team account responsible for scheduling. It uses this access only to: check team availability (free/busy) when generating available time slots, and create a calendar event (including a Google Meet link) when you confirm a booking. It does not read event details, contacts, or any other Google data, and it does not use this access for any other purpose. This data is not shared with or sold to third parties. Our use of information received from Google APIs adheres to the Google API Services User Data Policy, including the Limited Use requirements."],
+    ["9. Contact", `To exercise your rights or ask a privacy question, email ${defaultSiteConfig.brand.email}.`]
   ] : [
     ["1. Responsável pelo tratamento", `A Vektrum é responsável pelo tratamento da informação enviada através do diagnóstico de automação. Pode contactar-nos através de ${defaultSiteConfig.brand.email}.`],
     ["2. Informação recolhida", "Recolhemos os dados da empresa, operação, software, objetivos e contacto que fornece voluntariamente durante o diagnóstico."],
@@ -40,7 +41,8 @@ export function PrivacyPageContent({ locale }: { locale: Locale }) {
     ["5. Prestadores de serviços", "Podemos recorrer a prestadores tecnológicos e de comunicação cuidadosamente selecionados para armazenar, tratar ou transmitir dados em nosso nome. Não vendemos os seus dados pessoais."],
     ["6. Conservação", "Os dados do diagnóstico são conservados até 12 meses após o envio, salvo quando a lei exija um prazo superior ou uma relação comercial em curso justifique a sua conservação."],
     ["7. Os seus direitos", "Pode solicitar acesso, retificação, apagamento, limitação, portabilidade ou oposição ao tratamento, quando aplicável. Pode também apresentar reclamação junto da Comissão Nacional de Proteção de Dados (CNPD)."],
-    ["8. Contacto", `Para exercer os seus direitos ou esclarecer uma questão de privacidade, escreva para ${defaultSiteConfig.brand.email}.`]
+    ["8. Dados do Google Calendar (funcionalidade de marcação)", "Para operar a funcionalidade de marcação de reuniões, o nosso sistema de marcações liga-se, através do processo de autorização da Google, ao Google Calendar da conta da equipa Vektrum responsável pelos agendamentos. Este acesso é utilizado apenas para: verificar a disponibilidade da equipa (livre/ocupado) ao gerar horários disponíveis, e criar um evento no calendário (incluindo uma ligação Google Meet) quando confirma uma marcação. Não lemos detalhes de eventos, contactos ou quaisquer outros dados da Google, nem utilizamos este acesso para qualquer outra finalidade. Estes dados não são partilhados nem vendidos a terceiros. A utilização de informação recebida através das APIs da Google cumpre a Google API Services User Data Policy, incluindo os requisitos de Limited Use."],
+    ["9. Contacto", `Para exercer os seus direitos ou esclarecer uma questão de privacidade, escreva para ${defaultSiteConfig.brand.email}.`]
   ];
 
   return (

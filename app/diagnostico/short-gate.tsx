@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { readUtmAttribution, type UtmAttribution } from "./diagnosis-api";
 import { DiagnosisClient } from "./diagnosis-client";
 import { localize, type Locale } from "./diagnosis-config";
+import { localizePath } from "@/lib/site-links";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_PATTERN = /^[+\d][\d\s().-]{6,}$/;
@@ -96,7 +97,7 @@ export function DiagnosisGate({ locale, campaignSectorId = null }: { locale: Loc
   const [showLongForm, setShowLongForm] = useState(false);
   const [returning, setReturning] = useState(false);
   const startedAt = useRef<number>(Date.now());
-  const homeHref = locale === "en" ? "/?lang=en" : "/?lang=pt-PT";
+  const homeHref = localizePath("/", locale);
 
   useEffect(() => {
     const previousLanguage = document.documentElement.lang;
@@ -165,8 +166,7 @@ export function DiagnosisGate({ locale, campaignSectorId = null }: { locale: Loc
     const params = new URLSearchParams();
     params.set("name", lead.name.trim());
     params.set("email", lead.email.trim());
-    params.set("lang", locale);
-    router.push(`/marcar?${params.toString()}`);
+    router.push(`${localizePath("/marcar", locale)}?${params.toString()}`);
   };
 
   const continueToDiagnosis = () => {
@@ -255,7 +255,7 @@ export function DiagnosisGate({ locale, campaignSectorId = null }: { locale: Loc
                   onChange={(event) => setPrivacyConsent(event.target.checked)}
                   className="mt-0.5 h-5 w-5 shrink-0 rounded border-border accent-[rgb(var(--color-accent))]"
                 />
-                <span>{t.consentPrefix} <Link href={locale === "en" ? "/privacidade?lang=en" : "/privacidade"} target="_blank" className="font-semibold text-text underline decoration-accent/40 underline-offset-4 hover:text-accent">{t.privacy}</Link>.</span>
+                <span>{t.consentPrefix} <Link href={localizePath("/privacidade", locale)} target="_blank" className="font-semibold text-text underline decoration-accent/40 underline-offset-4 hover:text-accent">{t.privacy}</Link>.</span>
               </label>
               {errors.privacyConsent ? <p role="alert" className="text-sm font-medium text-red-700">{errors.privacyConsent}</p> : null}
 

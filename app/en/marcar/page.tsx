@@ -5,8 +5,8 @@ type BookingPageProps = {
   searchParams: Promise<{ name?: string; email?: string }>;
 };
 
-export const metadata: Metadata = getBookingMetadata("pt-PT");
+export const metadata: Metadata = getBookingMetadata("en");
 
-export default async function MarcarPage({ searchParams }: BookingPageProps) {
-  return <BookingPageContent locale="pt-PT" searchParams={searchParams} />;
+export default async function MarcarPageEn({ searchParams }: BookingPageProps) {
+  return <BookingPageContent locale="en" searchParams={searchParams} />;
 }

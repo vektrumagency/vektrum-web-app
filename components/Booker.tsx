@@ -113,7 +113,7 @@ const COPY: Record<
   "pt-PT": {
     tag: "pt-PT",
     intl: "pt-PT",
-    homeHref: "/?lang=pt-PT",
+    homeHref: "/",
     eyebrow: "Marcar reunião",
     heading: "Marcar uma chamada",
     subheading: "Escolha um dia com disponibilidade e depois o horário.",
@@ -146,7 +146,7 @@ const COPY: Record<
   en: {
     tag: "en",
     intl: "en-GB",
-    homeHref: "/?lang=en",
+    homeHref: "/en",
     eyebrow: "Book a meeting",
     heading: "Book a call",
     subheading: "Pick a day with availability, then a time.",
@@ -179,7 +179,7 @@ const COPY: Record<
   es: {
     tag: "es",
     intl: "es-ES",
-    homeHref: "/?lang=es",
+    homeHref: "/es",
     eyebrow: "Reservar reunión",
     heading: "Reservar una llamada",
     subheading: "Elige un día con disponibilidad y luego la hora.",
