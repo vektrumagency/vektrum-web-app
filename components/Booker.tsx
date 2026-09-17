@@ -340,7 +340,7 @@ export function Booker({ name = "", email = "", locale = "pt-PT" }: BookerProps)
     return Array.from({ length: 7 }, (_, i) => {
       const d = new Date(base);
       d.setDate(base.getDate() + i);
-      return fmt.format(d);
+      return fmt.format(d).replace(/\.$/, "").slice(0, 3);
     });
   }, [t.intl]);
 
@@ -452,7 +452,7 @@ export function Booker({ name = "", email = "", locale = "pt-PT" }: BookerProps)
 
         <dl className="mt-6 w-full rounded-2xl border border-accent/20 bg-accent/[0.06] px-5 py-4 text-sm">
           <dt className="text-xs font-bold uppercase tracking-[0.14em] text-accent">{t.detailsWith}</dt>
-          <dd className="mt-1 font-semibold capitalize text-text">{when}</dd>
+          <dd className="mt-1 font-semibold first-letter:uppercase text-text">{when}</dd>
           <dd className="text-muted">{t.duration}</dd>
         </dl>
 
@@ -499,7 +499,7 @@ export function Booker({ name = "", email = "", locale = "pt-PT" }: BookerProps)
       <div className="mt-8 rounded-3xl border border-border bg-surface/85 p-6 shadow-glow md:p-8">
         {!state.selected ? (
           <div>
-            <p className="mb-4 text-center text-sm font-semibold capitalize text-text">{monthLabel}</p>
+            <p className="mb-4 text-center text-sm font-semibold first-letter:uppercase text-text">{monthLabel}</p>
 
             <div className="grid grid-cols-7 gap-1 text-center">
               {weekdayHeaders.map((w, i) => (
@@ -524,7 +524,7 @@ export function Booker({ name = "", email = "", locale = "pt-PT" }: BookerProps)
                       has
                         ? "cursor-pointer border border-border bg-background/55 font-semibold text-text hover:-translate-y-0.5 hover:border-accent/50 hover:bg-accent/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
                         : "cursor-default text-muted/40",
-                      isSelected ? "border-accent bg-accent/[0.12] text-accent-soft" : "",
+                      isSelected ? "border-accent bg-accent/[0.14] font-bold text-accent-soft ring-2 ring-accent/25" : "",
                       (isPast || isBeyond) && !has ? "opacity-40" : ""
                     ].join(" ")}
                     onClick={() => dispatch({ type: "SELECT_DAY", day: k })}
@@ -566,7 +566,7 @@ export function Booker({ name = "", email = "", locale = "pt-PT" }: BookerProps)
         ) : (
           <div className="space-y-5">
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-accent/20 bg-accent/[0.06] px-4 py-3">
-              <span className="text-sm font-semibold capitalize text-accent-soft">
+              <span className="text-sm font-semibold first-letter:uppercase text-accent-soft">
                 {new Date(state.selected.startUTC).toLocaleString(t.intl, {
                   weekday: "long",
                   day: "numeric",
