@@ -139,7 +139,7 @@ export function buildAutomationDiagnosisPayload(
     contact: {
       name: answers.contactName.trim(),
       email: answers.email.trim().toLowerCase(),
-      phone: answers.phone.trim() || null
+      phone: answers.phone.trim() ? `+351 ${answers.phone.trim()}` : null
     },
     diagnosis: {
       privacyConsent: answers.privacyConsent,

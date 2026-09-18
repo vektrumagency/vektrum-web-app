@@ -69,6 +69,7 @@ const STORAGE_KEY = "vektrum-diagnosis-v3";
 const PREVIOUS_STORAGE_KEY = "vektrum-diagnosis-v2";
 const LEGACY_STORAGE_KEY = "vektrum-diagnosis-v1";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PT_PHONE_PATTERN = /^[239]\d{8}$/;
 
 type ValidationIssue = { message: string; field: string };
 
@@ -156,6 +157,7 @@ function TextField({
   invalid,
   describedBy,
   maxLength,
+  prefix,
   onChange,
   onEnter
 }: {
@@ -169,6 +171,7 @@ function TextField({
   invalid?: boolean;
   describedBy?: string;
   maxLength?: number;
+  prefix?: string;
   onChange: (value: string) => void;
   onEnter?: () => void;
 }) {
@@ -182,19 +185,26 @@ function TextField({
   return (
     <label className="block" data-field={fieldId}>
       <span className="mb-2 block text-sm font-semibold text-text">{label}</span>
-      <input
-        type={type}
-        inputMode={inputMode}
-        value={value}
-        placeholder={placeholder}
-        autoComplete={autoComplete}
-        aria-invalid={invalid}
-        aria-describedby={describedBy}
-        maxLength={maxLength}
-        onChange={(event) => onChange(event.target.value)}
-        onKeyDown={handleKeyDown}
-        className="diagnosis-input"
-      />
+      <div className="relative">
+        {prefix ? (
+          <span className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-base text-text sm:left-5 sm:text-lg">
+            {prefix}
+          </span>
+        ) : null}
+        <input
+          type={type}
+          inputMode={inputMode}
+          value={value}
+          placeholder={placeholder}
+          autoComplete={autoComplete}
+          aria-invalid={invalid}
+          aria-describedby={describedBy}
+          maxLength={maxLength}
+          onChange={(event) => onChange(event.target.value)}
+          onKeyDown={handleKeyDown}
+          className={`diagnosis-input ${prefix ? "pl-[4.75rem] sm:pl-[5.5rem]" : ""}`}
+        />
+      </div>
     </label>
   );
 }
@@ -709,7 +719,7 @@ function QuestionInput({
     <div className="space-y-4" data-field="contact" tabIndex={-1}>
       <TextField fieldId="contactName" label={t.labels.name} value={answers.contactName} placeholder={t.placeholders.name} autoComplete="name" invalid={invalidField === "contactName"} describedBy={invalidField === "contactName" ? "diagnosis-error" : undefined} maxLength={100} onChange={(value) => onFieldChange("contactName", value)} />
       <TextField fieldId="email" label={t.labels.email} value={answers.email} placeholder={t.placeholders.email} type="email" inputMode="email" autoComplete="email" invalid={invalidField === "email"} describedBy={invalidField === "email" ? "diagnosis-error" : undefined} maxLength={160} onChange={(value) => onFieldChange("email", value)} />
-      <TextField fieldId="phone" label={`${t.labels.phone} · ${t.optional}`} value={answers.phone} placeholder={t.placeholders.phone} type="tel" inputMode="tel" autoComplete="tel" maxLength={40} onChange={(value) => onFieldChange("phone", value)} />
+      <TextField fieldId="phone" label={`${t.labels.phone} · ${t.optional}`} value={answers.phone} placeholder={t.placeholders.phone} type="tel" inputMode="tel" autoComplete="tel" maxLength={20} prefix="🇵🇹 +351" invalid={invalidField === "phone"} describedBy={invalidField === "phone" ? "diagnosis-error" : undefined} onChange={(value) => onFieldChange("phone", value)} />
       <label data-field="privacyConsent" className={`flex cursor-pointer items-start gap-3 rounded-2xl border bg-surface/70 p-4 text-sm leading-relaxed text-muted transition hover:border-accent/35 ${invalidField === "privacyConsent" ? "border-red-500" : "border-border"}`}>
         <input type="checkbox" checked={answers.privacyConsent} aria-invalid={invalidField === "privacyConsent"} aria-describedby={invalidField === "privacyConsent" ? "diagnosis-error" : undefined} onChange={(event) => onFieldChange("privacyConsent", event.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 rounded border-border accent-[rgb(var(--color-accent))]" />
         <span>{t.consentPrefix} <Link href={localizePath("/privacidade", locale)} target="_blank" className="font-semibold text-text underline decoration-accent/40 underline-offset-4 hover:text-accent">{t.privacy}</Link>.</span>
@@ -724,6 +734,7 @@ function validateQuestion(question: QuestionDefinition, answers: DiagnosisAnswer
   if (question.kind === "contact") {
     if (answers.contactName.trim().length < 2) return { message: errors.name, field: "contactName" };
     if (!EMAIL_PATTERN.test(answers.email.trim())) return { message: errors.email, field: "email" };
+    if (answers.phone.trim() && !PT_PHONE_PATTERN.test(answers.phone.replace(/\s+/g, ""))) return { message: errors.phone, field: "phone" };
     if (!answers.privacyConsent) return { message: errors.consent, field: "privacyConsent" };
     return null;
   }

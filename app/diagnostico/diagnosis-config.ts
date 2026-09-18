@@ -110,7 +110,7 @@ export const uiCopy = {
       website: "exemplo.pt",
       name: "O seu nome",
       email: "nome@empresa.pt",
-      phone: "+351 912 345 678"
+      phone: "912 345 678"
     },
     errors: {
       company: "Indique o nome da empresa para continuar.",
@@ -122,6 +122,7 @@ export const uiCopy = {
       text: "Partilhe uma resposta curta para continuar.",
       name: "Indique o seu nome.",
       email: "Introduza um endereço de email válido.",
+      phone: "Introduza um número de telemóvel ou telefone português válido (9 dígitos).",
       consent: "É necessário aceitar o tratamento dos dados para receber o relatório.",
       submit: "Não foi possível entregar o diagnóstico. As respostas estão guardadas — tente novamente.",
       config: "O envio ainda não está configurado. Contacte a Vektrum ou tente novamente mais tarde."
@@ -184,7 +185,7 @@ export const uiCopy = {
       website: "example.com",
       name: "Your name",
       email: "name@company.com",
-      phone: "+351 912 345 678"
+      phone: "912 345 678"
     },
     errors: {
       company: "Enter your company name to continue.",
@@ -196,6 +197,7 @@ export const uiCopy = {
       text: "Share a short answer to continue.",
       name: "Enter your name.",
       email: "Enter a valid email address.",
+      phone: "Enter a valid Portuguese phone number (9 digits).",
       consent: "You need to accept data processing to receive the report.",
       submit: "We couldn't deliver the diagnosis. Your answers are saved — please try again.",
       config: "Submission is not configured yet. Contact Vektrum or try again later."
