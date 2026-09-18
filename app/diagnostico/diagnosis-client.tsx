@@ -199,11 +199,24 @@ function TextField({
   );
 }
 
-export function DiagnosisClient({ locale, campaignSectorId = null }: { locale: Locale; campaignSectorId?: string | null }) {
+export function DiagnosisClient({
+  locale,
+  campaignSectorId = null,
+  prefill
+}: {
+  locale: Locale;
+  campaignSectorId?: string | null;
+  prefill?: { contactName?: string; email?: string; phone?: string };
+}) {
   const t = uiCopy[locale];
   const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<DiagnosisAnswers>(EMPTY_ANSWERS);
+  const [answers, setAnswers] = useState<DiagnosisAnswers>(() => ({
+    ...EMPTY_ANSWERS,
+    contactName: prefill?.contactName ?? EMPTY_ANSWERS.contactName,
+    email: prefill?.email ?? EMPTY_ANSWERS.email,
+    phone: prefill?.phone ?? EMPTY_ANSWERS.phone
+  }));
   const [error, setError] = useState<ValidationIssue | null>(null);
   const [showAllSectors, setShowAllSectors] = useState(false);
   const [direction, setDirection] = useState<"forward" | "back">("forward");

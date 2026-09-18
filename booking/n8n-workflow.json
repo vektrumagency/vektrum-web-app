@@ -1,0 +1,437 @@
+{
+  "name": "Vektrum Booking",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "disponibilidade",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "wh-disponibilidade",
+      "name": "Webhook: GET /disponibilidade",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-1200, 0],
+      "webhookId": "REPLACE_WITH_WEBHOOK_ID_DISPONIBILIDADE"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ==== CONFIG — every placeholder a human must fill lives here ====\n// See booking/README.md section 4 for the full field-by-field checklist.\nreturn [{\n  json: {\n    timezone: 'Europe/Lisbon',\n    quorumN: 2,\n    meetingMin: 30,\n    bufferMin: 15,\n    slotStepMin: 30,\n    minLeadHours: 12,\n    horizonDays: 14,\n    // Luxon weekday: 1=Mon .. 7=Sun\n    businessHours: {\n      1: [['10:00', '13:00'], ['14:00', '18:00']],\n      2: [['10:00', '13:00'], ['14:00', '18:00']],\n      3: [['10:00', '13:00'], ['14:00', '18:00']],\n      4: [['10:00', '13:00'], ['14:00', '18:00']],\n      5: [['10:00', '13:00'], ['14:00', '18:00']]\n    },\n    pacing: { 0: 2, 1: 3, default: 3 },\n    // PLACEHOLDER: fill with the 3 real people on rotation.\n    people: [\n      { name: 'PLACEHOLDER_NAME_1', email: 'PLACEHOLDER_EMAIL_1@vektrum.agency', calendars: ['PLACEHOLDER_CALENDAR_ID_1'] },\n      { name: 'PLACEHOLDER_NAME_2', email: 'PLACEHOLDER_EMAIL_2@vektrum.agency', calendars: ['PLACEHOLDER_CALENDAR_ID_2'] },\n      { name: 'PLACEHOLDER_NAME_3', email: 'PLACEHOLDER_EMAIL_3@vektrum.agency', calendars: ['PLACEHOLDER_CALENDAR_ID_3'] }\n    ],\n    // PLACEHOLDER: real PT-holidays calendar ID + Vektrum PTO calendar ID.\n    blockingCalendars: ['PLACEHOLDER_PT_HOLIDAYS_CALENDAR_ID', 'PLACEHOLDER_VEKTRUM_PTO_CALENDAR_ID'],\n    // PLACEHOLDER: calendar ID confirmed bookings get written to.\n    bookingCalendarId: 'PLACEHOLDER_BOOKING_CALENDAR_ID'\n  }\n}];"
+      },
+      "id": "cfg-disponibilidade",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-980, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const CFG = $('Config').first().json;\nconst now = DateTime.now().setZone(CFG.timezone);\nconst items = [];\nfor (const p of CFG.people) for (const c of p.calendars) items.push({ id: c });\nfor (const c of CFG.blockingCalendars) items.push({ id: c });\nreturn [{\n  json: {\n    timeMin: now.toUTC().toISO(),\n    timeMax: now.plus({ days: CFG.horizonDays }).toUTC().toISO(),\n    timeZone: CFG.timezone,\n    items\n  }\n}];"
+      },
+      "id": "build-freebusy-body",
+      "name": "Build freeBusy body",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-760, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.googleapis.com/calendar/v3/freeBusy",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "http-freebusy",
+      "name": "HTTP Request: freeBusy",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-540, 0],
+      "credentials": {
+        "googleOAuth2Api": {
+          "id": "PLACEHOLDER_GOOGLE_OAUTH2_CREDENTIAL_ID",
+          "name": "Vektrum Google Calendar (booking)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ==== Slot engine — byte-identical to booking/slot-engine.js's computeSlots pipeline. ====\n// Luxon `DateTime` is a GLOBAL inside n8n Code nodes — do not require/import it here.\nconst CFG = $('Config').first().json;\nconst fbRaw = $json.calendars;\nconst now = DateTime.now().setZone(CFG.timezone);\nconst fb = {};\nfor (const [id, v] of Object.entries(fbRaw)) fb[id] = v.busy || [];\n\nconst hm = (s) => ({ hour: +s.slice(0, 2), minute: +s.slice(3, 5), second: 0, millisecond: 0 });\n\nfunction candidates() {\n  const earliest = now.plus({ hours: CFG.minLeadHours });\n  const horizon = now.plus({ days: CFG.horizonDays });\n  const out = [];\n  let day = now.startOf('day');\n  while (day < horizon) {\n    for (const [s, e] of (CFG.businessHours[day.weekday] || [])) {\n      let cur = day.set(hm(s));\n      const win = day.set(hm(e));\n      while (cur.plus({ minutes: CFG.meetingMin }) <= win) {\n        const st = cur, en = cur.plus({ minutes: CFG.meetingMin });\n        if (st >= earliest) out.push({ start: st, end: en });\n        cur = cur.plus({ minutes: CFG.slotStepMin });\n      }\n    }\n    day = day.plus({ days: 1 });\n  }\n  return out;\n}\n\nfunction busyOverlaps(iv, st, en, buf) {\n  return (iv || []).some((x) => {\n    const bS = DateTime.fromISO(x.start).minus({ minutes: buf });\n    const bE = DateTime.fromISO(x.end).plus({ minutes: buf });\n    return st < bE && en > bS;\n  });\n}\n\nfunction evaluate(slot) {\n  for (const c of CFG.blockingCalendars) {\n    if (busyOverlaps(fb[c], slot.start, slot.end, 0)) return { ok: false };\n  }\n  let free = 0;\n  const members = [];\n  for (const p of CFG.people) {\n    const busy = p.calendars.some((c) => busyOverlaps(fb[c], slot.start, slot.end, CFG.bufferMin));\n    if (!busy) { free++; members.push(p.email); }\n  }\n  return { ok: free >= CFG.quorumN, members };\n}\n\nfunction pace(q) {\n  const ws = now.startOf('week');\n  const b = {};\n  for (const s of q) {\n    const off = Math.floor(s.start.diff(ws, 'weeks').weeks);\n    (b[off] ??= []).push(s);\n  }\n  const out = [];\n  for (const off of Object.keys(b).map(Number).sort((a, z) => a - z)) {\n    const lim = CFG.pacing[off] ?? CFG.pacing.default;\n    b[off].sort((a, z) => a.start - z.start);\n    for (const s of b[off].slice(0, lim)) {\n      out.push({\n        startUTC: s.start.toUTC().toISO(),\n        endUTC: s.end.toUTC().toISO(),\n        label: s.start.setLocale('pt').toFormat(\"cccc d 'de' LLL 'às' HH:mm\"),\n        weekOffset: off,\n        freeMembers: s.members\n      });\n    }\n  }\n  return out;\n}\n\nconst qualified = candidates().map((s) => ({ ...s, ...evaluate(s) })).filter((s) => s.ok);\nconst slots = pace(qualified).map(({ freeMembers, ...pub }) => pub);\nreturn [{ json: { timezone: CFG.timezone, slots } }];"
+      },
+      "id": "slot-engine",
+      "name": "Slot engine",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-320, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "respond-disponibilidade",
+      "name": "Respond: slots",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [-100, 0]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "marcar",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "wh-marcar",
+      "name": "Webhook: POST /marcar",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-1200, 400],
+      "webhookId": "REPLACE_WITH_WEBHOOK_ID_MARCAR"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "loose" },
+          "conditions": [
+            {
+              "id": "honeypot-cond",
+              "leftValue": "={{ $json.body._hp }}",
+              "rightValue": "",
+              "operator": { "type": "string", "operation": "notEmpty" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-honeypot",
+      "name": "IF honeypot filled",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [-980, 400]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { status: \"confirmed\" } }}",
+        "options": { "responseCode": 200 }
+      },
+      "id": "respond-honeypot-fake",
+      "name": "Respond: fake success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [-760, 560]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ==== Validate input — responds 400 on first failure via error thrown to caller's own IF, ====\n// or simply pass-through with { valid, reason }. Here we set json.valid for a following IF.\n// CFG comes from Config1 — this branch's own Config node, which runs BEFORE this node.\n// Never reference the /disponibilidade branch's Config node here: n8n 2.x throws when\n// $() points at a node that did not execute in the current run.\nconst CFG = $('Config1').first().json;\nconst b = $json.body || {};\nconst now = DateTime.now().setZone(CFG.timezone);\n\nfunction fail(reason) { return [{ json: { valid: false, reason } }]; }\n\nif (!b.name || typeof b.name !== 'string' || !b.name.trim()) return fail('missing_name');\nif (!b.email || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(b.email)) return fail('invalid_email');\nif (!b.startUTC) return fail('missing_start');\n\nconst start = DateTime.fromISO(b.startUTC).setZone(CFG.timezone);\nif (!start.isValid) return fail('invalid_start');\nif (start <= now) return fail('start_not_future');\n\nconst end = start.plus({ minutes: CFG.meetingMin });\n\n// Aligned to grid: minutes-from-midnight must be a multiple of slotStepMin.\nconst dayStart = start.startOf('day');\nconst minutesFromMidnight = start.diff(dayStart, 'minutes').minutes;\nif (minutesFromMidnight % CFG.slotStepMin !== 0) return fail('not_on_grid');\n\n// Inside a business-hours window for its weekday.\nconst hm = (s) => ({ hour: +s.slice(0, 2), minute: +s.slice(3, 5), second: 0, millisecond: 0 });\nconst windows = CFG.businessHours[start.weekday] || [];\nconst inWindow = windows.some(([s, e]) => {\n  const ws = dayStart.set(hm(s)), we = dayStart.set(hm(e));\n  return start >= ws && end <= we;\n});\nif (!inWindow) return fail('outside_business_hours');\n\n// Within horizon.\nif (start > now.plus({ days: CFG.horizonDays })) return fail('beyond_horizon');\n\nreturn [{ json: { valid: true, name: b.name.trim(), email: b.email, note: b.note || '', lang: b.lang || 'pt', startUTC: start.toUTC().toISO(), endUTC: end.toUTC().toISO() } }];"
+      },
+      "id": "validate-input",
+      "name": "Validate input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-540, 320]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "loose" },
+          "conditions": [
+            {
+              "id": "valid-cond",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "true" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-validation-passed",
+      "name": "IF valid",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [-320, 320]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { status: \"invalid\", reason: $json.reason } }}",
+        "options": { "responseCode": 400 }
+      },
+      "id": "respond-invalid",
+      "name": "Respond: invalid",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [-320, 460]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Reuse the same CFG shape as the /disponibilidade Config node.\nreturn [{\n  json: {\n    timezone: 'Europe/Lisbon',\n    quorumN: 2,\n    meetingMin: 30,\n    bufferMin: 15,\n    slotStepMin: 30,\n    minLeadHours: 12,\n    horizonDays: 14,\n    businessHours: {\n      1: [['10:00', '13:00'], ['14:00', '18:00']],\n      2: [['10:00', '13:00'], ['14:00', '18:00']],\n      3: [['10:00', '13:00'], ['14:00', '18:00']],\n      4: [['10:00', '13:00'], ['14:00', '18:00']],\n      5: [['10:00', '13:00'], ['14:00', '18:00']]\n    },\n    pacing: { 0: 2, 1: 3, default: 3 },\n    people: [\n      { name: 'PLACEHOLDER_NAME_1', email: 'PLACEHOLDER_EMAIL_1@vektrum.agency', calendars: ['PLACEHOLDER_CALENDAR_ID_1'] },\n      { name: 'PLACEHOLDER_NAME_2', email: 'PLACEHOLDER_EMAIL_2@vektrum.agency', calendars: ['PLACEHOLDER_CALENDAR_ID_2'] },\n      { name: 'PLACEHOLDER_NAME_3', email: 'PLACEHOLDER_EMAIL_3@vektrum.agency', calendars: ['PLACEHOLDER_CALENDAR_ID_3'] }\n    ],\n    blockingCalendars: ['PLACEHOLDER_PT_HOLIDAYS_CALENDAR_ID', 'PLACEHOLDER_VEKTRUM_PTO_CALENDAR_ID'],\n    bookingCalendarId: 'PLACEHOLDER_BOOKING_CALENDAR_ID'\n  }\n}];"
+      },
+      "id": "cfg-marcar",
+      "name": "Config1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-760, 240]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build a freeBusy body scoped to the ONE requested slot, padded by CFG.bufferMin.\nconst CFG = $('Config1').first().json;\nconst v = $('Validate input').first().json;\nconst start = DateTime.fromISO(v.startUTC).minus({ minutes: CFG.bufferMin });\nconst end = DateTime.fromISO(v.endUTC).plus({ minutes: CFG.bufferMin });\nconst items = [];\nfor (const p of CFG.people) for (const c of p.calendars) items.push({ id: c });\nfor (const c of CFG.blockingCalendars) items.push({ id: c });\nreturn [{\n  json: {\n    timeMin: start.toUTC().toISO(),\n    timeMax: end.toUTC().toISO(),\n    timeZone: CFG.timezone,\n    items\n  }\n}];"
+      },
+      "id": "build-freebusy-body-recheck",
+      "name": "Build freeBusy body (recheck)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-100, 240]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.googleapis.com/calendar/v3/freeBusy",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "http-freebusy-recheck",
+      "name": "HTTP Request: freeBusy recheck",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [120, 240],
+      "credentials": {
+        "googleOAuth2Api": {
+          "id": "PLACEHOLDER_GOOGLE_OAUTH2_CREDENTIAL_ID",
+          "name": "Vektrum Google Calendar (booking)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Reuse evaluate() from slot-engine.js against the single requested slot.\nconst CFG = $('Config1').first().json;\nconst v = $('Validate input').first().json;\nconst fbRaw = $json.calendars;\nconst fb = {};\nfor (const [id, val] of Object.entries(fbRaw)) fb[id] = val.busy || [];\n\nfunction busyOverlaps(iv, st, en, buf) {\n  return (iv || []).some((x) => {\n    const bS = DateTime.fromISO(x.start).minus({ minutes: buf });\n    const bE = DateTime.fromISO(x.end).plus({ minutes: buf });\n    return st < bE && en > bS;\n  });\n}\n\nconst st = DateTime.fromISO(v.startUTC);\nconst en = DateTime.fromISO(v.endUTC);\n\nfor (const c of CFG.blockingCalendars) {\n  if (busyOverlaps(fb[c], st, en, 0)) return [{ json: { ok: false } }];\n}\nlet free = 0;\nconst members = [];\nfor (const p of CFG.people) {\n  const busy = p.calendars.some((c) => busyOverlaps(fb[c], st, en, CFG.bufferMin));\n  if (!busy) { free++; members.push(p.email); }\n}\nconst ok = free >= CFG.quorumN;\nreturn [{ json: { ok, members, name: v.name, email: v.email, note: v.note, lang: v.lang, startUTC: v.startUTC, endUTC: v.endUTC } }];"
+      },
+      "id": "recheck-slot",
+      "name": "Re-check slot",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [340, 240]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "loose" },
+          "conditions": [
+            {
+              "id": "still-ok-cond",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "true" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-still-ok",
+      "name": "IF slot still free",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [560, 240]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Slot taken — recompute the full paced list to hand back with the 409, using a fresh freeBusy\n// call over the full horizon (same approach as /disponibilidade's Slot engine node).\n// NOTE: for a minimal import this re-runs the /disponibilidade freeBusy call manually.\nconst CFG = $('Config1').first().json;\nreturn [{ json: { needsRecompute: true, cfg: CFG } }];"
+      },
+      "id": "recompute-marker",
+      "name": "Mark: recompute full list",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [780, 360]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.googleapis.com/calendar/v3/freeBusy",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ (() => { const CFG=$json.cfg; const now=DateTime.now().setZone(CFG.timezone); const items=[]; for (const p of CFG.people) for (const c of p.calendars) items.push({id:c}); for (const c of CFG.blockingCalendars) items.push({id:c}); return JSON.stringify({ timeMin: now.toUTC().toISO(), timeMax: now.plus({days:CFG.horizonDays}).toUTC().toISO(), timeZone: CFG.timezone, items }); })() }}",
+        "options": {}
+      },
+      "id": "http-freebusy-for-409",
+      "name": "HTTP Request: freeBusy (for 409 list)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1000, 360],
+      "credentials": {
+        "googleOAuth2Api": {
+          "id": "PLACEHOLDER_GOOGLE_OAUTH2_CREDENTIAL_ID",
+          "name": "Vektrum Google Calendar (booking)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Identical pipeline to the /disponibilidade \"Slot engine\" node — kept as a separate node\n// because n8n Code nodes can't share a JS module; paste-in-sync with slot-engine.js.\nconst CFG = $('Config1').first().json;\nconst fbRaw = $json.calendars;\nconst now = DateTime.now().setZone(CFG.timezone);\nconst fb = {};\nfor (const [id, v] of Object.entries(fbRaw)) fb[id] = v.busy || [];\n\nconst hm = (s) => ({ hour: +s.slice(0, 2), minute: +s.slice(3, 5), second: 0, millisecond: 0 });\n\nfunction candidates() {\n  const earliest = now.plus({ hours: CFG.minLeadHours });\n  const horizon = now.plus({ days: CFG.horizonDays });\n  const out = [];\n  let day = now.startOf('day');\n  while (day < horizon) {\n    for (const [s, e] of (CFG.businessHours[day.weekday] || [])) {\n      let cur = day.set(hm(s));\n      const win = day.set(hm(e));\n      while (cur.plus({ minutes: CFG.meetingMin }) <= win) {\n        const st = cur, en = cur.plus({ minutes: CFG.meetingMin });\n        if (st >= earliest) out.push({ start: st, end: en });\n        cur = cur.plus({ minutes: CFG.slotStepMin });\n      }\n    }\n    day = day.plus({ days: 1 });\n  }\n  return out;\n}\n\nfunction busyOverlaps(iv, st, en, buf) {\n  return (iv || []).some((x) => {\n    const bS = DateTime.fromISO(x.start).minus({ minutes: buf });\n    const bE = DateTime.fromISO(x.end).plus({ minutes: buf });\n    return st < bE && en > bS;\n  });\n}\n\nfunction evaluate(slot) {\n  for (const c of CFG.blockingCalendars) {\n    if (busyOverlaps(fb[c], slot.start, slot.end, 0)) return { ok: false };\n  }\n  let free = 0;\n  const members = [];\n  for (const p of CFG.people) {\n    const busy = p.calendars.some((c) => busyOverlaps(fb[c], slot.start, slot.end, CFG.bufferMin));\n    if (!busy) { free++; members.push(p.email); }\n  }\n  return { ok: free >= CFG.quorumN, members };\n}\n\nfunction pace(q) {\n  const ws = now.startOf('week');\n  const b = {};\n  for (const s of q) {\n    const off = Math.floor(s.start.diff(ws, 'weeks').weeks);\n    (b[off] ??= []).push(s);\n  }\n  const out = [];\n  for (const off of Object.keys(b).map(Number).sort((a, z) => a - z)) {\n    const lim = CFG.pacing[off] ?? CFG.pacing.default;\n    b[off].sort((a, z) => a.start - z.start);\n    for (const s of b[off].slice(0, lim)) {\n      out.push({\n        startUTC: s.start.toUTC().toISO(),\n        endUTC: s.end.toUTC().toISO(),\n        label: s.start.setLocale('pt').toFormat(\"cccc d 'de' LLL 'às' HH:mm\"),\n        weekOffset: off,\n        freeMembers: s.members\n      });\n    }\n  }\n  return out;\n}\n\nconst qualified = candidates().map((s) => ({ ...s, ...evaluate(s) })).filter((s) => s.ok);\nconst slots = pace(qualified).map(({ freeMembers, ...pub }) => pub);\nreturn [{ json: { timezone: CFG.timezone, slots } }];"
+      },
+      "id": "slot-engine-recompute",
+      "name": "Slot engine (recompute)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1220, 360]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { status: \"taken\", slots: $json.slots } }}",
+        "options": { "responseCode": 409 }
+      },
+      "id": "respond-taken",
+      "name": "Respond: taken (409)",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1440, 360]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://www.googleapis.com/calendar/v3/calendars/{{ $('Config1').first().json.bookingCalendarId }}/events?conferenceDataVersion=1&sendUpdates=all",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ summary: `Vektrum × ${$json.name}`, description: $json.note || '', start: { dateTime: $json.startUTC, timeZone: 'Europe/Lisbon' }, end: { dateTime: $json.endUTC, timeZone: 'Europe/Lisbon' }, attendees: [ ...($json.members || []).map(email => ({ email })), { email: $json.email } ], conferenceData: { createRequest: { requestId: $json.startUTC + '-' + $json.email, conferenceSolutionKey: { type: 'hangoutsMeet' } } } }) }}",
+        "options": {}
+      },
+      "id": "http-events-insert",
+      "name": "HTTP Request: events.insert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [780, 140],
+      "credentials": {
+        "googleOAuth2Api": {
+          "id": "PLACEHOLDER_GOOGLE_OAUTH2_CREDENTIAL_ID",
+          "name": "Vektrum Google Calendar (booking)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "vektrum.agency@gmail.com",
+        "toEmail": "={{ $('Re-check slot').first().json.email }}",
+        "subject": "={{ $('Re-check slot').first().json.lang === 'en' ? 'Your Vektrum meeting is confirmed' : 'A sua reunião com a Vektrum está confirmada' }}",
+        "emailFormat": "html",
+        "html": "={{ (() => { const v = $('Re-check slot').first().json; const meet = $json.hangoutLink || ($json.conferenceData && $json.conferenceData.entryPoints && $json.conferenceData.entryPoints[0] && $json.conferenceData.entryPoints[0].uri) || ''; const isEn = v.lang === 'en'; return isEn ? `<p>Hi ${v.name},</p><p>Your meeting with Vektrum is confirmed.</p><p>Google Meet: <a href=\"${meet}\">${meet}</a></p>` : `<p>Olá ${v.name},</p><p>A sua reunião com a Vektrum está confirmada.</p><p>Google Meet: <a href=\"${meet}\">${meet}</a></p>`; })() }}",
+        "options": {}
+      },
+      "id": "smtp-send-confirmation",
+      "name": "Send confirmation email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [1000, 140],
+      "credentials": {
+        "smtp": {
+          "id": "PLACEHOLDER_SMTP_CREDENTIAL_ID",
+          "name": "Vektrum Gmail SMTP (booking)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { status: \"confirmed\", startUTC: $('Re-check slot').first().json.startUTC, endUTC: $('Re-check slot').first().json.endUTC, meetLink: $('HTTP Request: events.insert').first().json.hangoutLink || '' } }}",
+        "options": { "responseCode": 200 }
+      },
+      "id": "respond-confirmed",
+      "name": "Respond: confirmed",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1220, 140]
+    }
+  ],
+  "connections": {
+    "Webhook: GET /disponibilidade": {
+      "main": [[{ "node": "Config", "type": "main", "index": 0 }]]
+    },
+    "Config": {
+      "main": [[{ "node": "Build freeBusy body", "type": "main", "index": 0 }]]
+    },
+    "Build freeBusy body": {
+      "main": [[{ "node": "HTTP Request: freeBusy", "type": "main", "index": 0 }]]
+    },
+    "HTTP Request: freeBusy": {
+      "main": [[{ "node": "Slot engine", "type": "main", "index": 0 }]]
+    },
+    "Slot engine": {
+      "main": [[{ "node": "Respond: slots", "type": "main", "index": 0 }]]
+    },
+    "Webhook: POST /marcar": {
+      "main": [[{ "node": "IF honeypot filled", "type": "main", "index": 0 }]]
+    },
+    "IF honeypot filled": {
+      "main": [
+        [{ "node": "Respond: fake success", "type": "main", "index": 0 }],
+        [{ "node": "Config1", "type": "main", "index": 0 }]
+      ]
+    },
+    "Config1": {
+      "main": [[{ "node": "Validate input", "type": "main", "index": 0 }]]
+    },
+    "Validate input": {
+      "main": [[{ "node": "IF valid", "type": "main", "index": 0 }]]
+    },
+    "IF valid": {
+      "main": [
+        [{ "node": "Build freeBusy body (recheck)", "type": "main", "index": 0 }],
+        [{ "node": "Respond: invalid", "type": "main", "index": 0 }]
+      ]
+    },
+    "Build freeBusy body (recheck)": {
+      "main": [[{ "node": "HTTP Request: freeBusy recheck", "type": "main", "index": 0 }]]
+    },
+    "HTTP Request: freeBusy recheck": {
+      "main": [[{ "node": "Re-check slot", "type": "main", "index": 0 }]]
+    },
+    "Re-check slot": {
+      "main": [[{ "node": "IF slot still free", "type": "main", "index": 0 }]]
+    },
+    "IF slot still free": {
+      "main": [
+        [{ "node": "HTTP Request: events.insert", "type": "main", "index": 0 }],
+        [{ "node": "Mark: recompute full list", "type": "main", "index": 0 }]
+      ]
+    },
+    "Mark: recompute full list": {
+      "main": [[{ "node": "HTTP Request: freeBusy (for 409 list)", "type": "main", "index": 0 }]]
+    },
+    "HTTP Request: freeBusy (for 409 list)": {
+      "main": [[{ "node": "Slot engine (recompute)", "type": "main", "index": 0 }]]
+    },
+    "Slot engine (recompute)": {
+      "main": [[{ "node": "Respond: taken (409)", "type": "main", "index": 0 }]]
+    },
+    "HTTP Request: events.insert": {
+      "main": [[{ "node": "Send confirmation email", "type": "main", "index": 0 }]]
+    },
+    "Send confirmation email": {
+      "main": [[{ "node": "Respond: confirmed", "type": "main", "index": 0 }]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}
