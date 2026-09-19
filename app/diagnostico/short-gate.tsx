@@ -10,7 +10,7 @@ import { localize, type Locale } from "./diagnosis-config";
 import { localizePath } from "@/lib/site-links";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PHONE_PATTERN = /^[+\d][\d\s().-]{6,}$/;
+const PT_PHONE_PATTERN = /^[239]\d{8}$/;
 const LEAD_SUBMITTED_KEY = "vektrum_lead_submitted";
 
 type GateStep = "form" | "choice";
@@ -29,14 +29,14 @@ const COPY = {
     email: "Email profissional",
     emailPlaceholder: "nome@empresa.pt",
     phone: "Telefone",
-    phonePlaceholder: "+351 912 345 678",
+    phonePlaceholder: "912 345 678",
     consentPrefix: "Autorizo a Vektrum a tratar estes dados para me contactar sobre este pedido. Li a",
     privacy: "Política de Privacidade",
     submit: "Continuar",
     errors: {
       name: "Indique o seu nome.",
       email: "Introduza um endereço de email válido.",
-      phone: "Introduza um número de telefone válido.",
+      phone: "Introduza um número de telemóvel ou telefone português válido (9 dígitos).",
       consent: "É necessário aceitar o tratamento dos dados para continuar."
     },
     choiceEyebrow: "Obrigado, {name}",
@@ -61,14 +61,14 @@ const COPY = {
     email: "Work email",
     emailPlaceholder: "name@company.com",
     phone: "Phone",
-    phonePlaceholder: "+351 912 345 678",
+    phonePlaceholder: "912 345 678",
     consentPrefix: "I authorize Vektrum to process this information to contact me about this request. I have read the",
     privacy: "Privacy Policy",
     submit: "Continue",
     errors: {
       name: "Enter your name.",
       email: "Enter a valid email address.",
-      phone: "Enter a valid phone number.",
+      phone: "Enter a valid Portuguese phone number (9 digits).",
       consent: "You need to accept data processing to continue."
     },
     choiceEyebrow: "Thanks, {name}",
@@ -122,7 +122,7 @@ export function DiagnosisGate({ locale, campaignSectorId = null }: { locale: Loc
     const issues: FieldErrors = {};
     if (lead.name.trim().length < 2) issues.name = t.errors.name;
     if (!EMAIL_PATTERN.test(lead.email.trim())) issues.email = t.errors.email;
-    if (!PHONE_PATTERN.test(lead.phone.trim())) issues.phone = t.errors.phone;
+    if (!PT_PHONE_PATTERN.test(lead.phone.replace(/\s+/g, ""))) issues.phone = t.errors.phone;
     if (!privacyConsent) issues.privacyConsent = t.errors.consent;
     return issues;
   };
@@ -233,17 +233,22 @@ export function DiagnosisGate({ locale, campaignSectorId = null }: { locale: Loc
 
               <label className="block" data-field="phone">
                 <span className="mb-2 block text-sm font-semibold text-text">{t.phone}</span>
-                <input
-                  type="tel"
-                  inputMode="tel"
-                  value={lead.phone}
-                  placeholder={t.phonePlaceholder}
-                  autoComplete="tel"
-                  aria-invalid={Boolean(errors.phone)}
-                  maxLength={40}
-                  onChange={(event) => setLead((current) => ({ ...current, phone: event.target.value }))}
-                  className="diagnosis-input"
-                />
+                <div className="relative">
+                  <span className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-base text-text sm:left-5 sm:text-lg">
+                    🇵🇹 +351
+                  </span>
+                  <input
+                    type="tel"
+                    inputMode="tel"
+                    value={lead.phone}
+                    placeholder={t.phonePlaceholder}
+                    autoComplete="tel"
+                    aria-invalid={Boolean(errors.phone)}
+                    maxLength={20}
+                    onChange={(event) => setLead((current) => ({ ...current, phone: event.target.value }))}
+                    className="diagnosis-input pl-[4.75rem] sm:pl-[5.5rem]"
+                  />
+                </div>
                 {errors.phone ? <p role="alert" className="mt-1.5 text-sm font-medium text-red-700">{errors.phone}</p> : null}
               </label>
 
@@ -297,7 +302,7 @@ export function buildLeadPayload(lead: Lead, utm: UtmAttribution, locale: Locale
     contact: {
       name: lead.name.trim(),
       email: lead.email.trim().toLowerCase(),
-      phone: lead.phone.trim()
+      phone: lead.phone.trim() ? `+351 ${lead.phone.trim()}` : null
     },
     metadata: {
       formVersion: "automation-diagnosis-lead-v1",
