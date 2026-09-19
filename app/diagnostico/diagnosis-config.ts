@@ -104,13 +104,12 @@ export const uiCopy = {
     selectedSector: "Diagnóstico adaptado a",
     otherPlaceholder: "Especifique aqui",
     noWebsite: "A empresa não tem website",
-    labels: { name: "Nome", email: "Email profissional", phone: "Telefone", chars: "caracteres" },
+    labels: { name: "Nome", email: "Email profissional", phone: "Telefone", phoneCountry: "Indicativo do país", chars: "caracteres" },
     placeholders: {
       company: "Ex.: Empresa Exemplo, Lda.",
       website: "exemplo.pt",
       name: "O seu nome",
-      email: "nome@empresa.pt",
-      phone: "+351 912 345 678"
+      email: "nome@empresa.pt"
     },
     errors: {
       company: "Indique o nome da empresa para continuar.",
@@ -122,6 +121,7 @@ export const uiCopy = {
       text: "Partilhe uma resposta curta para continuar.",
       name: "Indique o seu nome.",
       email: "Introduza um endereço de email válido.",
+      phone: "Introduza um número de telefone válido para o país selecionado.",
       consent: "É necessário aceitar o tratamento dos dados para receber o relatório.",
       submit: "Não foi possível entregar o diagnóstico. As respostas estão guardadas — tente novamente.",
       config: "O envio ainda não está configurado. Contacte a Vektrum ou tente novamente mais tarde."
@@ -178,13 +178,12 @@ export const uiCopy = {
     selectedSector: "Diagnosis tailored to",
     otherPlaceholder: "Tell us more",
     noWebsite: "The company doesn't have a website",
-    labels: { name: "Name", email: "Work email", phone: "Phone", chars: "characters" },
+    labels: { name: "Name", email: "Work email", phone: "Phone", phoneCountry: "Country code", chars: "characters" },
     placeholders: {
       company: "e.g. Example Company Ltd.",
       website: "example.com",
       name: "Your name",
-      email: "name@company.com",
-      phone: "+351 912 345 678"
+      email: "name@company.com"
     },
     errors: {
       company: "Enter your company name to continue.",
@@ -196,6 +195,7 @@ export const uiCopy = {
       text: "Share a short answer to continue.",
       name: "Enter your name.",
       email: "Enter a valid email address.",
+      phone: "Enter a valid phone number for the selected country.",
       consent: "You need to accept data processing to receive the report.",
       submit: "We couldn't deliver the diagnosis. Your answers are saved — please try again.",
       config: "Submission is not configured yet. Contact Vektrum or try again later."

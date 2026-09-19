@@ -59,7 +59,7 @@ function makeAnswers(sectorId: string): DiagnosisSnapshot {
   return {
     companyName: "Example, Lda.", website: "example.pt", noWebsite: false, sectorId,
     responses, otherResponses: {}, contactName: "Ana Example", email: "ANA@example.pt",
-    phone: "", privacyConsent: true
+    phoneCountry: "PT", phone: "", privacyConsent: true
   };
 }
 
