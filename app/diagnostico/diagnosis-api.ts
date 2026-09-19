@@ -5,6 +5,7 @@ import {
   type QuestionDefinition,
   universalQuestions
 } from "./diagnosis-config";
+import { formatPhoneForPayload } from "./phone-countries";
 
 export const AUTOMATION_DIAGNOSIS_SUBMIT_PATH = "/api/automation-diagnosis";
 
@@ -21,6 +22,7 @@ export type DiagnosisSnapshot = {
   otherResponses: Record<string, string>;
   contactName: string;
   email: string;
+  phoneCountry: string;
   phone: string;
   privacyConsent: boolean;
 };
@@ -139,7 +141,7 @@ export function buildAutomationDiagnosisPayload(
     contact: {
       name: answers.contactName.trim(),
       email: answers.email.trim().toLowerCase(),
-      phone: answers.phone.trim() ? `+351 ${answers.phone.trim()}` : null
+      phone: answers.phone.trim() ? formatPhoneForPayload(answers.phoneCountry, answers.phone) : null
     },
     diagnosis: {
       privacyConsent: answers.privacyConsent,

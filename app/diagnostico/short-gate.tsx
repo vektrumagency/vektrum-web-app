@@ -7,15 +7,16 @@ import { useRouter } from "next/navigation";
 import { readUtmAttribution, type UtmAttribution } from "./diagnosis-api";
 import { DiagnosisClient } from "./diagnosis-client";
 import { localize, type Locale } from "./diagnosis-config";
+import { PhoneField } from "./phone-field";
+import { DEFAULT_COUNTRY, formatPhoneForPayload, isValidPhone } from "./phone-countries";
 import { localizePath } from "@/lib/site-links";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PT_PHONE_PATTERN = /^[239]\d{8}$/;
 const LEAD_SUBMITTED_KEY = "vektrum_lead_submitted";
 
 type GateStep = "form" | "choice";
 
-type Lead = { name: string; email: string; phone: string };
+type Lead = { name: string; email: string; phoneCountry: string; phone: string };
 
 type FieldErrors = Partial<Record<"name" | "email" | "phone" | "privacyConsent", string>>;
 
@@ -29,14 +30,14 @@ const COPY = {
     email: "Email profissional",
     emailPlaceholder: "nome@empresa.pt",
     phone: "Telefone",
-    phonePlaceholder: "912 345 678",
+    phoneCountry: "Indicativo do país",
     consentPrefix: "Autorizo a Vektrum a tratar estes dados para me contactar sobre este pedido. Li a",
     privacy: "Política de Privacidade",
     submit: "Continuar",
     errors: {
       name: "Indique o seu nome.",
       email: "Introduza um endereço de email válido.",
-      phone: "Introduza um número de telemóvel ou telefone português válido (9 dígitos).",
+      phone: "Introduza um número de telefone válido para o país selecionado.",
       consent: "É necessário aceitar o tratamento dos dados para continuar."
     },
     choiceEyebrow: "Obrigado, {name}",
@@ -61,14 +62,14 @@ const COPY = {
     email: "Work email",
     emailPlaceholder: "name@company.com",
     phone: "Phone",
-    phonePlaceholder: "912 345 678",
+    phoneCountry: "Country code",
     consentPrefix: "I authorize Vektrum to process this information to contact me about this request. I have read the",
     privacy: "Privacy Policy",
     submit: "Continue",
     errors: {
       name: "Enter your name.",
       email: "Enter a valid email address.",
-      phone: "Enter a valid Portuguese phone number (9 digits).",
+      phone: "Enter a valid phone number for the selected country.",
       consent: "You need to accept data processing to continue."
     },
     choiceEyebrow: "Thanks, {name}",
@@ -90,7 +91,7 @@ export function DiagnosisGate({ locale, campaignSectorId = null }: { locale: Loc
   const t = COPY[locale];
   const router = useRouter();
   const [step, setStep] = useState<GateStep>("form");
-  const [lead, setLead] = useState<Lead>({ name: "", email: "", phone: "" });
+  const [lead, setLead] = useState<Lead>({ name: "", email: "", phoneCountry: DEFAULT_COUNTRY, phone: "" });
   const [privacyConsent, setPrivacyConsent] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
@@ -122,7 +123,7 @@ export function DiagnosisGate({ locale, campaignSectorId = null }: { locale: Loc
     const issues: FieldErrors = {};
     if (lead.name.trim().length < 2) issues.name = t.errors.name;
     if (!EMAIL_PATTERN.test(lead.email.trim())) issues.email = t.errors.email;
-    if (!PT_PHONE_PATTERN.test(lead.phone.replace(/\s+/g, ""))) issues.phone = t.errors.phone;
+    if (!isValidPhone(lead.phoneCountry, lead.phone)) issues.phone = t.errors.phone;
     if (!privacyConsent) issues.privacyConsent = t.errors.consent;
     return issues;
   };
@@ -178,7 +179,7 @@ export function DiagnosisGate({ locale, campaignSectorId = null }: { locale: Loc
       <DiagnosisClient
         locale={locale}
         campaignSectorId={campaignSectorId}
-        prefill={{ contactName: lead.name, email: lead.email, phone: lead.phone }}
+        prefill={{ contactName: lead.name, email: lead.email, phoneCountry: lead.phoneCountry, phone: lead.phone }}
       />
     );
   }
@@ -231,26 +232,19 @@ export function DiagnosisGate({ locale, campaignSectorId = null }: { locale: Loc
                 {errors.email ? <p role="alert" className="mt-1.5 text-sm font-medium text-red-700">{errors.email}</p> : null}
               </label>
 
-              <label className="block" data-field="phone">
-                <span className="mb-2 block text-sm font-semibold text-text">{t.phone}</span>
-                <div className="relative">
-                  <span className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-base text-text sm:left-5 sm:text-lg">
-                    🇵🇹 +351
-                  </span>
-                  <input
-                    type="tel"
-                    inputMode="tel"
-                    value={lead.phone}
-                    placeholder={t.phonePlaceholder}
-                    autoComplete="tel"
-                    aria-invalid={Boolean(errors.phone)}
-                    maxLength={20}
-                    onChange={(event) => setLead((current) => ({ ...current, phone: event.target.value }))}
-                    className="diagnosis-input pl-[4.75rem] sm:pl-[5.5rem]"
-                  />
-                </div>
+              <div data-field="phone">
+                <PhoneField
+                  locale={locale}
+                  label={t.phone}
+                  selectLabel={t.phoneCountry}
+                  countryCode={lead.phoneCountry}
+                  value={lead.phone}
+                  invalid={Boolean(errors.phone)}
+                  onCountryChange={(code) => setLead((current) => ({ ...current, phoneCountry: code }))}
+                  onValueChange={(value) => setLead((current) => ({ ...current, phone: value }))}
+                />
                 {errors.phone ? <p role="alert" className="mt-1.5 text-sm font-medium text-red-700">{errors.phone}</p> : null}
-              </label>
+              </div>
 
               <label data-field="privacyConsent" className={`flex cursor-pointer items-start gap-3 rounded-2xl border bg-surface/70 p-4 text-sm leading-relaxed text-muted transition hover:border-accent/35 ${errors.privacyConsent ? "border-red-500" : "border-border"}`}>
                 <input
@@ -302,7 +296,7 @@ export function buildLeadPayload(lead: Lead, utm: UtmAttribution, locale: Locale
     contact: {
       name: lead.name.trim(),
       email: lead.email.trim().toLowerCase(),
-      phone: lead.phone.trim() ? `+351 ${lead.phone.trim()}` : null
+      phone: lead.phone.trim() ? formatPhoneForPayload(lead.phoneCountry, lead.phone) : null
     },
     metadata: {
       formVersion: "automation-diagnosis-lead-v1",
